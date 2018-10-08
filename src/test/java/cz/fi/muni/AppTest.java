@@ -17,8 +17,7 @@ public class AppTest
      */
     public AppTest( String testName )
     {
-        fail();
-//        super( testName );
+        super( testName );
     }
 
     /**
