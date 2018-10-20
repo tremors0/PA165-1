@@ -29,6 +29,9 @@ public class Agent {
     }
 
 
+    /**
+     * @param id of agent
+     */
     public Agent(Long id) {
         this.id = id;
     }
