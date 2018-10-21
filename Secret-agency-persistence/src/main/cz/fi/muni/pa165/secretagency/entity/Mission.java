@@ -113,11 +113,11 @@ public class Mission {
         if (!(object instanceof Mission)) return false;
 
         Mission mission = (Mission) object;
-        return java.util.Objects.equals(id, mission.getId()) &&
-                java.util.Arrays.equals(location, mission.getLocation()) &&
-                java.util.Objects.equals(missionType, mission.getMissionType()) &&
-                java.util.Objects.equals(started, mission.getStarted()) &&
-                java.util.Objects.equals(ended, mission.getEnded());
+        return Objects.equals(getId(), mission.getId()) &&
+                Arrays.equals(getLocation(), mission.getLocation()) &&
+                Objects.equals(getMissionType(), mission.getMissionType()) &&
+                Objects.equals(getStarted(), mission.getStarted()) &&
+                Objects.equals(getEnded(), mission.getEnded());
     }
 
     @Override
