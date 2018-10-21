@@ -110,14 +110,14 @@ public class Mission {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
+        if (!(object instanceof Mission)) return false;
+
         Mission mission = (Mission) object;
-        return java.util.Objects.equals(id, mission.id) &&
-                java.util.Arrays.equals(location, mission.location) &&
-                java.util.Objects.equals(missionType, mission.missionType) &&
-                java.util.Objects.equals(started, mission.started) &&
-                java.util.Objects.equals(ended, mission.ended);
+        return java.util.Objects.equals(id, mission.getId()) &&
+                java.util.Arrays.equals(location, mission.getLocation()) &&
+                java.util.Objects.equals(missionType, mission.getMissionType()) &&
+                java.util.Objects.equals(started, mission.getStarted()) &&
+                java.util.Objects.equals(ended, mission.getEnded());
     }
 
     @Override
