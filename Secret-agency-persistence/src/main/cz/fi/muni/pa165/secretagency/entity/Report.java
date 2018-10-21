@@ -98,8 +98,6 @@ public class Report {
 
         Report report = (Report) o;
 
-        // TODO - ask during the seminar if this is correct
-        if (getId() != null && !getId().equals(report.getId())) return false;
         if (!getText().equals(report.getText())) return false;
         if (!getDate().equals(report.getDate())) return false;
         return getMissionResult() == report.getMissionResult();
@@ -107,8 +105,7 @@ public class Report {
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + getText().hashCode();
+        int result = getText().hashCode();
         result = 31 * result + getDate().hashCode();
         result = 31 * result + getMissionResult().hashCode();
         return result;
