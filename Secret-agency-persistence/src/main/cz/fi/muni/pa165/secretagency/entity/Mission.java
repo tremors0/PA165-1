@@ -10,7 +10,8 @@ import java.util.Objects;
  */
 public class Mission {
     private Long id;
-    private Double[] location;
+    private Double latitude;
+    private Double longtitude;
     private String missionType;
     private LocalDate started;
     private LocalDate ended;
@@ -18,14 +19,15 @@ public class Mission {
     /**
      * Constructor
      * @param id of mission
-     * @param location of mission (latitude and longtitude)
+     * @param latitude of mission location
+     * @param longtitude of mission location
      * @param missionType type of mission
      * @param started mission start date
      * @param ended mission end date
      */
-    public Mission(Long id, Double[] location, String missionType, LocalDate started, LocalDate ended) {
-        this.id = id;
-        this.location = location;
+    public Mission(Double latitude, Double longtitude, String missionType, LocalDate started, LocalDate ended) {
+        this.latitude = latitude;
+        this.longtitude = longtitude;
         this.missionType = missionType;
         this.started = started;
         this.ended = ended;
@@ -52,17 +54,31 @@ public class Mission {
     }
 
     /**
-     * @return mission location
+     * @return latitude of mission location
      */
-    public Double[] getLocation() {
-        return location;
+    public Double getLatitude() {
+        return latitude;
     }
 
     /**
-     * @param location of mission
+     * @param latitude of mission location
      */
-    public void setLocation(Double[] location) {
-        this.location = location;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     * @return longtitude of mission location
+     */
+    public Double getLongtitude() {
+        return longtitude;
+    }
+
+    /**
+     * @param longtitude of mission location
+     */
+    public void setLongtitude(Double longtitude) {
+        this.longtitude = longtitude;
     }
 
     /**
@@ -113,8 +129,8 @@ public class Mission {
         if (!(object instanceof Mission)) return false;
 
         Mission mission = (Mission) object;
-        return Objects.equals(getId(), mission.getId()) &&
-                Arrays.equals(getLocation(), mission.getLocation()) &&
+        return Objects.equals(getLatitude(), mission.getLatitude()) &&
+                Objects.equals(getLongtitude(), mission.getLongtitude()) &&
                 Objects.equals(getMissionType(), mission.getMissionType()) &&
                 Objects.equals(getStarted(), mission.getStarted()) &&
                 Objects.equals(getEnded(), mission.getEnded());
@@ -122,8 +138,6 @@ public class Mission {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), id, missionType, started, ended);
-        result = 31 * result + Arrays.hashCode(location);
-        return result;
+        return Objects.hash(latitude, longtitude, missionType, started, ended);
     }
 }
