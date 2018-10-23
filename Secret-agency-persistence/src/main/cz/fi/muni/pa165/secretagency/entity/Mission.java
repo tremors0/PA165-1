@@ -1,5 +1,7 @@
 package main.cz.fi.muni.pa165.secretagency.entity;
 
+import main.cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ public class Mission {
     private Long id;
     private Double latitude;
     private Double longtitude;
-    private String missionType;
+    private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
 
@@ -25,7 +27,7 @@ public class Mission {
      * @param started mission start date
      * @param ended mission end date
      */
-    public Mission(Double latitude, Double longtitude, String missionType, LocalDate started, LocalDate ended) {
+    public Mission(Double latitude, Double longtitude, MissionTypeEnum missionType, LocalDate started, LocalDate ended) {
         this.latitude = latitude;
         this.longtitude = longtitude;
         this.missionType = missionType;
@@ -84,14 +86,14 @@ public class Mission {
     /**
      * @return mission type
      */
-    public String getMissionType() {
+    public MissionTypeEnum getMissionType() {
         return missionType;
     }
 
     /**
      * @param missionType type of mission
      */
-    public void setMissionType(String missionType) {
+    public void setMissionType(MissionTypeEnum missionType) {
         this.missionType = missionType;
     }
 
@@ -138,6 +140,6 @@ public class Mission {
 
     @Override
     public int hashCode() {
-        return Objects.hash(latitude, longtitude, missionType, started, ended);
+        return Objects.hash(getLatitude(), getLongtitude(), getMissionType(), getStarted(), getEnded());
     }
 }
