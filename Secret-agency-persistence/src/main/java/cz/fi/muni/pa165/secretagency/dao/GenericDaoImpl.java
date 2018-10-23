@@ -35,21 +35,21 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @Override
-    public void deleteEntityById(Long id, Class<T> entityClazz) {
-        T entityToRemove = em.find(entityClazz, id);
+    public void deleteEntityById(Long id, Class<T> entityClass) {
+        T entityToRemove = em.find(entityClass, id);
         em.remove(entityToRemove);
     }
 
     @Override
-    public T getEntityById(Long id, Class<T> entityClazz) {
-        return em.find(entityClazz, id);
+    public T getEntityById(Long id, Class<T> entityClass) {
+        return em.find(entityClass, id);
     }
 
     @Override
-    public List<T> getAll(Class<T> entityClazz) {
+    public List<T> getAll(Class<T> entityClass) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(entityClazz);
-        Root<T> root = query.from(entityClazz);
+        CriteriaQuery<T> query = cb.createQuery(entityClass);
+        Root<T> root = query.from(entityClass);
         query.select(root);
         return em.createQuery(query).getResultList();
     }

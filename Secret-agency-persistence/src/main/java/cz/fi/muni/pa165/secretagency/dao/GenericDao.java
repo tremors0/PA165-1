@@ -28,22 +28,22 @@ public interface GenericDao<T> {
     /**
      * Deletes entity from database.
      * @param id Id of entity which is going to be deleted.
-     * @param entityClazz Class of entity which should be deleted.
+     * @param entityClass Class of entity which should be deleted.
      */
-    void deleteEntityById(Long id, Class<T> entityClazz);
+    void deleteEntityById(Long id, Class<T> entityClass);
 
     /**
      * Returns entity with given id.
      * @param id Id of entity.
-     * @param entityClazz Class of entity which should be retrieved.
+     * @param entityClass Class of entity which should be retrieved.
      * @return Entity with given id.
      */
-    T getEntityById(Long id, Class<T> entityClazz);
+    T getEntityById(Long id, Class<T> entityClass);
 
     /**
      * Returns  all entities.
-     * @param entityClazz Class of entities which should be retrieved.
+     * @param entityClass Class of entities which should be retrieved.
      * @return All entities from table.
      */
-    List<T> getAll(Class<T> entityClazz);
+    List<T> getAll(Class<T> entityClass);
 }
