@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Mission {
     private Long id;
     private Double latitude;
-    private Double longtitude;
+    private Double longitude;
     private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
@@ -22,14 +22,14 @@ public class Mission {
      * Constructor
      * @param id of mission
      * @param latitude of mission location
-     * @param longtitude of mission location
+     * @param longitude of mission location
      * @param missionType type of mission
      * @param started mission start date
      * @param ended mission end date
      */
-    public Mission(Double latitude, Double longtitude, MissionTypeEnum missionType, LocalDate started, LocalDate ended) {
+    public Mission(Double latitude, Double longitude, MissionTypeEnum missionType, LocalDate started, LocalDate ended) {
         this.latitude = latitude;
-        this.longtitude = longtitude;
+        this.longitude = longitude;
         this.missionType = missionType;
         this.started = started;
         this.ended = ended;
@@ -70,17 +70,17 @@ public class Mission {
     }
 
     /**
-     * @return longtitude of mission location
+     * @return longitude of mission location
      */
-    public Double getLongtitude() {
-        return longtitude;
+    public Double getLongitude() {
+        return longitude;
     }
 
     /**
-     * @param longtitude of mission location
+     * @param longitude of mission location
      */
-    public void setLongtitude(Double longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     /**
@@ -132,7 +132,7 @@ public class Mission {
 
         Mission mission = (Mission) object;
         return Objects.equals(getLatitude(), mission.getLatitude()) &&
-                Objects.equals(getLongtitude(), mission.getLongtitude()) &&
+                Objects.equals(getLongitude(), mission.getLongitude()) &&
                 Objects.equals(getMissionType(), mission.getMissionType()) &&
                 Objects.equals(getStarted(), mission.getStarted()) &&
                 Objects.equals(getEnded(), mission.getEnded());
@@ -140,6 +140,6 @@ public class Mission {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(), getLongtitude(), getMissionType(), getStarted(), getEnded());
+        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded());
     }
 }
