@@ -1,8 +1,8 @@
-package main.cz.fi.muni.pa165.secretagency.entity;
+package cz.fi.muni.pa165.secretagency.entity;
 
-import main.cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
+import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -20,7 +20,6 @@ public class Mission {
 
     /**
      * Constructor
-     * @param id of mission
      * @param latitude of mission location
      * @param longitude of mission location
      * @param missionType type of mission
