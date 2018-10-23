@@ -1,4 +1,4 @@
-package main.cz.fi.muni.pa165.secretagency.enums;
+package cz.fi.muni.pa165.secretagency.enums;
 
 /**
  * Types of mission
