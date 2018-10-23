@@ -2,6 +2,8 @@ package cz.fi.muni.pa165.secretagency.entity;
 
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
@@ -9,23 +11,49 @@ import java.time.LocalDate;
  *
  * @author Jan Pavlu (487548)
  */
+@Entity
 public class Report {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private String text;
+
+    @Temporal(TemporalType.DATE)
+    @NotNull
     private LocalDate date;
+
+    @Enumerated
+    @NotNull
     private MissionResultReportEnum missionResult;
+
+    @ManyToOne
+    @JoinColumn(name = "mission_id")
+    @NotNull
+    private Mission mission;
+
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    @NotNull
+    private Agent agent;
 
     /**
      * Constructor
      * @param text text of the report
      * @param date date when report was created
      * @param missionResult result of agent's work during the mission
+     * @param mission Mission, which is described by this report
+     * @param agent Author of report
      */
-    public Report(String text, LocalDate date, MissionResultReportEnum missionResult) {
+    public Report(String text, LocalDate date, MissionResultReportEnum missionResult,
+                  Mission mission, Agent agent) {
         this.text = text;
         this.date = date;
         this.missionResult = missionResult;
+        this.mission = mission;
+        this.agent = agent;
     }
 
     /**
@@ -89,6 +117,34 @@ public class Report {
      */
     public void setMissionResult(MissionResultReportEnum missionResult) {
         this.missionResult = missionResult;
+    }
+
+    /**
+     * @return mission, which is described by this report
+     */
+    public Mission getMission() {
+        return mission;
+    }
+
+    /**
+     * @param mission Mission described by report
+     */
+    public void setMission(Mission mission) {
+        this.mission = mission;
+    }
+
+    /**
+     * @return Agent who wrote the report
+     */
+    public Agent getAgent() {
+        return agent;
+    }
+
+    /**
+     * @param agent Author of the report
+     */
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     @Override
