@@ -1,19 +1,40 @@
 package cz.fi.muni.pa165.secretagency.entity;
 
-import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Department entity for Secret Agency.
  *
  * @author Milos Silhar (433614)
  */
+@Entity
 public class Department {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String city;
+
+    @NotNull
     private String country;
+
+    @NotNull
     private Double latitude;
+
+    @NotNull
     private Double longitude;
+
+    @OneToMany
+    private List<Agent> agents = new ArrayList<>();
 
     public Department() {
     }
