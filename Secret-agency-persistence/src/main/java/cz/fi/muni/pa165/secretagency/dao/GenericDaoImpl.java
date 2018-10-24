@@ -32,7 +32,7 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
 
     @Override
     public T save(T t) {
