@@ -174,7 +174,6 @@ public class Report {
 
         Report report = (Report) o;
 
-        if (!getId().equals(report.getId())) return false;
         if (!getText().equals(report.getText())) return false;
         if (!getDate().equals(report.getDate())) return false;
         if (getReportStatus() != report.getReportStatus()) return false;
@@ -183,8 +182,7 @@ public class Report {
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
-        result = 31 * result + getText().hashCode();
+        int result = getText().hashCode();
         result = 31 * result + getDate().hashCode();
         result = 31 * result + getReportStatus().hashCode();
         result = 31 * result + getMissionResult().hashCode();
