@@ -39,6 +39,12 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
 
+        <!-- Beans validation - constraints -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
         <!-- In memory database -->
         <dependency>
             <groupId>com.h2database</groupId>
