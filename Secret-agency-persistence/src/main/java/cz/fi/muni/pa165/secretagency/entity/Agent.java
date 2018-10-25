@@ -5,7 +5,7 @@ import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,7 +26,7 @@ public class Agent {
 
     @Temporal(TemporalType.DATE)
     @NotNull
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @ElementCollection
     @NotNull
@@ -47,7 +47,7 @@ public class Agent {
      * @param languages agent can speak these languages
      * @param rank of agent
      */
-    public Agent(Long id, String name, LocalDateTime birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName) {
+    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -97,7 +97,7 @@ public class Agent {
     /**
      * @return agent's birth date
      */
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
@@ -132,7 +132,7 @@ public class Agent {
     /**
      * @param birthDate agent's birth date
      */
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
