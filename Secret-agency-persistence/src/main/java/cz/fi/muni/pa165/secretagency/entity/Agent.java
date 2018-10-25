@@ -32,9 +32,13 @@ public class Agent {
     @NotNull
     private Set<LanguageEnum> languages = new HashSet<>();
 
+    @Enumerated
     @NotNull
     private AgentRankEnum rank;
 
+    @NotNull
+    @Enumerated
+    private String codeName;
     /**
      *
      * @param id of agent
@@ -43,12 +47,13 @@ public class Agent {
      * @param languages agent can speak these languages
      * @param rank of agent
      */
-    public Agent(Long id, String name, LocalDateTime birthDate, Set<LanguageEnum> languages, AgentRankEnum rank) {
+    public Agent(Long id, String name, LocalDateTime birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.languages = languages;
         this.rank = rank;
+        this.codeName = codeName;
     }
 
     /**
@@ -131,6 +136,20 @@ public class Agent {
         this.birthDate = birthDate;
     }
 
+    /**
+     * @return agent's code name
+     */
+    public String getCodeName() {
+        return codeName;
+    }
+
+    /**
+     * @param codeName set agent's code name
+     */
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,11 +158,12 @@ public class Agent {
         return Objects.equals(getName(), agent.getName()) &&
                 Objects.equals(getBirthDate(), agent.getBirthDate()) &&
                 Objects.equals(getLanguages(), agent.getLanguages()) &&
-                Objects.equals(getRank(), agent.getRank());
+                Objects.equals(getRank(), agent.getRank()) &&
+                Objects.equals(getCodeName(), agent.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank());
+        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName());
     }
 }
