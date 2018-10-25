@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.secretagency.dao;
 
 import cz.fi.muni.pa165.secretagency.entity.Department;
+import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 
 import java.util.List;
 
@@ -30,6 +31,10 @@ public interface DepartmentDao extends GenericDao<Department> {
      */
     List<Department> getDepartmentsInCity(String city);
 
-    // TODO popsat, az bude existovat DepartmentSpecializationResult
-    List<Department> getDepartmentBySpecialization();
+    /**
+     * Returns departments with selected specialization.
+     * @param departmentSpecialization selected specialization
+     * @return departments with selected specialization
+     */
+    List<Department> getDepartmentBySpecialization(DepartmentSpecialization departmentSpecialization);
 }
