@@ -1,33 +1,60 @@
 package cz.fi.muni.pa165.secretagency.entity;
 
-import java.time.LocalDateTime;
+import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
+import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Agent entity for the Secret agency project.
  *
- * @author (name = "Adam Kral", UCO = "<433328>")
+ * @author (Adam Kral<433328>)
  */
-
+@Entity
 public class Agent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String name;
 
-    private LocalDateTime birthDate;
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    private LocalDate birthDate;
 
+    @ElementCollection
+    @NotNull
+    private Set<LanguageEnum> languages = new HashSet<>();
+
+    @Enumerated
+    @NotNull
+    private AgentRankEnum rank;
+
+    @NotNull
+    @Enumerated
+    private String codeName;
     /**
      *
      * @param id of agent
      * @param name of agent
      * @param birthDate of agent
+     * @param languages agent can speak these languages
+     * @param rank of agent
      */
-    public Agent(Long id, String name, LocalDateTime birthDate) {
+    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
+        this.languages = languages;
+        this.rank = rank;
+        this.codeName = codeName;
     }
-
 
     /**
      * @param id of agent
@@ -70,15 +97,57 @@ public class Agent {
     /**
      * @return agent's birth date
      */
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    /**
+     * @return agents' known languages
+     */
+    public Set<LanguageEnum> getLanguages() {
+        return languages;
+    }
+
+    /**
+     * @param languages agent's newly learned languages
+     */
+    public void setLanguages(Set<LanguageEnum> languages) {
+        this.languages = languages;
+    }
+
+    /**
+     * @return agents' rank
+     */
+    public AgentRankEnum getRank() {
+        return rank;
+    }
+
+    /**
+     * @param rank agents rank
+     */
+    public void setRank(AgentRankEnum rank) {
+        this.rank = rank;
     }
 
     /**
      * @param birthDate agent's birth date
      */
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    /**
+     * @return agent's code name
+     */
+    public String getCodeName() {
+        return codeName;
+    }
+
+    /**
+     * @param codeName set agent's code name
+     */
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
     }
 
     @Override
@@ -87,11 +156,14 @@ public class Agent {
         if (!(o instanceof Agent)) return false;
         Agent agent = (Agent) o;
         return Objects.equals(getName(), agent.getName()) &&
-                Objects.equals(getBirthDate(), agent.getBirthDate());
+                Objects.equals(getBirthDate(), agent.getBirthDate()) &&
+                Objects.equals(getLanguages(), agent.getLanguages()) &&
+                Objects.equals(getRank(), agent.getRank()) &&
+                Objects.equals(getCodeName(), agent.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBirthDate());
+        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName());
     }
 }
