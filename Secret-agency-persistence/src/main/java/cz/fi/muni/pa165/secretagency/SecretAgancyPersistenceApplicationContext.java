@@ -16,6 +16,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.sql.DataSource;
 
+/**
+ * Application context for testing. Copied from seminar exercise.
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "cz.fi.muni.pa165.secretagency")
 @EnableTransactionManagement
