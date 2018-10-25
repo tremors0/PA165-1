@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = "cz.fi.muni.pa165.secretagency")
 @EnableTransactionManagement
 @ComponentScan(basePackages = "cz.fi.muni.pa165.secretagency")
-public class SecretAgancyPersistenceApplicationContext {
+public class SecretAgencyPersistenceApplicationContext {
 
     @Bean
     public JpaTransactionManager transactionManager(){
