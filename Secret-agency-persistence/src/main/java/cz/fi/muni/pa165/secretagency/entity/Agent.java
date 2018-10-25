@@ -41,6 +41,7 @@ public class Agent {
      * @param name of agent
      * @param birthDate of agent
      * @param languages agent can speak these languages
+     * @param rank of agent
      */
     public Agent(Long id, String name, LocalDateTime birthDate, Set<LanguageEnum> languages, AgentRankEnum rank) {
         this.id = id;
