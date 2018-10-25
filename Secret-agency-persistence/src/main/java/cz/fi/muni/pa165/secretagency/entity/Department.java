@@ -1,6 +1,8 @@
 package cz.fi.muni.pa165.secretagency.entity;
 
 
+import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Department entity for Secret Agency.
@@ -32,6 +36,8 @@ public class Department {
 
     @NotNull
     private Double longitude;
+
+    private DepartmentSpecialization specialization;
 
     @OneToMany
     private List<Agent> agents = new ArrayList<>();
@@ -112,6 +118,36 @@ public class Department {
      */
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    /**
+     * @return Department's specialization
+     */
+    public DepartmentSpecialization getSpecialization() {
+        return specialization;
+    }
+
+    /**
+     * Sets specialization of department.
+     * @param specialization Department's specialization
+     */
+    public void setSpecialization(DepartmentSpecialization specialization) {
+        this.specialization = specialization;
+    }
+
+    /**
+     * @return All agents assotiated with this department.
+     */
+    public List<Agent> getAgents() {
+        return Collections.unmodifiableList(this.agents);
+    }
+
+    /**
+     * Adds agent to this department.
+     * @param agent Agent to be added to this department.
+     */
+    public void addAgent(Agent agent) {
+        this.agents.add(agent);
     }
 
     @Override
