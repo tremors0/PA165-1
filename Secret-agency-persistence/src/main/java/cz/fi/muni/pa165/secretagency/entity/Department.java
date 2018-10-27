@@ -150,6 +150,7 @@ public class Department {
      */
     public void addAgent(Agent agent) {
         this.agents.add(agent);
+        agent.setDepartment(this);
     }
 
     @Override
@@ -160,11 +161,12 @@ public class Department {
         return Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getLatitude(), that.getLatitude()) &&
-                Objects.equals(getLongitude(), that.getLongitude());
+                Objects.equals(getLongitude(), that.getLongitude()) &&
+                Objects.equals(getSpecialization(), that.getSpecialization());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCity(), getCountry(), getLatitude(), getLongitude());
+        return Objects.hash(getCity(), getCountry(), getLatitude(), getLongitude(), getSpecialization());
     }
 }
