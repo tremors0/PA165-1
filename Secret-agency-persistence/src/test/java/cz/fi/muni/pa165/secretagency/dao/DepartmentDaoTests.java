@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 /**
  * @author Adam Kral <433328>
@@ -87,6 +88,11 @@ public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
         assertEquals(found.getLongitude(), 1d);
         assertEquals(found.getSpecialization(), DepartmentSpecialization.ASSASSINATION);
         assertEquals(found.getAgents().size(), 1);
+    }
+
+    @Test
+    public void getByIdNull() {
+        assertNull(departmentDao.getEntityById(41312311l));
     }
 
 //    @Test
