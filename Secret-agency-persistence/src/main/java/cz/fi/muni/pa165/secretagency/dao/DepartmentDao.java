@@ -1,9 +1,9 @@
 package cz.fi.muni.pa165.secretagency.dao;
 
-import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
+import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Jan Pavlu (487548)
@@ -11,25 +11,30 @@ import java.util.Collection;
 public interface DepartmentDao extends GenericDao<Department> {
 
     /**
-     * Returns all agents in the department.
-     * @param department selected department
-     * @return all agents in given department.
+     * \Returns number of employees in selected department.
+     * @param departmentId selected department
+     * @return number of employees in the department
      */
-    Collection<Agent> getAgentsInDepartment(Department department);
+    long getNumberOfEmployees(Long departmentId);
 
     /**
-     * Add agent to the department.
-     * @param department selected department.
-     * @param agent agent, which should be added to the department.
-     * @return <code>true</code>, if agent was added, otherwise <code>false</code>
+     * Returns departments, which are located in selected country.
+     * @param country selected country
+     * @return departments, which are located in selected country
      */
-    boolean addAgentToDepartment(Department department, Agent agent);
+    List<Department> getDepartmentsInCountry(String country);
 
     /**
-     * Remove agent from the department.
-     * @param department selected department
-     * @param agent agent, which should be removed
-     * @return <code>true</code>, if agent was removed, otherwise <code>false</code>
+     * Returns departments, which are located in selected city.
+     * @param city selected city
+     * @return departments, which are located in selected city
      */
-    boolean removeAgentFromDepartment(Department department, Agent agent);
+    List<Department> getDepartmentsInCity(String city);
+
+    /**
+     * Returns departments with selected specialization.
+     * @param departmentSpecialization selected specialization
+     * @return departments with selected specialization
+     */
+    List<Department> getDepartmentBySpecialization(DepartmentSpecialization departmentSpecialization);
 }
