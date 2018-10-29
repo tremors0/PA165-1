@@ -24,7 +24,7 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
-/**
+/*
  * Tests for Department dao implementation
  */
 
@@ -106,20 +106,10 @@ public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
         assertEquals(found.getAgents().size(), 2);
 
         Agent foundAgent1 = found.getAgents().get(0);
-        assertEquals(foundAgent1.getName(), a1.getName());
-        assertEquals(foundAgent1.getMissions(), a1.getMissions());
-        assertEquals(foundAgent1.getLanguages(), a1.getLanguages());
-        assertEquals(foundAgent1.getCodeName(), a1.getCodeName());
-        assertEquals(foundAgent1.getBirthDate(), a1.getBirthDate());
-        assertEquals(foundAgent1.getRank(), a1.getRank());
+        assertEquals(foundAgent1, a1);
 
         Agent foundAgent2 = found.getAgents().get(1);
-        assertEquals(foundAgent2.getName(), a2.getName());
-        assertEquals(foundAgent2.getMissions(), a2.getMissions());
-        assertEquals(foundAgent2.getLanguages(), a2.getLanguages());
-        assertEquals(foundAgent2.getCodeName(), a2.getCodeName());
-        assertEquals(foundAgent2.getBirthDate(), a2.getBirthDate());
-        assertEquals(foundAgent2.getRank(), a2.getRank());
+        assertEquals(foundAgent2, a2);
     }
 
     @Test
