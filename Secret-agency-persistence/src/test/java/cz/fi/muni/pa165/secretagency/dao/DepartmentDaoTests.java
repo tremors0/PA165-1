@@ -68,10 +68,20 @@ public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
         a1.setRank(AgentRankEnum.JUNIOR);
         a1.setName("James Bond");
 
+        Agent a2 = new Agent();
+        a2.setDepartment(department);
+        a2.setBirthDate(LocalDate.of(1988, 11, 11));
+        a2.setCodeName("Donald");
+        a2.addLanguage(LanguageEnum.RU);
+        a2.setRank(AgentRankEnum.SENIOR);
+        a2.setName("Donald Trump");
+
         em.persist(department);
         em.persist(a1);
+        em.persist(a2);
 
         department.addAgent(a1);
+        department.addAgent(a2);
 
         em.getTransaction().commit();
         em.close();
@@ -87,18 +97,18 @@ public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
         assertEquals(found.getLatitude(), 2d);
         assertEquals(found.getLongitude(), 1d);
         assertEquals(found.getSpecialization(), DepartmentSpecialization.ASSASSINATION);
-        assertEquals(found.getAgents().size(), 1);
+        assertEquals(found.getAgents().size(), 2);
     }
 
     @Test
     public void getByIdNull() {
-        assertNull(departmentDao.getEntityById(41312311l));
+        assertNull(departmentDao.getEntityById(41312311L));
     }
 
-//    @Test
-////    public void getNumberOfEmployees() {
-////        assertEquals(departmentDao.getNumberOfEmployees(d1.getId()), 2);
-////    }
+    @Test
+    public void getNumberOfEmployees() {
+        assertEquals(departmentDao.getNumberOfEmployees(d1.getId()), 2L);
+    }
 
     @Test
     public void getDepartmentInCountry() {
