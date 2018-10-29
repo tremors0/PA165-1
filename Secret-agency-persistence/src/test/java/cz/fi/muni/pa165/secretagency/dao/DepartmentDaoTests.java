@@ -36,7 +36,7 @@ public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
     private EntityManagerFactory emf;
 
     @Autowired
-    private DepartmentDaoImpl departmentDao;
+    private DepartmentDao departmentDao;
 
     private Department d1;
 
