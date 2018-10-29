@@ -181,8 +181,12 @@ public class Agent {
 
     /**
      * @param mission adds mission to agent's mission
+     * @throws NullPointerException when mission is null
      */
     public void addMission(Mission mission) {
+        if (mission == null) {
+            throw new NullPointerException("Cannot add mission to agent if mission is null");
+        }
         this.missions.add(mission);
     }
 
@@ -195,8 +199,12 @@ public class Agent {
 
     /**
      * @param department set department in which agent is working
+     * @throws NullPointerException when department is null
      */
     public void setDepartment(Department department) {
+        if (department == null) {
+            throw new NullPointerException("Cannot department for agent when department is null");
+        }
         this.department = department;
     }
 
@@ -213,14 +221,15 @@ public class Agent {
      * Add report about a given mission
      * @param report agent's written report
      * @param mission mission where report should be added
+     * @throws NullPointerException when report or mission is null
      */
     public void addReport(Report report, Mission mission) {
         if (report == null) {
-            return;
+            throw new NullPointerException("Cannot add report when report is null");
         }
 
         if (mission == null) {
-            return;
+            throw new NullPointerException("Cannot add report when mission is null");
         }
 
         this.reports.add(report);

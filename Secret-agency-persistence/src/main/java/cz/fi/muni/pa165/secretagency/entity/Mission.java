@@ -180,17 +180,22 @@ public class Mission {
     /**
      * Add report about mission
      * @param report report about mission
+     * @throws NullPointerException when report is null
      */
     public void addReport(Report report) {
+        if (report == null) {
+            throw new NullPointerException("Cannot add report for mission when report is null");
+        }
         this.reports.add(report);
     }
 
     /**
      * @param agent agent, which should be added
+     * @throws NullPointerException when agent is null
      */
     public void addAgent(Agent agent) {
         if (agent == null) {
-            return;
+            throw new NullPointerException("Cannot add agent on mission if agent is null");
         }
         this.agents.add(agent);
         agent.addMission(this);
