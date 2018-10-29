@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.secretagency.SecretAgencyPersistenceApplicationContext;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author Jan Pavlu (487548)
  */
 @ContextConfiguration(classes = SecretAgencyPersistenceApplicationContext.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class MissionDaoTests extends AbstractTestNGSpringContextTests {
 
     @PersistenceUnit
