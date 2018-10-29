@@ -3,10 +3,12 @@ package cz.fi.muni.pa165.secretagency.dao;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public class AgentDaoImpl extends GenericDaoImpl<Agent> implements AgentDao {
 
     /**
