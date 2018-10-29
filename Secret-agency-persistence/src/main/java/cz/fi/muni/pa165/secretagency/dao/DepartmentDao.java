@@ -15,7 +15,7 @@ public interface DepartmentDao extends GenericDao<Department> {
      * @param departmentId selected department
      * @return number of employees in the department
      */
-    int getNumberOfEmployees(Long departmentId);
+    long getNumberOfEmployees(Long departmentId);
 
     /**
      * Returns departments, which are located in selected country.
