@@ -26,6 +26,13 @@ public interface GenericDao<T> {
     void delete(T t);
 
     /**
+     * Merges detached entity
+     * @param t Detached entity
+     * @return Entity, which is menaged now.
+     */
+    T merge(T t);
+
+    /**
      * Deletes entity from database.
      * @param id Id of entity which is going to be deleted.
      */
