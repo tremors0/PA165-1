@@ -177,6 +177,17 @@ public class Mission {
         this.ended = ended;
     }
 
+    /**
+     * @param agent agent, which should be added
+     */
+    public void addAgent(Agent agent) {
+        if (agent == null) {
+            return;
+        }
+        this.agents.add(agent);
+        agent.addMission(this);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
