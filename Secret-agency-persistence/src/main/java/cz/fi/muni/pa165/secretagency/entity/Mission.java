@@ -1,7 +1,10 @@
 package cz.fi.muni.pa165.secretagency.entity;
 
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
+import org.springframework.lang.Nullable;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -10,12 +13,26 @@ import java.util.Objects;
  *
  * @author Adam Skurla (487588)
  */
+@Entity
 public class Mission {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private Double latitude;
+
+    @NotNull
     private Double longitude;
+
+    @NotNull
+    @Enumerated
     private MissionTypeEnum missionType;
+
+    @NotNull
     private LocalDate started;
+
+    @Nullable
     private LocalDate ended;
 
     /**
