@@ -25,12 +25,13 @@ public class DepartmentDaoImpl extends GenericDaoImpl<Department> implements Dep
     }
 
     @Override
-    public int getNumberOfEmployees(Long departmentId) {
+    public long getNumberOfEmployees(Long departmentId) {
         Object result = em.createQuery("SELECT COUNT(d) FROM Department d " +
-                "LEFT JOIN Agent a " +
-                "WHERE d.id = :departmentId").getSingleResult();
-
-        return (int)result;
+                "inner JOIN d.agents " +
+                "WHERE d.id = :departmentId")
+                .setParameter("departmentId", departmentId)
+                .getSingleResult();
+        return (long)result;
     }
 
     @Override

@@ -204,13 +204,11 @@ public class Agent {
                 Objects.equals(getBirthDate(), agent.getBirthDate()) &&
                 Objects.equals(getLanguages(), agent.getLanguages()) &&
                 Objects.equals(getRank(), agent.getRank()) &&
-                Objects.equals(getCodeName(), agent.getCodeName()) &&
-                Objects.equals(getMissions(), agent.getMissions()) &&
-                Objects.equals(getDepartment(), agent.getDepartment());
+                Objects.equals(getCodeName(), agent.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName(), getMissions(), getDepartment());
+        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName());
     }
 }
