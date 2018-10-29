@@ -178,6 +178,14 @@ public class Mission {
     }
 
     /**
+     * Add report about mission
+     * @param report report about mission
+     */
+    public void addReport(Report report) {
+        this.reports.add(report);
+    }
+
+    /**
      * @param agent agent, which should be added
      */
     public void addAgent(Agent agent) {
