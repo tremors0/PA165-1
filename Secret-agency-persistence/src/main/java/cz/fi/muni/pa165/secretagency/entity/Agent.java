@@ -47,6 +47,10 @@ public class Agent {
     @JoinColumn(name = "department_id")
     @NotNull
     private Department department;
+
+    @OneToMany
+    private List<Report> reports = new ArrayList<>();
+
     /**
      *
      * @param id of agent
@@ -55,7 +59,7 @@ public class Agent {
      * @param languages agent can speak these languages
      * @param rank of agent
      */
-    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName, List<Mission> missions, Department department) {
+    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName, List<Mission> missions, Department department, List<Report> reports) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -64,6 +68,7 @@ public class Agent {
         this.codeName = codeName;
         this.missions = missions;
         this.department = department;
+        this.reports = reports;
     }
 
     /**
@@ -195,6 +200,33 @@ public class Agent {
         this.department = department;
     }
 
+
+    /**
+     * Get all agent's reports
+     * @return all reports of agent
+     */
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    /**
+     * Add report about a given mission
+     * @param report agent's written report
+     * @param mission mission where report should be added
+     */
+    public void addReport(Report report, Mission mission) {
+        if (report == null) {
+            return;
+        }
+
+        if (mission == null) {
+            return;
+        }
+
+        this.reports.add(report);
+        mission.addReport(report);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -204,13 +236,11 @@ public class Agent {
                 Objects.equals(getBirthDate(), agent.getBirthDate()) &&
                 Objects.equals(getLanguages(), agent.getLanguages()) &&
                 Objects.equals(getRank(), agent.getRank()) &&
-                Objects.equals(getCodeName(), agent.getCodeName()) &&
-                Objects.equals(getMissions(), agent.getMissions()) &&
-                Objects.equals(getDepartment(), agent.getDepartment());
+                Objects.equals(getCodeName(), agent.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName(), getMissions(), getDepartment());
+        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName());
     }
 }
