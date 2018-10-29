@@ -1,6 +1,6 @@
-package cz.fi.muni.pa165.secretagency;
+package cz.fi.muni.pa165.secretagency.dao;
 
-import cz.fi.muni.pa165.secretagency.dao.MissionDao;
+import cz.fi.muni.pa165.secretagency.SecretAgencyPersistenceApplicationContext;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,17 +96,26 @@ public class MissionDaoTests extends AbstractTestNGSpringContextTests {
     }
 
     /**
-     * Tests if correct mission is returned, when date from is the last day of the mission
-     *   and date to is one day before a next mission.
+     * Tests if correct mission is returned, when date from is first day of the mission.
      */
     @Test
     public void getMissionsStartedInIntervalBorderValues() {
-        LocalDate dateFrom = LocalDate.of(1975, 4, 30);
+        LocalDate dateFrom = LocalDate.of(1955, 1, 1);
         LocalDate dateTo = LocalDate.of(2001, 5, 4);
         List<Mission> missionsInInterval = missionDao.getMissionsStartedInInterval(dateFrom, dateTo);
         Assert.assertEquals(missionsInInterval.size(), 1);
-        Mission selectedMission = missionsInInterval.get(0);
-        Assert.assertEquals(selectedMission, vietnam);
+        Assert.assertTrue(missionsInInterval.contains(vietnam));
+    }
+
+    /**
+     * Tests if no mission is returned, when date from is second day of the mission.
+     */
+    @Test
+    public void getMissionsStartedInIntervalBorderValues2() {
+        LocalDate dateFrom = LocalDate.of(1955, 1, 2);
+        LocalDate dateTo = LocalDate.of(2001, 5, 4);
+        List<Mission> missionsInInterval = missionDao.getMissionsStartedInInterval(dateFrom, dateTo);
+        Assert.assertEquals(missionsInInterval.size(), 0);
     }
 
     /**
