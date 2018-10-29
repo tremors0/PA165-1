@@ -6,7 +6,9 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Mission entity for Secret agency project.
@@ -34,6 +36,12 @@ public class Mission {
 
     @Nullable
     private LocalDate ended;
+
+    @ManyToMany(mappedBy = "missions")
+    private Set<Agent> agents = new HashSet<>();
+
+    @OneToMany(mappedBy = "mission")
+    private Set<Report> reports = new HashSet<>();
 
     /**
      * Constructor
@@ -132,6 +140,34 @@ public class Mission {
      */
     public LocalDate getEnded() {
         return ended;
+    }
+
+    /**
+     * @return agents on mission
+     */
+    public Set<Agent> getAgents() {
+        return agents;
+    }
+
+    /**
+     * @param agents agents on mission
+     */
+    public void setAgents(Set<Agent> agents) {
+        this.agents = agents;
+    }
+
+    /**
+     * @return reports from mission
+     */
+    public Set<Report> getReports() {
+        return reports;
+    }
+
+    /**
+     * @param reports reports from mission
+     */
+    public void setReports(Set<Report> reports) {
+        this.reports = reports;
     }
 
     /**
