@@ -7,6 +7,7 @@ import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -32,6 +33,7 @@ import static org.testng.Assert.assertNull;
  * @author Adam Kral <433328>
  */
 @ContextConfiguration(classes=SecretAgencyPersistenceApplicationContext.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 @Transactional
 public class DepartmentDaoTests extends AbstractTestNGSpringContextTests {
