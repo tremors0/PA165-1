@@ -29,7 +29,7 @@ public interface AgentDao extends GenericDao<Agent> {
     /**
      * Returns agents with given codename.
      * @param codename Codename of an agent to search for.
-     * @return Agents with given codename.
+     * @return Agent with given codename or null if no agent was found.
      */
     Agent getAgentByCodename(String codename);
 
