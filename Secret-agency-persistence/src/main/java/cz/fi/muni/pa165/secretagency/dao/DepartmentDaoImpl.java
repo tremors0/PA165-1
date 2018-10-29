@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -49,10 +50,10 @@ public class DepartmentDaoImpl extends GenericDaoImpl<Department> implements Dep
     }
 
     @Override
-    public List<Department> getDepartmentBySpecialization(DepartmentSpecialization departmentSpecialization) {
+    public List<Department> getDepartmentBySpecialization(DepartmentSpecialization specialization) {
         TypedQuery<Department> query = em.createQuery("SELECT d FROM Department d " +
-                "WHERE d.departmentSpecialization = :departmentSpecialization", Department.class);
-        return query.setParameter("departmentSpecialization", departmentSpecialization)
+                "WHERE d.specialization = :specialization", Department.class);
+        return query.setParameter("specialization", specialization)
                 .getResultList();
     }
 }

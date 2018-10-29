@@ -126,6 +126,13 @@ public class Agent {
     }
 
     /**
+     * @param language agent's newly learned language
+     */
+    public void addLanguage(LanguageEnum language) {
+        this.languages.add(language);
+    }
+
+    /**
      * @return agents' rank
      */
     public AgentRankEnum getRank() {
