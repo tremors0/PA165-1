@@ -112,10 +112,7 @@ public class ReportDaoTests extends AbstractTestNGSpringContextTests {
     public void getReportById() {
         Report found = reportDao.getEntityById(reportNew.getId());
         Assert.assertNotNull(found);
-        Assert.assertEquals(found.getText(), reportNew.getText());
-        Assert.assertEquals(found.getDate(), reportNew.getDate());
-        Assert.assertEquals(found.getReportStatus(), reportNew.getReportStatus());
-        Assert.assertEquals(found.getMissionResult(), reportNew.getMissionResult());
+        Assert.assertEquals(found, reportNew);
     }
 
     /**
