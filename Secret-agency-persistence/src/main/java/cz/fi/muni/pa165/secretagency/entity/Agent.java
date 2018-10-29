@@ -185,7 +185,7 @@ public class Agent {
      */
     public void addMission(Mission mission) {
         if (mission == null) {
-            throw new NullPointerException("Cannot add mission to agent if mission is null");
+            throw new NullPointerException("Cannot add mission to agent when mission is null");
         }
         this.missions.add(mission);
     }
@@ -199,12 +199,8 @@ public class Agent {
 
     /**
      * @param department set department in which agent is working
-     * @throws NullPointerException when department is null
      */
     public void setDepartment(Department department) {
-        if (department == null) {
-            throw new NullPointerException("Cannot department for agent when department is null");
-        }
         this.department = department;
     }
 
