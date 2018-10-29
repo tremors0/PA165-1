@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 
-    private Class<T> clazz;
+    protected Class<T> clazz;
 
     /**
      * Constructor
@@ -46,9 +46,17 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @Override
+    public T merge(T t) {
+        return em.merge(t);
+    }
+
+    @Override
     public void deleteEntityById(Long id) {
-        T entityToRemove = em.find(clazz, id);
-        em.remove(entityToRemove);
+        T entityToRemove = this.getEntityById(id);
+        if (entityToRemove == null) {
+            throw new IllegalArgumentException("Entity with given ID doesn't exist");
+        }
+        this.delete(entityToRemove);
     }
 
     @Override
