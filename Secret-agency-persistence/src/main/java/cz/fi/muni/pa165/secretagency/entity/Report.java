@@ -6,6 +6,7 @@ import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Report entity for Secret agency project.
@@ -153,21 +154,15 @@ public class Report {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Report)) return false;
-
         Report report = (Report) o;
-
-        if (!getText().equals(report.getText())) return false;
-        if (!getDate().equals(report.getDate())) return false;
-        if (getReportStatus() != report.getReportStatus()) return false;
-        return getMissionResult() == report.getMissionResult();
+        return Objects.equals(getText(), report.getText()) &&
+                Objects.equals(getDate(), report.getDate()) &&
+                getReportStatus() == report.getReportStatus() &&
+                getMissionResult() == report.getMissionResult();
     }
 
     @Override
     public int hashCode() {
-        int result = getText().hashCode();
-        result = 31 * result + getDate().hashCode();
-        result = 31 * result + getReportStatus().hashCode();
-        result = 31 * result + getMissionResult().hashCode();
-        return result;
+        return Objects.hash(getText(), getDate(), getReportStatus(), getMissionResult());
     }
 }
