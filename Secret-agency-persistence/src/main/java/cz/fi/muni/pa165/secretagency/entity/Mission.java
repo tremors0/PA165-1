@@ -171,6 +171,7 @@ public class Mission {
             throw new NullPointerException("Cannot add report for mission when report is null");
         }
         this.reports.add(report);
+        report.setMission(this);
     }
 
     /**
