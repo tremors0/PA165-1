@@ -41,7 +41,7 @@ public class Department {
     @Enumerated
     private DepartmentSpecialization specialization;
 
-    @OneToMany
+    @OneToMany(mappedBy = "department")
     private List<Agent> agents = new ArrayList<>();
 
     public Department() {
