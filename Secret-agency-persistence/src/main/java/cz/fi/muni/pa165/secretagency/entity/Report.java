@@ -44,23 +44,6 @@ public class Report {
     private Agent agent;
 
     /**
-     * Constructor
-     * @param text text of the report
-     * @param date date when report was created
-     * @param missionResult result of agent's work during the mission
-     * @param mission Mission, which is described by this report
-     * @param agent Author of report
-     */
-    public Report(String text, LocalDate date, MissionResultReportEnum missionResult,
-                  Mission mission, Agent agent) {
-        this.text = text;
-        this.date = date;
-        this.missionResult = missionResult;
-        this.mission = mission;
-        this.agent = agent;
-    }
-
-    /**
      * Empty constructor
      */
     public Report() {

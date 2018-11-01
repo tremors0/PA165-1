@@ -51,33 +51,6 @@ public class Agent {
     @OneToMany
     private List<Report> reports = new ArrayList<>();
 
-    /**
-     *
-     * @param id of agent
-     * @param name of agent
-     * @param birthDate of agent
-     * @param languages agent can speak these languages
-     * @param rank of agent
-     */
-    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName, List<Mission> missions, Department department, List<Report> reports) {
-        this.id = id;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.languages = languages;
-        this.rank = rank;
-        this.codeName = codeName;
-        this.missions = missions;
-        this.department = department;
-        this.reports = reports;
-    }
-
-    /**
-     * @param id of agent
-     */
-    public Agent(Long id) {
-        this.id = id;
-    }
-
     /** Create empty Agent **/
     public Agent() {}
 
