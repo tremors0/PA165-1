@@ -32,6 +32,7 @@
 
   <modules>
     <module>Secret-agency-persistence</module>
+    <module>Secret-agency-service</module>
   </modules>
 
 </project>
