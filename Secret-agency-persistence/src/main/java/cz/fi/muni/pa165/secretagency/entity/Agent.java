@@ -51,33 +51,6 @@ public class Agent {
     @OneToMany
     private List<Report> reports = new ArrayList<>();
 
-    /**
-     *
-     * @param id of agent
-     * @param name of agent
-     * @param birthDate of agent
-     * @param languages agent can speak these languages
-     * @param rank of agent
-     */
-    public Agent(Long id, String name, LocalDate birthDate, Set<LanguageEnum> languages, AgentRankEnum rank, String codeName, List<Mission> missions, Department department, List<Report> reports) {
-        this.id = id;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.languages = languages;
-        this.rank = rank;
-        this.codeName = codeName;
-        this.missions = missions;
-        this.department = department;
-        this.reports = reports;
-    }
-
-    /**
-     * @param id of agent
-     */
-    public Agent(Long id) {
-        this.id = id;
-    }
-
     /** Create empty Agent **/
     public Agent() {}
 
@@ -181,8 +154,12 @@ public class Agent {
 
     /**
      * @param mission adds mission to agent's mission
+     * @throws NullPointerException when mission is null
      */
     public void addMission(Mission mission) {
+        if (mission == null) {
+            throw new NullPointerException("Cannot add mission to agent when mission is null");
+        }
         this.missions.add(mission);
     }
 
@@ -213,14 +190,15 @@ public class Agent {
      * Add report about a given mission
      * @param report agent's written report
      * @param mission mission where report should be added
+     * @throws NullPointerException when report or mission is null
      */
     public void addReport(Report report, Mission mission) {
         if (report == null) {
-            return;
+            throw new NullPointerException("Cannot add report when report is null");
         }
 
         if (mission == null) {
-            return;
+            throw new NullPointerException("Cannot add report when mission is null");
         }
 
         this.reports.add(report);
