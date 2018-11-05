@@ -24,7 +24,8 @@ public class ReportDaoImpl extends GenericDaoImpl<Report> implements ReportDao {
 
     @Override
     public List<Report> getReportsFromInterval(LocalDate dateFrom, LocalDate dateTo) {
-        TypedQuery<Report> query = em.createQuery("select r from Report r where r.date between :dateFrom and :dateTo", Report.class);
+        TypedQuery<Report> query = em.createQuery("select r from Report r " +
+                "where r.date between :dateFrom and :dateTo", Report.class);
         return query
                 .setParameter("dateFrom", dateFrom)
                 .setParameter("dateTo", dateTo)
@@ -33,7 +34,8 @@ public class ReportDaoImpl extends GenericDaoImpl<Report> implements ReportDao {
 
     @Override
     public List<Report> getReportsWithResult(MissionResultReportEnum missionResultReport) {
-        TypedQuery<Report> query = em.createQuery("select r from Report r where r.missionResult = :resultReport", Report.class);
+        TypedQuery<Report> query = em.createQuery("select r from Report r " +
+                "where r.missionResult = :resultReport", Report.class);
         return query
                 .setParameter("resultReport", missionResultReport)
                 .getResultList();
@@ -41,7 +43,8 @@ public class ReportDaoImpl extends GenericDaoImpl<Report> implements ReportDao {
 
     @Override
     public List<Report> getReportsWithStatus(ReportStatus reportStatus) {
-        TypedQuery<Report> query = em.createQuery("select r from Report r where r.reportStatus = :reportStatus", Report.class);
+        TypedQuery<Report> query = em.createQuery("select r from Report r where " +
+                "r.reportStatus = :reportStatus", Report.class);
         return query
                 .setParameter("reportStatus", reportStatus)
                 .getResultList();
@@ -49,7 +52,8 @@ public class ReportDaoImpl extends GenericDaoImpl<Report> implements ReportDao {
 
     @Override
     public List<Report> getReportsWithStatusFromMission(ReportStatus reportStatus, Mission mission) {
-        TypedQuery<Report> query = em.createQuery("select r from Report r where r.reportStatus = :reportStatus and r.mission = :mission", Report.class);
+        TypedQuery<Report> query = em.createQuery("select r from Report r " +
+                "where r.reportStatus = :reportStatus and r.mission = :mission", Report.class);
         return query
                 .setParameter("reportStatus", reportStatus)
                 .setParameter("mission", mission)
