@@ -82,9 +82,4 @@ public class AgentServiceImpl implements AgentService {
     public void addAgentToDepartment(Agent agent, Department department) {
         agent.setDepartment(department);
     }
-
-    @Override
-    public void removeAgentFromDepartment(Agent agent, Department department) {
-        agent.setDepartment(null);
-    }
 }

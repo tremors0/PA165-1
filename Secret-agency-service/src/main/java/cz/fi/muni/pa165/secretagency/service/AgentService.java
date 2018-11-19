@@ -83,11 +83,4 @@ interface AgentService {
      * @param department department to be moved to
      */
     void addAgentToDepartment(Agent agent, Department department);
-
-    /**
-     * Remove agent from department
-     * @param agent agent to be removed
-     * @param department department to be removed from
-     */
-    void removeAgentFromDepartment(Agent agent, Department department);
 }

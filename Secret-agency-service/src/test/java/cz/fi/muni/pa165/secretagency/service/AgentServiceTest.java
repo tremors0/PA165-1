@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 
 /**
@@ -42,6 +43,43 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     @BeforeClass
     public void setup() throws ServiceException {
         MockitoAnnotations.initMocks(this);
+    }
+
+    /**
+     * Test that all agents are returned
+     */
+    @Test
+    public void getAllAgentsTest() {
+        Agent agent = new Agent(50L);
+        when(agentDao.getAll()).thenReturn(Collections.singletonList(agent));
+        assertEquals(1, agentService.getAll().size());
+    }
+
+    /**
+     * Test that agent is created
+     */
+    @Test
+    public void createAgentTest() {
+        Agent agent = new Agent(50L);
+        agent.setCodeName("Rum");
+        agent.setRank(AgentRankEnum.JUNIOR);
+        when(agentDao.save(agent)).thenReturn(agent);
+        Agent savedAgent = agentService.createAgent(agent);
+        assertEquals(agent, savedAgent);
+    }
+
+    /**
+     * Test that correct agent with is returned by id
+     */
+    @Test
+    public void getByIdTest() {
+        Agent agent1 = new Agent(50L);
+        Agent agent2 = new Agent(30L);
+        List<Agent> agentsList = new ArrayList<>();
+        agentsList.add(agent1);
+        agentsList.add(agent2);
+        when(agentDao.getEntityById(agent1.getId())).thenReturn(agent1);
+        assertEquals(agent1, agentService.getById(agent1.getId()));
     }
 
     /**
