@@ -1,4 +1,4 @@
-package cz.fi.muni.pa165.secretagency.service.service;
+package cz.fi.muni.pa165.secretagency.service;
 
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
@@ -14,9 +14,29 @@ import java.util.List;
 interface AgentService {
     /**
      * Create new agent
-     * @param agent agent to create
+     * @param agent to be created
+     * @return created agent
      */
-    void createAgent(Agent agent);
+    Agent createAgent(Agent agent);
+
+    /**
+     * Get agent by his id
+     * @param id agent's id
+     * @return Agent with given id //TODO: throw exception on not found?
+     */
+    Agent getById(Long id);
+
+    /**
+     * Get all agents
+     * @return all agents
+     */
+    List<Agent> getAll();
+
+    /**
+     * Delete given agent
+     * @param agent to be deleted
+     */
+    void deleteAgent(Agent agent);
 
     /**
      * Get all agents on a given mission
@@ -37,7 +57,7 @@ interface AgentService {
      * @param codename agent's codename
      * @return agents with given codename
      */
-    List<Agent> getAgentsByCodeName(String codename);
+    Agent getAgentByCodeName(String codename);
 
     /**
      * Assigns an agent to mission
@@ -51,7 +71,7 @@ interface AgentService {
      * @param agent agent to be removed
      * @param mission mission to be removed from
      */
-    void unassignAgentFromMission(Agent agent, Mission mission);
+    void removeAgentFromMission(Agent agent, Mission mission);
 
     /**
      * Add agent to given department
