@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
+import cz.fi.muni.pa165.secretagency.service.exceptions.AgentServiceException;
 
 import java.util.List;
 
@@ -63,15 +64,17 @@ interface AgentService {
      * Assigns an agent to mission
      * @param agent agent to be assigned
      * @param mission mission to be assigned on
+     * @throws AgentServiceException when agent is already assigned to given mission
      */
-    void assignAgentToMission(Agent agent, Mission mission);
+    void assignAgentToMission(Agent agent, Mission mission) throws AgentServiceException;
 
     /**
      * Remove agent from a mission
      * @param agent agent to be removed
      * @param mission mission to be removed from
+     * @throws AgentServiceException when given mission could not be found in a list of agent's missions
      */
-    void removeAgentFromMission(Agent agent, Mission mission);
+    void removeAgentFromMission(Agent agent, Mission mission) throws AgentServiceException;
 
     /**
      * Add agent to given department

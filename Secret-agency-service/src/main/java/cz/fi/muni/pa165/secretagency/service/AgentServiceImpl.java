@@ -5,11 +5,12 @@ import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
+import cz.fi.muni.pa165.secretagency.service.exceptions.AgentServiceException;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link AgentService}. This class is part of the
@@ -48,7 +49,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public List<Agent> getAgentsOnMission(Mission mission) {
-        throw new NotImplementedException();
+        return getAll().stream().filter(agent -> agent.getMissions().contains(mission)).collect(Collectors.toList());
     }
 
     @Override
@@ -63,11 +64,17 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public void assignAgentToMission(Agent agent, Mission mission) {
+        if (agent.getMissions().contains(mission)) {
+            throw new AgentServiceException("Cannot assign agent to mission, already assigned");
+        }
         agent.addMission(mission);
     }
 
     @Override
     public void removeAgentFromMission(Agent agent, Mission mission) {
+        if (!agent.getMissions().contains(mission)) {
+            throw new AgentServiceException("Cannot remove agent from mission, could not find mission");
+        }
         agent.removeMission(mission);
     }
 

@@ -5,6 +5,7 @@ import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
+import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,13 +44,46 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         MockitoAnnotations.initMocks(this);
     }
 
+    /**
+     * Test that all agents with given mission are returned
+     */
     @Test
     public void getAgentsOnMissionTest() {
         Agent agent = new Agent(50L);
         Mission mission = new Mission();
         agent.addMission(mission);
+        when(agentDao.getAll()).thenReturn(Collections.singletonList(agent));
+        List<Agent> agentsOnMission = agentService.getAgentsOnMission(mission);
+        assertEquals(1, agentsOnMission.size());
     }
 
+    /**
+     * Test that agents are not returned if they are assigned to no/other mission
+     */
+    @Test
+    public void getAgentsOnMissionNoAgentsFoundTest() {
+        Agent agentNoMission = new Agent(50L);
+        Agent agentOnDifferentMission = new Agent(40L);
+        Mission agentsMission = new Mission();
+        agentsMission.setId(1L);
+        agentOnDifferentMission.addMission(agentsMission);
+
+        Mission assassination = new Mission();
+        assassination.setId(2L);
+        assassination.setMissionType(MissionTypeEnum.ASSASSINATION);
+
+        List<Agent> agentsList = new ArrayList<>();
+        agentsList.add(agentNoMission);
+        agentsList.add(agentOnDifferentMission);
+
+        when(agentDao.getAll()).thenReturn(agentsList);
+        List<Agent> agentsOnMission = agentService.getAgentsOnMission(assassination);
+        assertEquals(0, agentsOnMission.size());
+    }
+
+    /**
+     * Assert that agent with given rank are returned
+     */
     @Test
     public void getAgentsWithRankTest() {
         Agent agent = new Agent(50L);
@@ -60,15 +95,21 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     }
 
 
+    /**
+     * Assert that agent with given codename is returned
+     */
     @Test
     public void getAgentByCodenameTest() {
         Agent agent = new Agent(50L);
         agent.setCodeName("Tequila");
         when(agentDao.getAgentByCodename("Tequila")).thenReturn(agent);
-        Agent foundAgent = agentService.getAgentByCodeName("Tequilla");
-        assertEquals(50L, (long) agent.getId());
+        Agent foundAgent = agentService.getAgentByCodeName("Tequila");
+        assertEquals(50L, (long) foundAgent.getId());
     }
 
+    /**
+     * Assert that agent is assigned to given mission
+     */
     @Test
     public void assignAgentToMissionTest() {
         Agent agent = new Agent(50L);
@@ -79,6 +120,9 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         assertEquals(1L, (long) agent.getMissions().get(0).getId());
     }
 
+    /**
+     * Assert that agent is removed from given mission
+     */
     @Test
     public void removeAgentFromMissionTest() {
         Agent agent = new Agent(50L);
@@ -89,6 +133,9 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         assertEquals(0, agent.getMissions().size());
     }
 
+    /**
+     * Assert that agent department is correctly changed
+     */
     @Test
     public void addAgentToDepartmentTest() {
         Agent agent = new Agent(50L);
