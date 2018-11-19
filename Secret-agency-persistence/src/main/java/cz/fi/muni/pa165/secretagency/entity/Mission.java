@@ -44,22 +44,6 @@ public class Mission {
     private Set<Report> reports = new HashSet<>();
 
     /**
-     * Constructor
-     * @param latitude of mission location
-     * @param longitude of mission location
-     * @param missionType type of mission
-     * @param started mission start date
-     * @param ended mission end date
-     */
-    public Mission(Double latitude, Double longitude, MissionTypeEnum missionType, LocalDate started, LocalDate ended) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.missionType = missionType;
-        this.started = started;
-        this.ended = ended;
-    }
-
-    /**
      * Create empty Mission
      */
     public Mission() {
@@ -187,6 +171,7 @@ public class Mission {
             throw new NullPointerException("Cannot add report for mission when report is null");
         }
         this.reports.add(report);
+        report.setMission(this);
     }
 
     /**
