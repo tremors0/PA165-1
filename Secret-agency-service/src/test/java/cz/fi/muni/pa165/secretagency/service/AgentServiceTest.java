@@ -23,7 +23,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 
 /**
@@ -50,7 +49,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getAllAgentsTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         when(agentDao.getAll()).thenReturn(Collections.singletonList(agent));
         assertEquals(1, agentService.getAll().size());
     }
@@ -60,7 +60,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void createAgentTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         agent.setCodeName("Rum");
         agent.setRank(AgentRankEnum.JUNIOR);
         when(agentDao.save(agent)).thenReturn(agent);
@@ -73,11 +74,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getByIdTest() {
-        Agent agent1 = new Agent(50L);
-        Agent agent2 = new Agent(30L);
-        List<Agent> agentsList = new ArrayList<>();
-        agentsList.add(agent1);
-        agentsList.add(agent2);
+        Agent agent1 = new Agent();
+        agent1.setId(50L);
         when(agentDao.getEntityById(agent1.getId())).thenReturn(agent1);
         assertEquals(agent1, agentService.getById(agent1.getId()));
     }
@@ -87,7 +85,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getAgentsOnMissionTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         Mission mission = new Mission();
         agent.addMission(mission);
         when(agentDao.getAll()).thenReturn(Collections.singletonList(agent));
@@ -100,8 +99,10 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getAgentsOnMissionNoAgentsFoundTest() {
-        Agent agentNoMission = new Agent(50L);
-        Agent agentOnDifferentMission = new Agent(40L);
+        Agent agentNoMission = new Agent();
+        agentNoMission.setId(50L);
+        Agent agentOnDifferentMission = new Agent();
+        agentOnDifferentMission.setId(40L);
         Mission agentsMission = new Mission();
         agentsMission.setId(1L);
         agentOnDifferentMission.addMission(agentsMission);
@@ -124,7 +125,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getAgentsWithRankTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         agent.setRank(AgentRankEnum.JUNIOR);
         when(agentDao.getAgentsWithRank(AgentRankEnum.JUNIOR)).thenReturn(Collections.singletonList(agent));
         List<Agent> agentList = agentService.getAgentsByRank(AgentRankEnum.JUNIOR);
@@ -138,7 +140,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void getAgentByCodenameTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         agent.setCodeName("Tequila");
         when(agentDao.getAgentByCodename("Tequila")).thenReturn(agent);
         Agent foundAgent = agentService.getAgentByCodeName("Tequila");
@@ -150,7 +153,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void assignAgentToMissionTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         Mission mission = new Mission();
         mission.setId(1L);
         agentService.assignAgentToMission(agent, mission);
@@ -163,7 +167,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void removeAgentFromMissionTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         Mission mission = new Mission();
         mission.setId(1L);
         agent.addMission(mission);
@@ -176,7 +181,8 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
      */
     @Test
     public void addAgentToDepartmentTest() {
-        Agent agent = new Agent(50L);
+        Agent agent = new Agent();
+        agent.setId(50L);
         Department formerDepartment = new Department();
         formerDepartment.setId(1L);
 
