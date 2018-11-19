@@ -1,7 +1,6 @@
 package cz.fi.muni.pa165.secretagency.dao;
 
 import cz.fi.muni.pa165.secretagency.entity.Agent;
-import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 
