@@ -41,7 +41,7 @@ public class Department {
     @Enumerated
     private DepartmentSpecialization specialization;
 
-    @OneToMany
+    @OneToMany(mappedBy = "department")
     private List<Agent> agents = new ArrayList<>();
 
     public Department() {
@@ -147,8 +147,12 @@ public class Department {
     /**
      * Adds agent to this department.
      * @param agent Agent to be added to this department.
+     * @throws NullPointerException when agent is null
      */
     public void addAgent(Agent agent) {
+        if (agent == null) {
+            throw new NullPointerException("Cannot add agent to department when agent is null");
+        }
         this.agents.add(agent);
         agent.setDepartment(this);
     }

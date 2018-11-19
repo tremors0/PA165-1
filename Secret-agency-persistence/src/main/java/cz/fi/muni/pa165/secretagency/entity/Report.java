@@ -6,6 +6,7 @@ import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Report entity for Secret agency project.
@@ -42,23 +43,6 @@ public class Report {
     @JoinColumn(name = "agent_id")
     @NotNull
     private Agent agent;
-
-    /**
-     * Constructor
-     * @param text text of the report
-     * @param date date when report was created
-     * @param missionResult result of agent's work during the mission
-     * @param mission Mission, which is described by this report
-     * @param agent Author of report
-     */
-    public Report(String text, LocalDate date, MissionResultReportEnum missionResult,
-                  Mission mission, Agent agent) {
-        this.text = text;
-        this.date = date;
-        this.missionResult = missionResult;
-        this.mission = mission;
-        this.agent = agent;
-    }
 
     /**
      * Empty constructor
@@ -170,21 +154,15 @@ public class Report {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Report)) return false;
-
         Report report = (Report) o;
-
-        if (!getText().equals(report.getText())) return false;
-        if (!getDate().equals(report.getDate())) return false;
-        if (getReportStatus() != report.getReportStatus()) return false;
-        return getMissionResult() == report.getMissionResult();
+        return Objects.equals(getText(), report.getText()) &&
+                Objects.equals(getDate(), report.getDate()) &&
+                getReportStatus() == report.getReportStatus() &&
+                getMissionResult() == report.getMissionResult();
     }
 
     @Override
     public int hashCode() {
-        int result = getText().hashCode();
-        result = 31 * result + getDate().hashCode();
-        result = 31 * result + getReportStatus().hashCode();
-        result = 31 * result + getMissionResult().hashCode();
-        return result;
+        return Objects.hash(getText(), getDate(), getReportStatus(), getMissionResult());
     }
 }
