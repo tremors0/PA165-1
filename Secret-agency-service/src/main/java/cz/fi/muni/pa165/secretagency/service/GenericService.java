@@ -1,27 +1,29 @@
-package cz.fi.muni.pa165.secretagency.dao;
+package cz.fi.muni.pa165.secretagency.service;
 
 import java.util.List;
 
 /**
- * Interface which describes common operations over entities.
- * Every other DAO interface should extend this one.
- *
- * @author Jan Pavlu (487548)
+ * Generic service which provides general operations over entities.
+ * Every other Service class should extend this one.
  *
  * @param <Entity> Entity
+ *
+ * @author Jan Pavlu (487548)
  */
-public interface GenericDao<Entity> {
+public interface GenericService<Entity> {
 
     /**
      * Persists entity into database.
      * @param entity Entity which is going to be persisted
      * @return Saved entity.
+     * @throws NullPointerException when parameter is null
      */
     Entity save(Entity entity);
 
     /**
      * Deletes entity from database.
      * @param entity Entity which is going to be deleted.
+     * @throws NullPointerException when parameter is null
      */
     void delete(Entity entity);
 
@@ -29,12 +31,14 @@ public interface GenericDao<Entity> {
      * Merges detached entity
      * @param entity Detached entity
      * @return Entity, which is menaged now.
+     * @throws NullPointerException when parameter is null
      */
     Entity merge(Entity entity);
 
     /**
      * Deletes entity from database.
      * @param id Id of entity which is going to be deleted.
+     * @throws NullPointerException when parameter is null
      */
     void deleteEntityById(Long id);
 
@@ -42,6 +46,7 @@ public interface GenericDao<Entity> {
      * Returns entity with given id.
      * @param id Id of entity.
      * @return Entity with given id.
+     * @throws NullPointerException when parameter is null
      */
     Entity getEntityById(Long id);
 
