@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.secretagency.service;
 import cz.fi.muni.pa165.secretagency.dao.GenericDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * 2author Jan Pavlu (487548)
  */
 @Service
+@Transactional
 public class GenericServiceImpl<Entity> implements GenericService<Entity> {
 
     @Autowired
