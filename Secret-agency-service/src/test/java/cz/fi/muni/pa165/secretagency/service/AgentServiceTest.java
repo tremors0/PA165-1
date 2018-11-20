@@ -8,7 +8,8 @@ import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.hibernate.service.spi.ServiceException;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
@@ -29,13 +30,14 @@ import static org.testng.Assert.assertEquals;
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class AgentServiceTest extends AbstractTestNGSpringContextTests {
+    @Mock
     private AgentDao agentDao;
 
     private AgentService agentService;
 
     @BeforeClass
     public void setup() throws ServiceException {
-        this.agentDao = Mockito.mock(AgentDao.class);
+        MockitoAnnotations.initMocks(this);
         agentService = new AgentServiceImpl(this.agentDao);
     }
 
