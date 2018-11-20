@@ -20,7 +20,7 @@ import java.util.List;
 public class GenericServiceImpl<Entity> implements GenericService<Entity> {
 
     @Autowired
-    private GenericDao<Entity> genericDao;
+    protected GenericDao<Entity> genericDao;
 
     @Override
     public Entity save(Entity entity) {
