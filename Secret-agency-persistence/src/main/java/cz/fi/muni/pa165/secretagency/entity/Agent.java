@@ -164,6 +164,11 @@ public class Agent {
     }
 
     /**
+     * @param mission mission to be removed
+     */
+    public void removeMission(Mission mission) { this.missions.remove(mission); }
+
+    /**
      * @return get department in which agent is working
      */
     public Department getDepartment() {
