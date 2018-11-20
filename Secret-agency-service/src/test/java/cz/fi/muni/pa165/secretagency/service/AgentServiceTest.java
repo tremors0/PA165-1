@@ -8,10 +8,7 @@ import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.hibernate.service.spi.ServiceException;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
@@ -32,16 +29,14 @@ import static org.testng.Assert.assertEquals;
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
 public class AgentServiceTest extends AbstractTestNGSpringContextTests {
-    @Mock
     private AgentDao agentDao;
 
-    @Autowired
-    @InjectMocks
     private AgentService agentService;
 
     @BeforeClass
     public void setup() throws ServiceException {
-        MockitoAnnotations.initMocks(this);
+        this.agentDao = Mockito.mock(AgentDao.class);
+        agentService = new AgentServiceImpl(this.agentDao);
     }
 
     /**
@@ -65,7 +60,7 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         agent.setCodeName("Rum");
         agent.setRank(AgentRankEnum.JUNIOR);
         when(agentDao.save(agent)).thenReturn(agent);
-        Agent savedAgent = agentService.createAgent(agent);
+        Agent savedAgent = agentService.create(agent);
         assertEquals(agent, savedAgent);
     }
 

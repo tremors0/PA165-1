@@ -12,33 +12,7 @@ import java.util.List;
  * An interface that defines a service access to the {@link Agent} entity.
  * @author (Adam Kral<433328>)
  */
-interface AgentService {
-    /**
-     * Create new agent
-     * @param agent to be created
-     * @return created agent
-     */
-    Agent createAgent(Agent agent);
-
-    /**
-     * Get agent by his id
-     * @param id agent's id
-     * @return Agent with given id //TODO: throw exception on not found?
-     */
-    Agent getById(Long id);
-
-    /**
-     * Get all agents
-     * @return all agents
-     */
-    List<Agent> getAll();
-
-    /**
-     * Delete given agent
-     * @param agent to be deleted
-     */
-    void deleteAgent(Agent agent);
-
+interface AgentService extends GenericService<Agent> {
     /**
      * Get all agents on a given mission
      * @param mission mission
