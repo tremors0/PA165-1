@@ -1,7 +1,7 @@
 package cz.fi.muni.pa165.secretagency.service;
 
 import cz.fi.muni.pa165.secretagency.dao.GenericDao;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,12 +17,11 @@ import java.util.List;
  * @param <Dao> Concrete dao - it is used to make easier usage of generic dao in children - they don't need to
  *              cast dao.
  *
- * 2author Adam Kral(433328), Jan Pavlu (487548)
+ * @author Adam Kral(433328), Jan Pavlu (487548)
  */
-@Service
-public class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>> implements GenericService<Entity> {
+public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>> implements GenericService<Entity> {
 
-    protected Dao dao;
+    private Dao dao;
 
     /**
      * This method should be used to access dao. It checks if dao is set and if it's not throw exception.
@@ -36,6 +35,7 @@ public class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>> implemen
         return dao;
     }
 
+    @Autowired
     public void setDao(Dao dao) {
         this.dao = dao;
     }

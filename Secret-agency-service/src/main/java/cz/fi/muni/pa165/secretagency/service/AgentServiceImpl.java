@@ -27,12 +27,6 @@ import java.util.stream.Collectors;
 public class AgentServiceImpl extends GenericServiceImpl<Agent, AgentDao> implements AgentService {
 
     @Override
-    @Autowired
-    public void setDao(AgentDao dao) {
-        this.dao = dao;
-    }
-
-    @Override
     public List<Agent> getAgentsOnMission(Mission mission) {
         return getAll().stream().filter(agent -> agent.getMissions().contains(mission)).collect(Collectors.toList());
     }
