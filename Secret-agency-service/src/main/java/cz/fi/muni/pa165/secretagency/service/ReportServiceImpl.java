@@ -25,12 +25,6 @@ import java.util.List;
 public class ReportServiceImpl extends GenericServiceImpl<Report, ReportDao> implements ReportService {
 
     @Override
-    @Autowired
-    public void setDao(ReportDao dao) {
-        this.dao = dao;
-    }
-
-    @Override
     public List<Report> getReportsFromInterval(LocalDate dateFrom, LocalDate dateTo) {
         if (dateFrom == null || dateTo == null) {
             throw new NullPointerException("Date from and date to must be set.");
