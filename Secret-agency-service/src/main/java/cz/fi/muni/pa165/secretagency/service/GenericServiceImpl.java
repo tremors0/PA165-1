@@ -1,7 +1,6 @@
 package cz.fi.muni.pa165.secretagency.service;
 
 import cz.fi.muni.pa165.secretagency.dao.GenericDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +14,14 @@ import java.util.List;
  *    specific dao methods for services which extend this one.
  *
  * @param <Entity> Entity
+ * @param <Dao> Concrete dao - it is used to make easier usage of generic dao in children - they don't need to
+ *              cast dao.
  *
- * 2author Jan Pavlu (487548)
+ * 2author Adam Kral(433328), Jan Pavlu (487548)
  */
 @Service
 public class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>> implements GenericService<Entity> {
 
-    @Autowired
     protected Dao dao;
 
     /**
@@ -34,6 +34,10 @@ public class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>> implemen
             throw new NullPointerException("Repository is not set");
         }
         return dao;
+    }
+
+    public void setDao(Dao dao) {
+        this.dao = dao;
     }
 
     @Override
