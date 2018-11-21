@@ -28,6 +28,7 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
      *
      * @return dao for given service
      */
+    @SuppressWarnings("WeakerAccess")
     protected Dao getDao() {
         if (dao == null) {
             throw new NullPointerException("Repository is not set");
