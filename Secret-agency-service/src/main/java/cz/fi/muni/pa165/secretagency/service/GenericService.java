@@ -8,10 +8,9 @@ import java.util.List;
  *
  * @param <Entity> Entity
  *
- * @author Jan Pavlu (487548)
+ * @author Adam Kral(433328), Jan Pavlu (487548)
  */
 public interface GenericService<Entity> {
-
     /**
      * Persists entity into database.
      * @param entity Entity which is going to be persisted
