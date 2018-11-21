@@ -11,7 +11,6 @@ import org.hibernate.service.spi.ServiceException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
@@ -61,16 +58,16 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     /**
      * Test that agent is created
      */
-//    @Test
-//    public void createAgentTest() {
-//        Agent agent = new Agent();
-//        agent.setId(50L);
-//        agent.setCodeName("Rum");
-//        agent.setRank(AgentRankEnum.JUNIOR);
-//        when(agentDao.save(agent)).thenReturn(agent);
-//        Agent savedAgent = agentService.create(agent);
-//        assertEquals(agent, savedAgent);
-//    }
+    @Test
+    public void createAgentTest() {
+        Agent agent = new Agent();
+        agent.setId(50L);
+        agent.setCodeName("Rum");
+        agent.setRank(AgentRankEnum.JUNIOR);
+        when(agentDao.save(agent)).thenReturn(agent);
+        Agent savedAgent = agentService.save(agent);
+        assertEquals(agent, savedAgent);
+    }
 
     /**
      * Test that correct agent with is returned by id
