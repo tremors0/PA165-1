@@ -6,6 +6,7 @@ import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import cz.fi.muni.pa165.secretagency.service.exceptions.ReportServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,12 @@ import java.util.List;
 @Service
 @Transactional
 public class ReportServiceImpl extends GenericServiceImpl<Report, ReportDao> implements ReportService {
+
+    @Override
+    @Autowired
+    public void setDao(ReportDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public List<Report> getReportsFromInterval(LocalDate dateFrom, LocalDate dateTo) {
