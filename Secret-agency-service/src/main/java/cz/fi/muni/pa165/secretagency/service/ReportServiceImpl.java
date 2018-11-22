@@ -30,7 +30,7 @@ public class ReportServiceImpl extends GenericServiceImpl<Report, ReportDao> imp
             throw new NullPointerException("Date from and date to must be set.");
         }
         if (dateFrom.isAfter(dateTo)) {
-            throw new ReportServiceException("Date from cannot higher value than date to");
+            throw new ReportServiceException("Date from cannot have higher value than date to");
         }
         return getDao().getReportsFromInterval(dateFrom, dateTo);
     }
