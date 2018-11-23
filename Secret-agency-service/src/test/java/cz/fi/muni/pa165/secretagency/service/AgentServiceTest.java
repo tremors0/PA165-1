@@ -10,8 +10,10 @@ import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -33,12 +35,13 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     @Mock
     private AgentDao agentDao;
 
+    @Autowired
     private AgentService agentService;
 
     @BeforeClass
     public void setup() throws ServiceException {
         MockitoAnnotations.initMocks(this);
-        agentService = new AgentServiceImpl(this.agentDao);
+        ReflectionTestUtils.setField(agentService, "dao", agentDao);
     }
 
     /**
@@ -62,7 +65,7 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         agent.setCodeName("Rum");
         agent.setRank(AgentRankEnum.JUNIOR);
         when(agentDao.save(agent)).thenReturn(agent);
-        Agent savedAgent = agentService.create(agent);
+        Agent savedAgent = agentService.save(agent);
         assertEquals(agent, savedAgent);
     }
 
@@ -74,7 +77,7 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         Agent agent1 = new Agent();
         agent1.setId(50L);
         when(agentDao.getEntityById(agent1.getId())).thenReturn(agent1);
-        assertEquals(agent1, agentService.getById(agent1.getId()));
+        assertEquals(agent1, agentService.getEntityById(agent1.getId()));
     }
 
     /**
