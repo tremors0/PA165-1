@@ -8,29 +8,29 @@ import java.util.List;
  *
  * @author Jan Pavlu (487548)
  *
- * @param <T> Entity
+ * @param <Entity> Entity
  */
-public interface GenericDao<T> {
+public interface GenericDao<Entity> {
 
     /**
      * Persists entity into database.
-     * @param t Entity which is going to be persisted
+     * @param entity Entity which is going to be persisted
      * @return Saved entity.
      */
-    T save(T t);
+    Entity save(Entity entity);
 
     /**
      * Deletes entity from database.
-     * @param t Entity which is going to be deleted.
+     * @param entity Entity which is going to be deleted.
      */
-    void delete(T t);
+    void delete(Entity entity);
 
     /**
      * Merges detached entity
-     * @param t Detached entity
+     * @param entity Detached entity
      * @return Entity, which is menaged now.
      */
-    T merge(T t);
+    Entity merge(Entity entity);
 
     /**
      * Deletes entity from database.
@@ -43,11 +43,11 @@ public interface GenericDao<T> {
      * @param id Id of entity.
      * @return Entity with given id.
      */
-    T getEntityById(Long id);
+    Entity getEntityById(Long id);
 
     /**
      * Returns  all entities.
      * @return All entities from table.
      */
-    List<T> getAll();
+    List<Entity> getAll();
 }

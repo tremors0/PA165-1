@@ -3,44 +3,55 @@ package cz.fi.muni.pa165.secretagency.service;
 import java.util.List;
 
 /**
- * Interface describing common service behavior
- * All other services should implement this interface
+ * Generic service which provides general operations over entities.
+ * Every other Service class should extend this one.
  *
- * Author: Adam Kral <433328>
- * Date: 11/19/18
- * Time: 10:26 PM
+ * @param <Entity> Entity
+ *
+ * @author Adam Kral(433328), Jan Pavlu (487548)
  */
-public interface GenericService<T> {
+public interface GenericService<Entity> {
     /**
-     * Create given entity
-     * @param t entity to be created
-     * @return create entity
+     * Persists entity into database.
+     * @param entity Entity which is going to be persisted
+     * @return Saved entity.
+     * @throws NullPointerException when parameter is null
      */
-    T create(T t);
+    Entity save(Entity entity);
 
     /**
-     * Delete given entity
-     * @param t deleted entity
+     * Deletes entity from database.
+     * @param entity Entity which is going to be deleted.
+     * @throws NullPointerException when parameter is null
      */
-    void delete(T t);
+    void delete(Entity entity);
 
     /**
-     * Update given entity
-     * @param t entity to be updated
-     * @return updated entity
+     * Merges detached entity
+     * @param entity Detached entity
+     * @return Entity, which is menaged now.
+     * @throws NullPointerException when parameter is null
      */
-    T update(T t);
+    Entity merge(Entity entity);
 
     /**
-     * Get entity by id
-     * @param id of entity
-     * @return entity with give ID
+     * Deletes entity from database.
+     * @param id Id of entity which is going to be deleted.
+     * @throws NullPointerException when parameter is null
      */
-    T getById(Long id);
+    void deleteEntityById(Long id);
 
     /**
-     * Get all entities
-     * @return list of all entities
+     * Returns entity with given id.
+     * @param id Id of entity.
+     * @return Entity with given id.
+     * @throws NullPointerException when parameter is null
      */
-    List<T> getAll();
+    Entity getEntityById(Long id);
+
+    /**
+     * Returns  all entities.
+     * @return All entities from table.
+     */
+    List<Entity> getAll();
 }

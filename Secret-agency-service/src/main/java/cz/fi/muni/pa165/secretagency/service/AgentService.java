@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.secretagency.service;
 
+import cz.fi.muni.pa165.secretagency.dao.AgentDao;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
