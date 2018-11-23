@@ -15,19 +15,19 @@ import java.util.List;
  *
  * @author Jan Pavlu (487548)
  *
- * @param <T> Entity
+ * @param <Entity> Entity
  */
 @Repository
-public abstract class GenericDaoImpl<T> implements GenericDao<T> {
+public abstract class GenericDaoImpl<Entity> implements GenericDao<Entity> {
 
-    protected Class<T> clazz;
+    protected Class<Entity> clazz;
 
     /**
      * Constructor
      * Sets class to work with in CRUD operations
      * @param clazzToSet class of entity that should be worked with
      */
-    protected GenericDaoImpl(Class<T> clazzToSet) {
+    protected GenericDaoImpl(Class<Entity> clazzToSet) {
         this.clazz = clazzToSet;
     }
 
@@ -35,24 +35,24 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     protected EntityManager em;
 
     @Override
-    public T save(T t) {
-        em.persist(t);
-        return t;
+    public Entity save(Entity entity) {
+        em.persist(entity);
+        return entity;
     }
 
     @Override
-    public void delete(T t) {
-        em.remove(em.contains(t) ? t : em.merge(t));
+    public void delete(Entity entity) {
+        em.remove(em.contains(entity) ? entity : em.merge(entity));
     }
 
     @Override
-    public T merge(T t) {
-        return em.merge(t);
+    public Entity merge(Entity entity) {
+        return em.merge(entity);
     }
 
     @Override
     public void deleteEntityById(Long id) {
-        T entityToRemove = this.getEntityById(id);
+        Entity entityToRemove = this.getEntityById(id);
         if (entityToRemove == null) {
             throw new IllegalArgumentException("Entity with given ID doesn't exist");
         }
@@ -60,15 +60,15 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @Override
-    public T getEntityById(Long id) {
+    public Entity getEntityById(Long id) {
         return em.find(clazz, id);
     }
 
     @Override
-    public List<T> getAll() {
+    public List<Entity> getAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<T> query = cb.createQuery(clazz);
-        Root<T> root = query.from(clazz);
+        CriteriaQuery<Entity> query = cb.createQuery(clazz);
+        Root<Entity> root = query.from(clazz);
         query.select(root);
         return em.createQuery(query).getResultList();
     }
