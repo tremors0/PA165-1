@@ -2,8 +2,8 @@ package cz.fi.muni.pa165.secretagency.dto;
 
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * DTO for creating new report. There is no need to override equals and hashcode
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class ReportCreateDTO {
 
     @NotNull
-    @Min(10)
+    @Size(min = 10)
     private String text;
 
     @NotNull
