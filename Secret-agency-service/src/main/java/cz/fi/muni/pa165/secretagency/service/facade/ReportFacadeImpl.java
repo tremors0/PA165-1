@@ -2,8 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
-import cz.fi.muni.pa165.secretagency.entity.Agent;
-import cz.fi.muni.pa165.secretagency.entity.Mission;
+import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
 import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
@@ -13,6 +12,7 @@ import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
 import cz.fi.muni.pa165.secretagency.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.List;
  * @author Jan Pavlu
  */
 @Service
+@Transactional
 public class ReportFacadeImpl implements ReportFacade {
 
     @Autowired
@@ -68,6 +69,24 @@ public class ReportFacadeImpl implements ReportFacade {
     @Override
     public void deleteReport(Long reportId) {
         reportService.deleteEntityById(reportId);
+    }
+
+    @Override
+    public void updateReportText(ReportUpdateTextDTO reportDTO) {
+        Report report = reportService.getEntityById(reportDTO.getId());
+        reportService.updateReportText(report, reportDTO.getText());
+    }
+
+    @Override
+    public void approveReport(Long reportId) {
+        Report report = reportService.getEntityById(reportId);
+        reportService.changeReportStatus(report, ReportStatus.APPROVED);
+    }
+
+    @Override
+    public void denyReport(Long reportId) {
+        Report report = reportService.getEntityById(reportId);
+        reportService.changeReportStatus(report, ReportStatus.DENIED);
     }
 
     @Override

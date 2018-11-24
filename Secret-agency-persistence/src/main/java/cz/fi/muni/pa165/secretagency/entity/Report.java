@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class Report {
     private Long id;
 
     @NotNull
+    @Min(10)
     private String text;
 
     @NotNull

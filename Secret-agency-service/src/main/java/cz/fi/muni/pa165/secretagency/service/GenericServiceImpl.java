@@ -2,7 +2,6 @@ package cz.fi.muni.pa165.secretagency.service;
 
 import cz.fi.muni.pa165.secretagency.dao.GenericDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,7 +41,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public Entity save(Entity entity) {
         if (entity == null) {
             throw new NullPointerException("Cannot save entity which value is null");
@@ -51,7 +49,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public void delete(Entity entity) {
         if (entity == null) {
             throw new NullPointerException("Cannot delete entity which value is null");
@@ -60,7 +57,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public Entity merge(Entity entity) {
         if (entity == null) {
             throw new NullPointerException("Cannot merge entity which value is null");
@@ -69,7 +65,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public void deleteEntityById(Long id) {
         if (id == null) {
             throw new NullPointerException("Entity with id set to null doesn't exist");
@@ -78,7 +73,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public Entity getEntityById(Long id) {
         if (id == null) {
             throw new NullPointerException("Entity with id set to null doesn't exist");
@@ -87,7 +81,6 @@ public abstract class GenericServiceImpl<Entity, Dao extends GenericDao<Entity>>
     }
 
     @Override
-    @Transactional
     public List<Entity> getAll() {
         return getDao().getAll();
     }

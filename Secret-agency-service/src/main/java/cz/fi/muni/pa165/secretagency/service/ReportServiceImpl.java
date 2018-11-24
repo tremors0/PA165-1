@@ -7,7 +7,6 @@ import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import cz.fi.muni.pa165.secretagency.service.exceptions.ReportServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
  * @author Jan Pavlu
  */
 @Service
-@Transactional
 public class ReportServiceImpl extends GenericServiceImpl<Report, ReportDao> implements ReportService {
 
     @Override
@@ -60,5 +58,32 @@ public class ReportServiceImpl extends GenericServiceImpl<Report, ReportDao> imp
             throw new NullPointerException("Mission must be set");
         }
         return getDao().getReportsWithStatusFromMission(reportStatus, mission);
+    }
+
+    @Override
+    public void updateReportText(Report report, String text) {
+        if (report == null) {
+            throw new NullPointerException("Report cannot be updated, because it wasn't found");
+        }
+
+        if (text == null) {
+            throw new NullPointerException("Text must be set");
+        }
+
+        report.setText(text);
+        report.setReportStatus(ReportStatus.UPDATED);
+    }
+
+    @Override
+    public void changeReportStatus(Report report, ReportStatus reportStatus) {
+        if (report == null) {
+            throw new NullPointerException("Report status cannot be updated, because  report wasn't found");
+        }
+
+        if (reportStatus == null) {
+            throw new NullPointerException("Report status must be set");
+        }
+
+        report.setReportStatus(reportStatus);
     }
 }
