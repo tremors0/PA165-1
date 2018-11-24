@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.secretagency.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
+import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 
@@ -39,6 +40,22 @@ public interface ReportFacade {
      * @param reportId report id
      */
     void deleteReport(Long reportId);
+
+    /**
+     * Updates text in selected report.
+     * @param report updated data
+     */
+    void updateReport(ReportUpdateTextDTO report);
+
+    /**
+     * Method which should be used for approving report.
+     */
+    void approveReport();
+
+    /**
+     * Method which should be used for denying report.
+     */
+    void denyReport();
 
     /**
      * Get all reports in given interval
