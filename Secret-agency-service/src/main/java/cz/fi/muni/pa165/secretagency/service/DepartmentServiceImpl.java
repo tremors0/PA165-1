@@ -71,6 +71,9 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
         if (originLongitude.compareTo(-180.0) < 0 || originLongitude.compareTo(180.0) > 0) {
             throw  new DepartmentServiceException("longitude is out of range [-180.0, 180.0]");
         }
+        if (maxDistance.compareTo(0.0) < 0) {
+            throw new DepartmentServiceException("maxDistance is negative");
+        }
         List<Department> allDepartments = getDao().getAll();
         List<Department> departmentsInArea = allDepartments.stream()
                 .filter(d -> twoPointDistance(originLatitude, originLongitude, d.getLatitude(), d.getLongitude()).compareTo(maxDistance) <= 0)
