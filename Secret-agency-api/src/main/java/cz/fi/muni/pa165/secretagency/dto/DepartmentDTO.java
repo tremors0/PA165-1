@@ -1,5 +1,7 @@
 package cz.fi.muni.pa165.secretagency.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -9,14 +11,16 @@ import java.util.Objects;
 public class DepartmentDTO {
 
     private Long id;
+
     private String city;
+
     private String country;
+
     private Double latitude;
+
     private Double longitude;
 
-    // TODO silhar - uncomment when AgentDTO is available
-    //private List<AgentDTO> agents = new ArrayList<>();
-
+    private List<AgentDTO> agents = new ArrayList<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -33,6 +37,9 @@ public class DepartmentDTO {
     public Double getLongitude() { return longitude; }
     public void setLongitude(Double longitude) { this.longitude = longitude; }
 
+    public List<AgentDTO> getAgents() { return agents; }
+    public void setAgents(List<AgentDTO> agents) { this.agents = agents; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,11 +49,12 @@ public class DepartmentDTO {
                 Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getLatitude(), that.getLatitude()) &&
-                Objects.equals(getLongitude(), that.getLongitude());
+                Objects.equals(getLongitude(), that.getLongitude()) &&
+                Objects.equals(agents, that.agents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCity(), getCountry(), getLatitude(), getLongitude());
+        return Objects.hash(getId(), getCity(), getCountry(), getLatitude(), getLongitude(), agents);
     }
 }

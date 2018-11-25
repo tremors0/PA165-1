@@ -57,4 +57,15 @@ public class DepartmentCreateDTO {
     public int hashCode() {
         return Objects.hash(getCity(), getCountry(), getLongitude(), getLatitude(), getSpecialization());
     }
+
+    @Override
+    public String toString() {
+        return "DepartmentCreateDTO{" +
+                "city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", specialization=" + specialization +
+                '}';
+    }
 }
