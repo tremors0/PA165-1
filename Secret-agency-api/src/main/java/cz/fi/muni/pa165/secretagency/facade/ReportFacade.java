@@ -30,10 +30,10 @@ public interface ReportFacade {
     ReportDTO getReportById(Long id);
 
     /**
-     * Creates report.
+     * Creates report. Returns id of the created report.
      * @param report data about report
      */
-    void createReport(ReportCreateDTO report);
+    Long createReport(ReportCreateDTO report);
 
     /**
      * Deletes report with given id.

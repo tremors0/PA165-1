@@ -51,7 +51,7 @@ public class ReportFacadeImpl implements ReportFacade {
     }
 
     @Override
-    public void createReport(ReportCreateDTO reportDTO) {
+    public Long createReport(ReportCreateDTO reportDTO) {
         // TODO pavlu - uncomment after mission service exists
 //        Agent agent = agentService.getEntityById(reportDTO.getAgentId());
 //        Mission mission = missionService.getEntiryById(reportDTO.getMissionId());
@@ -63,7 +63,9 @@ public class ReportFacadeImpl implements ReportFacade {
 //        report.setDate(reportDTO.getDate());
 //        report.setText(reportDTO.getText());
 //
-//        reportService.save(report);
+//        Report savedReport = reportService.save(report);
+//        return savedReport.getId();
+        return 0L;
     }
 
     @Override
