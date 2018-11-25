@@ -40,45 +40,19 @@ public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
     private ReportFacade reportFacade;
 
     private Report transferBabisJrToKrymReport;
-
     private Agent babis;
-
     private Mission transferBabisJrToKrym;
+    private Department praha;
 
     @BeforeClass
     public void setUp() {
         EntityManager em1 = emf.createEntityManager();
         em1.getTransaction().begin();
 
-        transferBabisJrToKrymReport = new Report();
-        transferBabisJrToKrymReport.setText("Get rid of my son");
-        transferBabisJrToKrymReport.setReportStatus(ReportStatus.NEW);
-        transferBabisJrToKrymReport.setDate(LocalDate.of(2018, 11, 1));
-        transferBabisJrToKrymReport.setMissionResult(MissionResultReportEnum.COMPLETED);
-
-        babis = new Agent();
-        babis.setLanguages(Collections.singleton(LanguageEnum.SK));
-        babis.setRank(AgentRankEnum.AGENT_IN_CHARGE);
-        babis.setName("Andrej Babis");
-        babis.setCodeName("Bures");
-        babis.setBirthDate(LocalDate.of(1980, 8, 8));
-
-        transferBabisJrToKrym = new Mission();
-        transferBabisJrToKrym.setMissionType(MissionTypeEnum.SABOTAGE);
-        transferBabisJrToKrym.setStarted(LocalDate.of(2017, 5, 1));
-        transferBabisJrToKrym.setEnded(LocalDate.of(2018, 11, 1));
-        transferBabisJrToKrym.setLatitude(47.304324);
-        transferBabisJrToKrym.setLongitude(39.521161);
-        transferBabisJrToKrym.addAgent(babis);
-        transferBabisJrToKrym.addReport(transferBabisJrToKrymReport, babis);
-
-        Department praha = new Department();
-        praha.setCountry("Czech Republic");
-        praha.setCity("Praha");
-        praha.setSpecialization(DepartmentSpecialization.INTELLIGENCE);
-        praha.setLatitude(50.08804);
-        praha.setLongitude(14.42076);
-        praha.addAgent(babis);
+        setUpReport();
+        setUpAgent();
+        setUpMission();
+        setUpDepartment();
 
         em1.persist(praha);
         em1.persist(babis);
@@ -88,6 +62,45 @@ public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
         em1.close();
     }
 
+    private void setUpReport() {
+        transferBabisJrToKrymReport = new Report();
+        transferBabisJrToKrymReport.setText("Get rid of my son");
+        transferBabisJrToKrymReport.setReportStatus(ReportStatus.NEW);
+        transferBabisJrToKrymReport.setDate(LocalDate.of(2018, 11, 1));
+        transferBabisJrToKrymReport.setMissionResult(MissionResultReportEnum.COMPLETED);
+    }
+
+    private void setUpAgent() {
+        babis = new Agent();
+        babis.setLanguages(Collections.singleton(LanguageEnum.SK));
+        babis.setRank(AgentRankEnum.AGENT_IN_CHARGE);
+        babis.setName("Andrej Babis");
+        babis.setCodeName("Bures");
+        babis.setBirthDate(LocalDate.of(1980, 8, 8));
+    }
+
+    private void setUpMission() {
+        transferBabisJrToKrym = new Mission();
+        transferBabisJrToKrym.setMissionType(MissionTypeEnum.SABOTAGE);
+        transferBabisJrToKrym.setStarted(LocalDate.of(2017, 5, 1));
+        transferBabisJrToKrym.setEnded(LocalDate.of(2018, 11, 1));
+        transferBabisJrToKrym.setLatitude(47.304324);
+        transferBabisJrToKrym.setLongitude(39.521161);
+        transferBabisJrToKrym.addAgent(babis);
+        transferBabisJrToKrym.addReport(transferBabisJrToKrymReport, babis);
+    }
+
+    private void setUpDepartment() {
+        praha = new Department();
+        praha.setCountry("Czech Republic");
+        praha.setCity("Praha");
+        praha.setSpecialization(DepartmentSpecialization.INTELLIGENCE);
+        praha.setLatitude(50.08804);
+        praha.setLongitude(14.42076);
+        praha.addAgent(babis);
+    }
+
+    // TESTS
 //    @Test
 //    public void createReport() {
 //        ReportCreateDTO reportCreateDTO = new ReportCreateDTO();
