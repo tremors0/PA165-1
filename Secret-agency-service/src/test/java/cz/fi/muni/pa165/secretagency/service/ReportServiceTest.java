@@ -188,4 +188,54 @@ public class ReportServiceTest extends AbstractTestNGSpringContextTests {
     public void getReportsWithStatusFromMissionMissionNotSet() {
         reportService.getReportsWithStatusFromMission(ReportStatus.APPROVED, null);
     }
+
+    /*****************************************************
+     *  UPDATE REPORT TEXT
+     ****************************************************/
+    @Test
+    public void updateReportTextOk() {
+        Report report = new Report();
+        report.setText("Mission was not successful. Agent Babis is still alive.");
+        reportService.updateReportText(report, "Mission was partly successful. Agent Babis is in prison.");
+        Assert.assertEquals(report.getText(), "Mission was partly successful. Agent Babis is in prison.");
+    }
+
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "Report cannot be updated, because it wasn't found")
+    public void updateReportTextReportNotSet() {
+        reportService.updateReportText(null, "Mission was not successful. Agent Babis is still alive.");
+    }
+
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "Text must be set")
+    public void updateReportTextTextNotSet() {
+        reportService.updateReportText(new Report(), null);
+    }
+
+    /*****************************************************
+     *  UPDATE REPORT TEXT
+     ****************************************************/
+    @Test
+    public void changeReportStatusOk() {
+        Report report = new Report();
+        report.setReportStatus(ReportStatus.NEW);
+
+        reportService.changeReportStatus(report, ReportStatus.APPROVED);
+        Assert.assertEquals(report.getReportStatus(), ReportStatus.APPROVED);
+
+        reportService.changeReportStatus(report, ReportStatus.DENIED);
+        Assert.assertEquals(report.getReportStatus(), ReportStatus.DENIED);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "Report status cannot be updated, because  report wasn't found")
+    public void changeReportStatusReportNotSet() {
+        reportService.changeReportStatus(null, ReportStatus.UPDATED);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "Report status must be set")
+    public void changeReportStatusStatusNotSet() {
+        reportService.changeReportStatus(new Report(), null);
+    }
 }

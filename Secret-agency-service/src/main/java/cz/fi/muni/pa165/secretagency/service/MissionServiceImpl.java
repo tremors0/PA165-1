@@ -32,7 +32,7 @@ public class MissionServiceImpl extends GenericServiceImpl<Mission, MissionDao> 
         if (start == null || end == null) {
             throw new NullPointerException("Mission start date or end date is null");
         }
-        if (end.isAfter(start)) {
+        if (start.isAfter(end)) {
             throw new MissionServiceException("End date is before start date");
         }
         return getDao().getMissionsStartedInInterval(start, end);
