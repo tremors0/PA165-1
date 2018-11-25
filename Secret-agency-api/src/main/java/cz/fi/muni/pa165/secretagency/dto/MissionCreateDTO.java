@@ -28,8 +28,6 @@ public class MissionCreateDTO {
 
     private Set<Long> agentIds;
 
-    private Set<Long> reportIds;
-
     public Long getLatitude() {
         return latitude;
     }
@@ -78,14 +76,6 @@ public class MissionCreateDTO {
         this.agentIds = agentIds;
     }
 
-    public Set<Long> getReportIds() {
-        return reportIds;
-    }
-
-    public void setReportIds(Set<Long> reportIds) {
-        this.reportIds = reportIds;
-    }
-
     @Override
     public String toString() {
         return "ReportCreateDTO{" +
@@ -95,7 +85,6 @@ public class MissionCreateDTO {
                 ", started=" + started +
                 ", ended=" + ended +
                 ", agentIds=" + agentIds +
-                ", reportIds=" + reportIds +
                 '}';
     }
 }
