@@ -7,7 +7,7 @@ import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
-//import cz.fi.muni.pa165.secretagency.service.AgentService;
+import cz.fi.muni.pa165.secretagency.service.AgentService;
 import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
 import cz.fi.muni.pa165.secretagency.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
+//import cz.fi.muni.pa165.secretagency.service.AgentService;
 
 /**
  * Implementation of facade for report.
@@ -32,8 +34,8 @@ public class ReportFacadeImpl implements ReportFacade {
     @Autowired
     private ReportService reportService;
 
-    //@Autowired
-    //private AgentService agentService;
+    @Autowired
+    private AgentService agentService;
 
     // TODO pavlu - uncomment after MissionService is created
     // @Autowired
