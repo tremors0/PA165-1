@@ -26,7 +26,7 @@ import java.util.List;
 
 
 /**
- * Tests for report facade.
+ * Integration tests for report facade. These tests are validating that layers are communicating correctly.
  *
  * @author Jan Pavlu
  */
