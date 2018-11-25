@@ -32,8 +32,10 @@ public interface ReportFacade {
     /**
      * Creates report.
      * @param report data about report
+     * @return id of the created report
+     * @throws NullPointerException when agent or mission with specified id does not exist
      */
-    void createReport(ReportCreateDTO report);
+    Long createReport(ReportCreateDTO report);
 
     /**
      * Deletes report with given id.

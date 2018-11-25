@@ -18,9 +18,8 @@ public class ReportDTO {
     private LocalDate date;
     private ReportStatus reportStatus = ReportStatus.NEW;
     private MissionResultReportEnum missionResult;
-    // TODO pavlu - uncomment, when other DTOs exist and generate getters and setters
     //private MissionDTO missionDTO;
-    //private AgentDTO agentDTO;
+    private AgentDTO agentDTO;
 
     public Long getId() {
         return id;
@@ -60,6 +59,14 @@ public class ReportDTO {
 
     public void setMissionResult(MissionResultReportEnum missionResult) {
         this.missionResult = missionResult;
+    }
+
+    public AgentDTO getAgentDTO() {
+        return agentDTO;
+    }
+
+    public void setAgentDTO(AgentDTO agentDTO) {
+        this.agentDTO = agentDTO;
     }
 
     // automatically generated equals and hashcode
