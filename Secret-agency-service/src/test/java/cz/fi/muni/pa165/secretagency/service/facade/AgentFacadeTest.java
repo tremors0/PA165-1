@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
@@ -34,6 +35,7 @@ import static org.testng.AssertJUnit.assertEquals;
  * Time: 3:57 PM
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AgentFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Spy
