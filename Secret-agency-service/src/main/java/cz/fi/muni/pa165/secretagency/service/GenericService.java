@@ -42,7 +42,7 @@ public interface GenericService<Entity> {
     void deleteEntityById(Long id);
 
     /**
-     * Returns entity with given id.
+     * Returns entity with given id. Returns null, when entity is not found.
      * @param id Id of entity.
      * @return Entity with given id.
      * @throws NullPointerException when parameter is null
@@ -50,7 +50,7 @@ public interface GenericService<Entity> {
     Entity getEntityById(Long id);
 
     /**
-     * Returns  all entities.
+     * Returns all entities. If table does not contain any entity, empty list is returned.
      * @return All entities from table.
      */
     List<Entity> getAll();
