@@ -3,12 +3,15 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
+import cz.fi.muni.pa165.secretagency.entity.Agent;
+import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
 import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
 import cz.fi.muni.pa165.secretagency.service.AgentService;
 import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
+import cz.fi.muni.pa165.secretagency.service.MissionService;
 import cz.fi.muni.pa165.secretagency.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-//import cz.fi.muni.pa165.secretagency.service.AgentService;
 
 /**
  * Implementation of facade for report.
@@ -37,9 +39,9 @@ public class ReportFacadeImpl implements ReportFacade {
     @Autowired
     private AgentService agentService;
 
-    // TODO pavlu - uncomment after MissionService is created
-    // @Autowired
-    // private MissionService missionService;
+    @Autowired
+    private MissionService missionService;
+
 
     @Override
     public List<ReportDTO> getAllReports() {
@@ -53,19 +55,27 @@ public class ReportFacadeImpl implements ReportFacade {
     }
 
     @Override
-    public void createReport(ReportCreateDTO reportDTO) {
-        // TODO pavlu - uncomment after mission service exists
-//        Agent agent = agentService.getEntityById(reportDTO.getAgentId());
-//        Mission mission = missionService.getEntiryById(reportDTO.getMissionId());
-//
-//        Report report = new Report();
-//        report.setMission(mission);
-//        report.setMissionResult(reportDTO.getMissionResult());
-//        report.setReportStatus(reportDTO.getReportStatus());
-//        report.setDate(reportDTO.getDate());
-//        report.setText(reportDTO.getText());
-//
-//        reportService.save(report);
+    public Long createReport(ReportCreateDTO reportDTO) {
+        Agent agent = agentService.getEntityById(reportDTO.getAgentId());
+        Mission mission = missionService.getEntityById(reportDTO.getMissionId());
+
+        if (agent == null) {
+            throw new NullPointerException("Agent with selected id was not found");
+        }
+
+        if (mission == null) {
+            throw new NullPointerException("Mission with selected id was not found");
+        }
+
+        Report report = new Report();
+        report.setMissionResult(reportDTO.getMissionResult());
+        report.setReportStatus(ReportStatus.NEW);
+        report.setDate(LocalDate.now());
+        report.setText(reportDTO.getText());
+        mission.addReport(report, agent);
+
+        Report savedReport = reportService.save(report);
+        return savedReport.getId();
     }
 
     @Override
@@ -108,11 +118,8 @@ public class ReportFacadeImpl implements ReportFacade {
 
     @Override
     public List<ReportDTO> getReportsWithStatusFromMission(ReportStatus reportStatus, Long missionId) {
-        // TODO pavlu - uncomment, after mission service is created
-        // Mission mission = mission.getEntityById(missionId);
-        // TODO pavlu - check if mission exists???
-        //return beanMappingService.mapTo(reportService.getReportsWithStatusFromMission(reportStatus, mission),
-        //        ReportDTO.class);
-        return null;
+        Mission mission = missionService.getEntityById(missionId);
+        return beanMappingService.mapTo(reportService.getReportsWithStatusFromMission(reportStatus, mission),
+                ReportDTO.class);
     }
 }
