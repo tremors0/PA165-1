@@ -29,7 +29,7 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
     @Override
     public List<Department> getDepartmentByCountry(String country) {
         if (country == null) {
-            throw new NullPointerException("country is null");
+            throw new NullPointerException("country cannot be null");
         }
         return getDao().getDepartmentsInCountry(country);
     }
@@ -37,7 +37,7 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
     @Override
     public List<Department> getDepartmentsBySpecialization(DepartmentSpecialization specialization) {
         if (specialization == null) {
-            throw new NullPointerException("specialization is null");
+            throw new NullPointerException("specialization cannot be null");
         }
         return getDao().getDepartmentBySpecialization(specialization);
     }
@@ -45,10 +45,10 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
     @Override
     public void changeSpecialization(Department department, DepartmentSpecialization newSpecialization) {
         if (department == null) {
-            throw new NullPointerException("department is null");
+            throw new NullPointerException("department cannot be null");
         }
         if (newSpecialization == null) {
-            throw new NullPointerException("newSpecialization is null");
+            throw new NullPointerException("newSpecialization cannot be null");
         }
         department.setSpecialization(newSpecialization);
     }
@@ -56,26 +56,26 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
     @Override
     public List<Department> getDepartmentsInArea(Double originLatitude, Double originLongitude, Double maxDistance) {
         if (originLatitude == null) {
-            throw new NullPointerException("originLatitude is null");
+            throw new NullPointerException("originLatitude cannot be null");
         }
         if (originLongitude == null) {
-            throw new NullPointerException("originLongitude is null");
+            throw new NullPointerException("originLongitude cannot be null");
         }
         if (maxDistance == null) {
-            throw new NullPointerException("maxDistance is null");
+            throw new NullPointerException("maxDistance cannot be null");
         }
-        if (originLatitude.compareTo(-90.0) < 0 || originLatitude.compareTo(90.0) > 0) {
-            throw  new DepartmentServiceException("latitude is out of range [-90.0, 90.0]");
+        if (originLatitude < -90.0d || originLatitude > 90.0d) {
+            throw  new DepartmentServiceException("originLatitude is out of range [-90.0, 90.0]");
         }
-        if (originLongitude.compareTo(-180.0) < 0 || originLongitude.compareTo(180.0) > 0) {
-            throw  new DepartmentServiceException("longitude is out of range [-180.0, 180.0]");
+        if (originLongitude < -180.0d || originLongitude > 180.0d) {
+            throw  new DepartmentServiceException("originLongitude is out of range [-180.0, 180.0]");
         }
-        if (maxDistance.compareTo(0.0) < 0) {
+        if (maxDistance < 0.0d) {
             throw new DepartmentServiceException("maxDistance is negative");
         }
         List<Department> allDepartments = getDao().getAll();
         List<Department> departmentsInArea = allDepartments.stream()
-                .filter(d -> twoPointDistance(originLatitude, originLongitude, d.getLatitude(), d.getLongitude()).compareTo(maxDistance) <= 0)
+                .filter(d -> twoPointDistance(originLatitude, originLongitude, d.getLatitude(), d.getLongitude()) <= maxDistance)
                 .collect(Collectors.toList());
         return departmentsInArea;
     }
