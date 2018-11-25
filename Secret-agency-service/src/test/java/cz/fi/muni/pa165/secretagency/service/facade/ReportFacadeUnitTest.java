@@ -97,7 +97,6 @@ public class ReportFacadeUnitTest extends AbstractTestNGSpringContextTests {
         transferBabisJrToKrym.setLongitude(39.521161);
     }
 
-    @SuppressWarnings("Duplicates")
     private void setUpAgent() {
         babis = new Agent();
         babis.setId(42L);
