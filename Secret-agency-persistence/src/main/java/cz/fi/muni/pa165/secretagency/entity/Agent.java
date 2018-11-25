@@ -94,7 +94,7 @@ public class Agent {
      * @return agents' known languages
      */
     public Set<LanguageEnum> getLanguages() {
-        return languages;
+        return Collections.unmodifiableSet(languages);
     }
 
     /**
