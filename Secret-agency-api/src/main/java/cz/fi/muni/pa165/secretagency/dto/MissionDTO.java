@@ -17,9 +17,8 @@ public class MissionDTO {
     private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
-    // private AgentDTO agents;
-    // private ReportDTO reports;
-
+    // private Set<AgentDTO> agents;
+    // private Set<ReportDTO> reports;
 
     public Long getId() {
         return id;
