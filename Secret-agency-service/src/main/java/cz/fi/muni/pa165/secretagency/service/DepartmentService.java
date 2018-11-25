@@ -40,7 +40,7 @@ public interface DepartmentService extends GenericService<Department> {
      * Changes specialization of given department
      * @param department Department to change specialization
      * @param newSpecialization new specialization of given department
-     * @throws NullPointerException if department is null
+     * @throws NullPointerException if department or specialization is null
      */
     public void changeSpecialization(Department department, DepartmentSpecialization newSpecialization);
 

@@ -7,8 +7,7 @@ import cz.fi.muni.pa165.secretagency.service.exceptions.DepartmentServiceExcepti
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,12 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
 
     @Override
     public void changeSpecialization(Department department, DepartmentSpecialization newSpecialization) {
+        if (department == null) {
+            throw new NullPointerException("department is null");
+        }
+        if (newSpecialization == null) {
+            throw new NullPointerException("newSpecialization is null");
+        }
         department.setSpecialization(newSpecialization);
     }
 
