@@ -3,7 +3,9 @@ package cz.fi.muni.pa165.secretagency.dto;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Mission DTO
@@ -17,8 +19,8 @@ public class MissionDTO {
     private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
-    // private Set<AgentDTO> agents;
-    // private Set<ReportDTO> reports;
+    private Set<AgentDTO> agents = new HashSet<>();
+    private Set<ReportDTO> reports = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -68,20 +70,38 @@ public class MissionDTO {
         this.ended = ended;
     }
 
+    public Set<AgentDTO> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(Set<AgentDTO> agents) {
+        this.agents = agents;
+    }
+
+    public Set<ReportDTO> getReports() {
+        return reports;
+    }
+
+    public void setReports(Set<ReportDTO> reports) {
+        this.reports = reports;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MissionDTO)) return false;
-        MissionDTO missionDTO = (MissionDTO) o;
-        return Objects.equals(getLatitude(), missionDTO.getLatitude()) &&
-                Objects.equals(getLongitude(), missionDTO.getLongitude()) &&
-                getMissionType() == missionDTO.getMissionType() &&
-                Objects.equals(getStarted(), missionDTO.getStarted()) &&
-                Objects.equals(getEnded(), missionDTO.getEnded());
+        MissionDTO that = (MissionDTO) o;
+        return Objects.equals(getLatitude(), that.getLatitude()) &&
+                Objects.equals(getLongitude(), that.getLongitude()) &&
+                getMissionType() == that.getMissionType() &&
+                Objects.equals(getStarted(), that.getStarted()) &&
+                Objects.equals(getEnded(), that.getEnded()) &&
+                Objects.equals(getAgents(), that.getAgents()) &&
+                Objects.equals(getReports(), that.getReports());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded());
+        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded(), getAgents(), getReports());
     }
 }
