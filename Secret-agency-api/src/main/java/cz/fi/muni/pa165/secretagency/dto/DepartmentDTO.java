@@ -6,6 +6,7 @@ import java.util.Objects;
 
 /**
  * DTO for Department
+ *
  * @author Milos Silhar (433614)
  */
 public class DepartmentDTO {

@@ -7,6 +7,8 @@ import java.util.Objects;
 
 /**
  * DTO for editing specialization of existing department
+ *
+ * @author Milos Silhar (433614)
  */
 public class DepartmentUpdateSpecializationDTO {
 

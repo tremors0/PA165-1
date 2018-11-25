@@ -7,7 +7,6 @@ import cz.fi.muni.pa165.secretagency.service.exceptions.DepartmentServiceExcepti
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.stream.Collectors;
 
