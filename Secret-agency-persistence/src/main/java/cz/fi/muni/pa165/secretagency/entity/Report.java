@@ -14,6 +14,7 @@ import java.util.Objects;
  *
  * @author Jan Pavlu (487548)
  */
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 public class Report {
 

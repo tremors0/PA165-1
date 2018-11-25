@@ -6,6 +6,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -130,28 +131,14 @@ public class Mission {
      * @return agents on mission
      */
     public Set<Agent> getAgents() {
-        return agents;
-    }
-
-    /**
-     * @param agents agents on mission
-     */
-    public void setAgents(Set<Agent> agents) {
-        this.agents = agents;
+        return Collections.unmodifiableSet(agents);
     }
 
     /**
      * @return reports from mission
      */
     public Set<Report> getReports() {
-        return reports;
-    }
-
-    /**
-     * @param reports reports from mission
-     */
-    public void setReports(Set<Report> reports) {
-        this.reports = reports;
+        return Collections.unmodifiableSet(reports);
     }
 
     /**
@@ -162,16 +149,21 @@ public class Mission {
     }
 
     /**
-     * Add report about mission
+     * Add report about mission from agent.
      * @param report report about mission
      * @throws NullPointerException when report is null
      */
-    public void addReport(Report report) {
+    public void addReport(Report report, Agent agent) {
         if (report == null) {
             throw new NullPointerException("Cannot add report for mission when report is null");
         }
+        if (agent == null) {
+            throw new NullPointerException("Cannot add report for mission when report is null");
+        }
         this.reports.add(report);
+        agent.addReport(report);
         report.setMission(this);
+        report.setAgent(agent);
     }
 
     /**
