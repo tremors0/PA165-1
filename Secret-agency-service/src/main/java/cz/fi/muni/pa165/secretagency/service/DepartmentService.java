@@ -46,9 +46,9 @@ public interface DepartmentService extends GenericService<Department> {
 
     /**
      * Gets all departments in area around given point on the earth
-     * @param originLatitude latitude of origin point
-     * @param originLongitude longitude of origin point
-     * @param maxDistance maximum distance from origin
+     * @param originLatitude latitude of origin point in range [-90.0, 90.0]
+     * @param originLongitude longitude of origin point in range [-180.0, 180.0]
+     * @param maxDistance maximum distance from origin, must be positive
      * @return Departments which are in 0 to maxDistance kilometers range from origin point
      * @throws NullPointerException if any parameter is null
      * @throws DepartmentServiceException when origin point has wrong coordinates or when maxDistance is negative
