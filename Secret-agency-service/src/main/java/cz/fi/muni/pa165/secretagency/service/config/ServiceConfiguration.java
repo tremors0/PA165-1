@@ -2,8 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.config;
 
 import cz.fi.muni.pa165.secretagency.SecretAgencyPersistenceApplicationContext;
 import cz.fi.muni.pa165.secretagency.service.AgentServiceImpl;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +19,7 @@ import org.springframework.context.annotation.Import;
 public class ServiceConfiguration {
 
     @Bean
-    public Mapper dozer(){
-        return new DozerBeanMapper();
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
-
 }
