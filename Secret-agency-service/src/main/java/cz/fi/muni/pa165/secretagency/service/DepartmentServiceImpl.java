@@ -64,13 +64,13 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
         if (maxDistance == null) {
             throw new NullPointerException("maxDistance cannot be null");
         }
-        if (originLatitude < -90.0d || originLatitude > 90.0d) {
+        if (originLatitude < -90.0 || originLatitude > 90.0) {
             throw  new DepartmentServiceException("originLatitude is out of range [-90.0, 90.0]");
         }
-        if (originLongitude < -180.0d || originLongitude > 180.0d) {
+        if (originLongitude < -180.0 || originLongitude > 180.0) {
             throw  new DepartmentServiceException("originLongitude is out of range [-180.0, 180.0]");
         }
-        if (maxDistance < 0.0d) {
+        if (maxDistance < 0.0) {
             throw new DepartmentServiceException("maxDistance is negative");
         }
         List<Department> allDepartments = getDao().getAll();
