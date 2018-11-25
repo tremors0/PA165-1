@@ -51,8 +51,8 @@ public class MissionServiceTest extends AbstractTestNGSpringContextTests {
         mission1.setEnded(LocalDate.of(1975, 4, 30));
         mission1.setMissionType(MissionTypeEnum.SABOTAGE);
 
-        List<Mission> sabotageMissions = missionDao.getMissionsWithType(MissionTypeEnum.SABOTAGE);
-        Assert.assertEquals(missionService.getMissionsWithType(MissionTypeEnum.SABOTAGE).size(), sabotageMissions.size());
+        when(missionDao.getMissionsWithType(MissionTypeEnum.SABOTAGE)).thenReturn(Collections.singletonList(mission1));
+        Assert.assertEquals(missionService.getMissionsWithType(MissionTypeEnum.SABOTAGE), Collections.singletonList(mission1));
     }
 
 
