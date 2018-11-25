@@ -13,6 +13,7 @@ import java.util.*;
  *
  * @author (Adam Kral<433328>)
  */
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 public class Agent {
     @Id
@@ -41,14 +42,14 @@ public class Agent {
             joinColumns = @JoinColumn(name = "agent_id"),
             inverseJoinColumns = @JoinColumn(name = "mission_id")
     )
-    private List<Mission> missions = new ArrayList<Mission>();
+    private List<Mission> missions = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "department_id")
     @NotNull
     private Department department;
 
-    @OneToMany
+    @OneToMany(mappedBy = "agent")
     private List<Report> reports = new ArrayList<>();
 
     /** Create empty Agent **/
@@ -93,7 +94,7 @@ public class Agent {
      * @return agents' known languages
      */
     public Set<LanguageEnum> getLanguages() {
-        return languages;
+        return Collections.unmodifiableSet(languages);
     }
 
     /**
@@ -153,7 +154,9 @@ public class Agent {
     }
 
     /**
-     * @param mission adds mission to agent's mission
+     * <b>SHOULD NOT BE CALLED MANUALLY.</b><br>
+     * If you want to add agent to mission use {@link Mission#addAgent(Agent)}
+     * @param mission selected mission
      * @throws NullPointerException when mission is null
      */
     public void addMission(Mission mission) {
@@ -188,26 +191,21 @@ public class Agent {
      * @return all reports of agent
      */
     public List<Report> getReports() {
-        return reports;
+        return Collections.unmodifiableList(reports);
     }
 
     /**
-     * Add report about a given mission
+     * <b>SHOULD NOT BE CALLED MANUALLY.</b><br>
+     * If you want to add report from agent, use {@link Mission#addReport(Report, Agent)}
      * @param report agent's written report
-     * @param mission mission where report should be added
      * @throws NullPointerException when report or mission is null
      */
-    public void addReport(Report report, Mission mission) {
+    public void addReport(Report report) {
         if (report == null) {
             throw new NullPointerException("Cannot add report when report is null");
         }
 
-        if (mission == null) {
-            throw new NullPointerException("Cannot add report when mission is null");
-        }
-
         this.reports.add(report);
-        mission.addReport(report);
     }
 
     @Override

@@ -23,9 +23,9 @@ public interface AgentService extends GenericService<Agent> {
     List<Agent> getAgentsByRank(AgentRankEnum rankEnum);
 
     /**
-     * List of all agents with given code name
+     * Agent with given code name
      * @param codename agent's codename
-     * @return agents with given codename
+     * @return agent with given codename
      * @throws NullPointerException when codename is null
      */
     Agent getAgentByCodeName(String codename);
