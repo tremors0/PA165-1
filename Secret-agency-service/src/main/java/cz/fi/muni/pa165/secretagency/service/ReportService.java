@@ -49,4 +49,18 @@ public interface ReportService extends GenericService<Report> {
      * @throws NullPointerException when any of parameters is null
      */
     List<Report> getReportsWithStatusFromMission(ReportStatus reportStatus, Mission mission);
+
+    /**
+     * Updates text in selected report.
+     * @param report updated data
+     * @param text new text
+     */
+    void updateReportText(Report report, String text);
+
+    /**
+     * Updates report status
+     * @param report report
+     * @param reportStatus new status
+     */
+    void changeReportStatus(Report report, ReportStatus reportStatus);
 }

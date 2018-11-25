@@ -1,7 +1,7 @@
 package cz.fi.muni.pa165.secretagency.dto;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * DTO for editing text of the existing report. There is no need to override equals and hashcode
@@ -15,7 +15,7 @@ public class ReportUpdateTextDTO {
     private Long id;
 
     @NotNull
-    @Min(10)
+    @Size(min = 10)
     private String text;
 
     public Long getId() {

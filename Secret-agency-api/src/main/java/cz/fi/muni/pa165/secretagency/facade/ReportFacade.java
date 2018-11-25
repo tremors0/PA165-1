@@ -45,17 +45,19 @@ public interface ReportFacade {
      * Updates text in selected report.
      * @param report updated data
      */
-    void updateReport(ReportUpdateTextDTO report);
+    void updateReportText(ReportUpdateTextDTO report);
 
     /**
      * Method which should be used for approving report.
+     * @param reportId id of the report
      */
-    void approveReport();
+    void approveReport(Long reportId);
 
     /**
      * Method which should be used for denying report.
+     * @param reportId id of the report
      */
-    void denyReport();
+    void denyReport(Long reportId);
 
     /**
      * Get all reports in given interval
