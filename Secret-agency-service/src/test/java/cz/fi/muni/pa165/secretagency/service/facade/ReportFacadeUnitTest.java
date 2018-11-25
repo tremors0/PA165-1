@@ -97,8 +97,10 @@ public class ReportFacadeUnitTest extends AbstractTestNGSpringContextTests {
         transferBabisJrToKrym.setLongitude(39.521161);
     }
 
+    @SuppressWarnings("Duplicates")
     private void setUpAgent() {
         babis = new Agent();
+        babis.setId(42L);
         babis.setLanguages(Collections.singleton(LanguageEnum.SK));
         babis.setRank(AgentRankEnum.AGENT_IN_CHARGE);
         babis.setName("Andrej Babis");

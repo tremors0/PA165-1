@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.secretagency.service.facade;
 
+import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
@@ -9,8 +10,10 @@ import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.*;
 import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
+import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
@@ -31,13 +34,17 @@ import java.util.List;
  * @author Jan Pavlu
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
-public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+public class ReportFacadeIntegrationTest extends AbstractTestNGSpringContextTests {
 
     @PersistenceUnit
     private EntityManagerFactory emf;
 
     @Autowired
     private ReportFacade reportFacade;
+
+    @Autowired
+    private BeanMappingService beanMappingService;
 
     private Report transferBabisJrToKrymReport;
     private Agent babis;
@@ -75,7 +82,7 @@ public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
         babis.setLanguages(Collections.singleton(LanguageEnum.SK));
         babis.setRank(AgentRankEnum.AGENT_IN_CHARGE);
         babis.setName("Andrej Babis");
-        babis.setCodeName("Bures");
+        babis.setCodeName("Bures 2");
         babis.setBirthDate(LocalDate.of(1980, 8, 8));
     }
 
@@ -101,22 +108,26 @@ public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     // TESTS
-//    @Test
-//    public void createReport() {
-//        ReportCreateDTO reportCreateDTO = new ReportCreateDTO();
-//        reportCreateDTO.setAgentId(babis.getId());
-//        reportCreateDTO.setMissionId(transferBabisJrToKrym.getId());
-//        reportCreateDTO.setMissionResult(MissionResultReportEnum.COMPLETED);
-//        reportCreateDTO.setText("Make Vodnanske kure great again");
-//        Long newReportId = reportFacade.createReport(reportCreateDTO);
-//
-//        ReportDTO newReport = reportFacade.getReportById(newReportId);
-//        Assert.assertEquals(newReport.getReportStatus(), ReportStatus.NEW);
-//        Assert.assertEquals(newReport.getText(), reportCreateDTO.getText());
-//        Assert.assertEquals(newReport.getMissionResult(), reportCreateDTO.getMissionResult());
-//
-//        // TODO pavlu - compare IDs of agent and mission
-//    }
+    //@Test
+    public void createReport() {
+        ReportCreateDTO reportCreateDTO = new ReportCreateDTO();
+        reportCreateDTO.setAgentId(babis.getId());
+        reportCreateDTO.setMissionId(transferBabisJrToKrym.getId());
+        reportCreateDTO.setMissionResult(MissionResultReportEnum.COMPLETED);
+        reportCreateDTO.setText("Make Vodnanske kure great again");
+        // TODO - it fails, when tests are run usin mvn install
+        // when running this test class from the IDE, it works correctly
+        Long newReportId = reportFacade.createReport(reportCreateDTO);
+
+        ReportDTO newReport = reportFacade.getReportById(newReportId);
+        Assert.assertEquals(newReport.getReportStatus(), ReportStatus.NEW);
+        Assert.assertEquals(newReport.getText(), reportCreateDTO.getText());
+        Assert.assertEquals(newReport.getMissionResult(), reportCreateDTO.getMissionResult());
+        Assert.assertEquals(newReport.getAgentDTO(), beanMappingService.mapTo(babis, AgentDTO.class));
+
+        // remove newly created report - get to the original state
+        reportFacade.deleteReport(newReportId);
+    }
 
     @Test
     public void getReportByIdTestFound() {
@@ -229,11 +240,11 @@ public class ReportFacadeTest extends AbstractTestNGSpringContextTests {
                 transferBabisJrToKrymReport.getId());
     }
 
-//    @Test
-//    public void getReportsWithStatusFromMissionOk() {
-//        List<ReportDTO> reportDTOS = reportFacade.getReportsWithStatusFromMission(ReportStatus.NEW,
-//                transferBabisJrToKrym.getId());
-//        Assert.assertEquals(reportDTOS.size(), 1);
-//        Assert.assertEquals(reportDTOS.get(0).getId(), transferBabisJrToKrymReport.getId());
-//    }
+    @Test
+    public void getReportsWithStatusFromMissionOk() {
+        List<ReportDTO> reportDTOS = reportFacade.getReportsWithStatusFromMission(ReportStatus.NEW,
+                transferBabisJrToKrym.getId());
+        Assert.assertEquals(reportDTOS.size(), 1);
+        Assert.assertEquals(reportDTOS.get(0).getId(), transferBabisJrToKrymReport.getId());
+    }
 }
