@@ -46,16 +46,26 @@ public class DepartmentDTO {
         if (this == o) return true;
         if (!(o instanceof DepartmentDTO)) return false;
         DepartmentDTO that = (DepartmentDTO) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getCity(), that.getCity()) &&
+        return Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getLatitude(), that.getLatitude()) &&
-                Objects.equals(getLongitude(), that.getLongitude()) &&
-                Objects.equals(agents, that.agents);
+                Objects.equals(getLongitude(), that.getLongitude());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCity(), getCountry(), getLatitude(), getLongitude(), agents);
+        return Objects.hash(getCity(), getCountry(), getLatitude(), getLongitude());
+    }
+
+    @Override
+    public String toString() {
+        return "DepartmentDTO{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", agents=" + agents +
+                '}';
     }
 }

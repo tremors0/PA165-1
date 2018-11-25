@@ -42,23 +42,6 @@ public class DepartmentCreateDTO {
     public void setSpecialization(DepartmentSpecialization specialization) { this.specialization = specialization; }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DepartmentCreateDTO)) return false;
-        DepartmentCreateDTO that = (DepartmentCreateDTO) o;
-        return Objects.equals(getCity(), that.getCity()) &&
-                Objects.equals(getCountry(), that.getCountry()) &&
-                Objects.equals(getLongitude(), that.getLongitude()) &&
-                Objects.equals(getLatitude(), that.getLatitude()) &&
-                getSpecialization() == that.getSpecialization();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getCity(), getCountry(), getLongitude(), getLatitude(), getSpecialization());
-    }
-
-    @Override
     public String toString() {
         return "DepartmentCreateDTO{" +
                 "city='" + city + '\'' +

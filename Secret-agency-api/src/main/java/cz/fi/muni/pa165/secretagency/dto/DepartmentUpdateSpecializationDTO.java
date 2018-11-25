@@ -25,20 +25,6 @@ public class DepartmentUpdateSpecializationDTO {
     public void setSpecialization(DepartmentSpecialization specialization) { this.specialization = specialization; }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DepartmentUpdateSpecializationDTO)) return false;
-        DepartmentUpdateSpecializationDTO that = (DepartmentUpdateSpecializationDTO) o;
-        return Objects.equals(getDepartmentId(), that.getDepartmentId()) &&
-                getSpecialization() == that.getSpecialization();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getDepartmentId(), getSpecialization());
-    }
-
-    @Override
     public String toString() {
         return "DepartmentUpdateSepcializationDTO{" +
                 "departmentId=" + departmentId +
