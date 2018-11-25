@@ -11,6 +11,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -30,6 +31,7 @@ import static org.testng.Assert.assertEquals;
  * Time: 4:01 PM
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     @Mock
     private AgentDao agentDao;
