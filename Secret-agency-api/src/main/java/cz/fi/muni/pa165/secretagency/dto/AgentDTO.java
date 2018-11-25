@@ -85,8 +85,7 @@ public class AgentDTO {
         if (this == o) return true;
         if (!(o instanceof AgentDTO)) return false;
         AgentDTO agentDTO = (AgentDTO) o;
-        return Objects.equals(id, agentDTO.id) &&
-                Objects.equals(name, agentDTO.name) &&
+        return Objects.equals(name, agentDTO.name) &&
                 Objects.equals(birthDate, agentDTO.birthDate) &&
                 Objects.equals(languages, agentDTO.languages) &&
                 rank == agentDTO.rank &&
@@ -95,7 +94,7 @@ public class AgentDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, birthDate, languages, rank, codeName);
+        return Objects.hash(name, birthDate, languages, rank, codeName);
     }
 
     @Override
