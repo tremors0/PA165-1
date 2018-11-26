@@ -158,7 +158,8 @@ public class ReportFacadeIntegrationTest extends AbstractTestNGSpringContextTest
         em.close();
     }
 
-    @Test(expectedExceptions = org.springframework.dao.InvalidDataAccessApiUsageException.class)
+    @Test(expectedExceptions = NullPointerException.class,
+          expectedExceptionsMessageRegExp = "Report with given ID doesn't exist")
     public void deleteNonExistingReport() {
         reportFacade.deleteReport(666L);
         Assert.assertEquals(reportFacade.getAllReports().size(), 1);
