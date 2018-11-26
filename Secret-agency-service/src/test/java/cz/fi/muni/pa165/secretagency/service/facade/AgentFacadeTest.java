@@ -2,12 +2,19 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
+import cz.fi.muni.pa165.secretagency.entity.Department;
+import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
+import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.facade.AgentFacade;
 import cz.fi.muni.pa165.secretagency.service.AgentService;
 import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
+import cz.fi.muni.pa165.secretagency.service.DepartmentService;
+import cz.fi.muni.pa165.secretagency.service.MissionService;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,19 +52,27 @@ public class AgentFacadeTest extends AbstractTestNGSpringContextTests {
     @Mock
     private AgentService agentService;
 
+    @Mock
+    private MissionService missionService;
+
+    @Mock
+    private DepartmentService departmentService;
+
     @InjectMocks
     private AgentFacade agentFacade = new AgentFacadeImpl();
 
     @BeforeMethod
     public void setUp() {
-        setUpAgents();
+        setUpTestingData();
         MockitoAnnotations.initMocks(this);
     }
 
     private Agent jamesBond;
     private Agent abbeyChase;
+    private Mission saveTheWorld;
+    private Department fbi;
 
-    private void setUpAgents() {
+    private void setUpTestingData() {
         jamesBond = new Agent();
         jamesBond.setId(1L);
         jamesBond.setName("James Bond");
@@ -69,6 +84,13 @@ public class AgentFacadeTest extends AbstractTestNGSpringContextTests {
         abbeyChase.setId(2L);
         abbeyChase.setRank(AgentRankEnum.JUNIOR);
         abbeyChase.addLanguage(LanguageEnum.CZ);
+
+        saveTheWorld = new Mission();
+        saveTheWorld.setId(5L);
+        saveTheWorld.setMissionType(MissionTypeEnum.ESPIONAGE);
+
+        fbi = new Department();
+        fbi.setId(3L);
     }
 
     @Test
@@ -137,5 +159,29 @@ public class AgentFacadeTest extends AbstractTestNGSpringContextTests {
         assertEquals(2,agents.size());
         assertTrue(agents.contains(jamesBond));
         assertTrue(agents.contains(abbeyChase));
+    }
+
+    @Test
+    public void assignAgentToMissionTest() {
+        AgentDTO agentDTO = beanMappingService.mapTo(jamesBond, AgentDTO.class);
+        MissionDTO missionDTO = beanMappingService.mapTo(saveTheWorld, MissionDTO.class);
+        when(missionService.getEntityById(saveTheWorld.getId())).thenReturn(saveTheWorld);
+        agentFacade.assignAgentToMission(agentDTO, missionDTO);
+    }
+
+    @Test
+    public void removeAgentFromMissionTest() {
+        AgentDTO agentDTO = beanMappingService.mapTo(jamesBond, AgentDTO.class);
+        MissionDTO missionDTO = beanMappingService.mapTo(saveTheWorld, MissionDTO.class);
+        when(missionService.getEntityById(saveTheWorld.getId())).thenReturn(saveTheWorld);
+        agentFacade.removeAgentFromMission(agentDTO, missionDTO);
+    }
+
+    @Test
+    public void addAgentToDepartmentTest() {
+        AgentDTO agentDTO = beanMappingService.mapTo(jamesBond, AgentDTO.class);
+        DepartmentDTO departmentDTO = beanMappingService.mapTo(fbi, DepartmentDTO.class);
+        when(departmentService.getEntityById(fbi.getId())).thenReturn(fbi);
+        agentFacade.addAgentToDepartment(agentDTO, departmentDTO);
     }
 }

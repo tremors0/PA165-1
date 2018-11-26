@@ -2,6 +2,8 @@ package cz.fi.muni.pa165.secretagency.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 
@@ -58,16 +60,14 @@ public interface AgentFacade {
      * @param agent agent to be assigned
      * @param mission mission to be assigned on
      */
-//    TODO: when missionDTO ready
-//    void assignAgentToMission(AgentDTO agent, MissionDTO mission);
+    void assignAgentToMission(AgentDTO agent, MissionDTO mission);
 
     /**
      * Remove agent from a mission
      * @param agent agent to be removed
      * @param mission mission to be removed from
      */
-    //    TODO: when missionDTO ready
-//    void removeAgentFromMission(AgentDTO agent, Mission mission);
+    void removeAgentFromMission(AgentDTO agent, MissionDTO mission);
 
     /**
      * Add agent to given department
@@ -75,8 +75,7 @@ public interface AgentFacade {
      * @param agent to be moved
      * @param department department to be moved to
      */
-//    TODO: when departmentDTO ready
-//    void addAgentToDepartment(AgentDTO agent, Department department);
+    void addAgentToDepartment(AgentDTO agent, DepartmentDTO department);
 
     /**
      * Get all agents who can speak given language

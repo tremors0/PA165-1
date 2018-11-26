@@ -8,9 +8,10 @@ import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.service.exceptions.AgentServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the {@link AgentService}. This class is part of the
@@ -22,7 +23,6 @@ import java.util.List;
  * Time: 2:54 PM
  */
 @Service
-@Transactional
 public class AgentServiceImpl extends GenericServiceImpl<Agent, AgentDao> implements AgentService {
 
     @Override
@@ -98,5 +98,18 @@ public class AgentServiceImpl extends GenericServiceImpl<Agent, AgentDao> implem
     @Override
     public List<Agent> getSoonRetiringAgents() {
         return getDao().getSoonRetiringAgents();
+    }
+
+    @Override
+    public Set<Agent> getAgentsWithCodeNames(Set<String> codeNames) {
+        if (codeNames == null) {
+            throw new NullPointerException("Codenames must be set");
+        }
+
+        if (codeNames.isEmpty()) {
+            return new HashSet<>();
+        }
+
+        return getDao().getAgentsWithCodeNames(codeNames);
     }
 }

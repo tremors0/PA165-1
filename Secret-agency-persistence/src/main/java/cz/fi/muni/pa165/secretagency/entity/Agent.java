@@ -167,7 +167,10 @@ public class Agent {
     }
 
     /**
-     * @param mission mission to be removed
+     * <b>SHOULD NOT BE CALLED MANUALLY.</b><br>
+     * If you want to remove agent from mission use {@link Mission#removeAgent(Agent)}
+     * @param mission selected mission
+     * @throws NullPointerException when mission is null
      */
     public void removeMission(Mission mission) { this.missions.remove(mission); }
 
