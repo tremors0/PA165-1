@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
  * DTO for creating new report. There is no need to override equals and hashcode
  *   because this class should not be used in a collection.
  *
- * @author Jan Pavlu
+ * @author Jan Pavlu (487548)
  */
 public class ReportCreateDTO {
 
