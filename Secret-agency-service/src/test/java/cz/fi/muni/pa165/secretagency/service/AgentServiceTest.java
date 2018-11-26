@@ -5,24 +5,27 @@ import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
-import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
+import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.hibernate.service.spi.ServiceException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -31,6 +34,7 @@ import static org.testng.Assert.assertEquals;
  * Time: 4:01 PM
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AgentServiceTest extends AbstractTestNGSpringContextTests {
     @Mock
     private AgentDao agentDao;
@@ -78,46 +82,6 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         agent1.setId(50L);
         when(agentDao.getEntityById(agent1.getId())).thenReturn(agent1);
         assertEquals(agent1, agentService.getEntityById(agent1.getId()));
-    }
-
-    /**
-     * Test that all agents with given mission are returned
-     */
-    @Test
-    public void getAgentsOnMissionTest() {
-        Agent agent = new Agent();
-        agent.setId(50L);
-        Mission mission = new Mission();
-        agent.addMission(mission);
-        when(agentDao.getAll()).thenReturn(Collections.singletonList(agent));
-        List<Agent> agentsOnMission = agentService.getAgentsOnMission(mission);
-        assertEquals(1, agentsOnMission.size());
-    }
-
-    /**
-     * Test that agents are not returned if they are assigned to no/other mission
-     */
-    @Test
-    public void getAgentsOnMissionNoAgentsFoundTest() {
-        Agent agentNoMission = new Agent();
-        agentNoMission.setId(50L);
-        Agent agentOnDifferentMission = new Agent();
-        agentOnDifferentMission.setId(40L);
-        Mission agentsMission = new Mission();
-        agentsMission.setId(1L);
-        agentOnDifferentMission.addMission(agentsMission);
-
-        Mission assassination = new Mission();
-        assassination.setId(2L);
-        assassination.setMissionType(MissionTypeEnum.ASSASSINATION);
-
-        List<Agent> agentsList = new ArrayList<>();
-        agentsList.add(agentNoMission);
-        agentsList.add(agentOnDifferentMission);
-
-        when(agentDao.getAll()).thenReturn(agentsList);
-        List<Agent> agentsOnMission = agentService.getAgentsOnMission(assassination);
-        assertEquals(0, agentsOnMission.size());
     }
 
     /**
@@ -193,5 +157,43 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
 
         agentService.addAgentToDepartment(agent, newDepartment);
         assertEquals(2L, (long) agent.getDepartment().getId());
+    }
+
+    @Test
+    public void getAgentsWithLanguageKnowledgeTest() {
+        Agent agent = new Agent();
+        agent.setId(50L);
+        agent.addLanguage(LanguageEnum.CZ);
+        when(agentDao.getAgentsWithLanguageKnowledge(LanguageEnum.CZ)).thenReturn(Collections.singletonList(agent));
+
+        List<Agent> agents = agentService.getAgentsWithLanguageKnowledge(LanguageEnum.CZ);
+        assertEquals(1, agents.size());
+        assertEquals(50L, (long) agents.get(0).getId());
+    }
+
+    @Test
+    public void getSoonRetiringAgentsTest() {
+        Agent agent = new Agent();
+        agent.setId(50L);
+        when(agentDao.getSoonRetiringAgents()).thenReturn(Collections.singletonList(agent));
+        List<Agent> agents = agentService.getSoonRetiringAgents();
+        assertEquals(1, agents.size());
+        assertEquals(50L, (long) agents.get(0).getId());
+    }
+
+    @Test
+    public void getAgentsWithCodeNamesTest() {
+        Agent pepa = new Agent();
+        pepa.setId(3L);
+        pepa.setCodeName("Pepa");
+        Set<Agent> agentsWithCodenames = new HashSet<>();
+        agentsWithCodenames.add(pepa);
+
+        Set<String> codeNames = new HashSet<>();
+        codeNames.add("Pepa");
+        when(agentDao.getAgentsWithCodeNames(codeNames)).thenReturn(agentsWithCodenames);
+        Set<Agent> agents = agentService.getAgentsWithCodeNames(codeNames);
+        assertEquals(agents.size(), 1);
+        assertTrue(agents.stream().anyMatch(agent -> agent.getId().equals(3L)));
     }
 }
