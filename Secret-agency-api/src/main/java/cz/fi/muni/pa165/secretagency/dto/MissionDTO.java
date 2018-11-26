@@ -95,13 +95,25 @@ public class MissionDTO {
                 Objects.equals(getLongitude(), that.getLongitude()) &&
                 getMissionType() == that.getMissionType() &&
                 Objects.equals(getStarted(), that.getStarted()) &&
-                Objects.equals(getEnded(), that.getEnded()) &&
-                Objects.equals(getAgents(), that.getAgents()) &&
-                Objects.equals(getReports(), that.getReports());
+                Objects.equals(getEnded(), that.getEnded());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded(), getAgents(), getReports());
+        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded());
+    }
+
+    @Override
+    public String toString() {
+        return "MissionDTO{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", missionType=" + missionType +
+                ", started=" + started +
+                ", ended=" + ended +
+                ", agents=" + agents +
+                ", reports=" + reports +
+                '}';
     }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * DTO for report.
  *
- * @author Jan Pavlu
+ * @author Jan Pavlu (487548)
  */
 public class ReportDTO {
 
@@ -18,7 +18,7 @@ public class ReportDTO {
     private LocalDate date;
     private ReportStatus reportStatus = ReportStatus.NEW;
     private MissionResultReportEnum missionResult;
-    //private MissionDTO missionDTO;
+    private MissionDTO missionDTO;
     private AgentDTO agentDTO;
 
     public Long getId() {
@@ -69,6 +69,14 @@ public class ReportDTO {
         this.agentDTO = agentDTO;
     }
 
+    public MissionDTO getMissionDTO() {
+        return missionDTO;
+    }
+
+    public void setMissionDTO(MissionDTO missionDTO) {
+        this.missionDTO = missionDTO;
+    }
+
     // automatically generated equals and hashcode
     @Override
     public boolean equals(Object o) {
@@ -84,5 +92,18 @@ public class ReportDTO {
     @Override
     public int hashCode() {
         return Objects.hash(getText(), getDate(), getReportStatus(), getMissionResult());
+    }
+
+    @Override
+    public String toString() {
+        return "ReportDTO{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                ", reportStatus=" + reportStatus +
+                ", missionResult=" + missionResult +
+                ", missionDTO=" + missionDTO +
+                ", agentDTO=" + agentDTO +
+                '}';
     }
 }

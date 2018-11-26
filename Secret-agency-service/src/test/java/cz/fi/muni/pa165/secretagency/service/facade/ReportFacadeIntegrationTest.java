@@ -1,6 +1,5 @@
 package cz.fi.muni.pa165.secretagency.service.facade;
 
-import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
