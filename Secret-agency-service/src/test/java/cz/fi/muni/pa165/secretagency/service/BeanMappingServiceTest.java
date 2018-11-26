@@ -29,6 +29,11 @@ import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.util.Collections;
 
+/**
+ * Tests for BeanMappingService class.
+ *
+ * @author Milos Silhar
+ */
 @ContextConfiguration(classes = ServiceConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
