@@ -83,7 +83,7 @@ public class AgentServiceImpl extends GenericServiceImpl<Agent, AgentDao> implem
         if (department == null) {
             throw new NullPointerException("Department cannot be null");
         }
-        agent.setDepartment(department);
+        department.addAgent(agent);
         getDao().merge(agent);
     }
 
