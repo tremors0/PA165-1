@@ -2,11 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
-import cz.fi.muni.pa165.secretagency.entity.Department;
-import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.facade.AgentFacade;
@@ -76,27 +72,27 @@ public class AgentFacadeImpl implements AgentFacade {
     }
 
     @Override
-    public void assignAgentToMission(AgentDTO agent, MissionDTO mission) {
-        Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
-        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedMission.addAgent(mappedAgent);
-        agentService.save(mappedAgent);
+    public void assignAgentToMission(Long agentId, Long missionId) {
+        agentService.assignAgentToMission(
+                agentService.getEntityById(agentId),
+                missionService.getEntityById(missionId)
+        );
     }
 
     @Override
-    public void removeAgentFromMission(AgentDTO agent, MissionDTO mission) {
-        Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
-        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedMission.removeAgent(mappedAgent);
-        agentService.save(mappedAgent);
+    public void removeAgentFromMission(Long agentId, Long missionId) {
+        agentService.removeAgentFromMission(
+                agentService.getEntityById(agentId),
+                missionService.getEntityById(missionId)
+        );
     }
 
     @Override
-    public void addAgentToDepartment(AgentDTO agent, DepartmentDTO department) {
-        Department mappedDepartment = beanMappingService.mapTo(departmentService.getEntityById(department.getId()), Department.class);
-        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedDepartment.addAgent(mappedAgent);
-        agentService.save(mappedAgent);
+    public void addAgentToDepartment(Long agentId, Long departmentId) {
+        agentService.addAgentToDepartment(
+                agentService.getEntityById(agentId),
+                departmentService.getEntityById(departmentId)
+        );
     }
 
     @Override
