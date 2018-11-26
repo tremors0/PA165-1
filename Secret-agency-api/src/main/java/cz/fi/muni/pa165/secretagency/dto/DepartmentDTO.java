@@ -56,12 +56,13 @@ public class DepartmentDTO {
         return Objects.equals(getCity(), that.getCity()) &&
                 Objects.equals(getCountry(), that.getCountry()) &&
                 Objects.equals(getLatitude(), that.getLatitude()) &&
-                Objects.equals(getLongitude(), that.getLongitude());
+                Objects.equals(getLongitude(), that.getLongitude()) &&
+                getSpecialization() == that.getSpecialization();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCity(), getCountry(), getLatitude(), getLongitude());
+        return Objects.hash(getCity(), getCountry(), getLatitude(), getLongitude(), getSpecialization());
     }
 
     @Override
@@ -72,6 +73,7 @@ public class DepartmentDTO {
                 ", country='" + country + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", specialization=" + specialization +
                 ", agents=" + agents +
                 '}';
     }
