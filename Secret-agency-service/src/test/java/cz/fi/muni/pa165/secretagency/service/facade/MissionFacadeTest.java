@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.when;
  * @author Adam Skurla (487588)
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class MissionFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Spy
