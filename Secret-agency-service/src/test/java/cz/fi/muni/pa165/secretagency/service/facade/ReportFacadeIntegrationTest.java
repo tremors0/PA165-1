@@ -108,15 +108,13 @@ public class ReportFacadeIntegrationTest extends AbstractTestNGSpringContextTest
     }
 
     // TESTS
-    //@Test
+    @Test
     public void createReport() {
         ReportCreateDTO reportCreateDTO = new ReportCreateDTO();
         reportCreateDTO.setAgentId(babis.getId());
         reportCreateDTO.setMissionId(transferBabisJrToKrym.getId());
         reportCreateDTO.setMissionResult(MissionResultReportEnum.COMPLETED);
         reportCreateDTO.setText("Make Vodnanske kure great again");
-        // TODO - it fails, when tests are run usin mvn install
-        // when running this test class from the IDE, it works correctly
         Long newReportId = reportFacade.createReport(reportCreateDTO);
 
         ReportDTO newReport = reportFacade.getReportById(newReportId);

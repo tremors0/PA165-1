@@ -11,6 +11,7 @@ import cz.fi.muni.pa165.secretagency.service.exceptions.ReportServiceException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.when;
  * @author Jan Pavlu (487548)
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ReportServiceTest extends AbstractTestNGSpringContextTests {
 
     @Mock

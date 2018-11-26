@@ -60,11 +60,11 @@ public class ReportFacadeImpl implements ReportFacade {
         Mission mission = missionService.getEntityById(reportDTO.getMissionId());
 
         if (agent == null) {
-            throw new NullPointerException("Agent with selected id was not found");
+            throw new NullPointerException("Agent with id " + reportDTO.getAgentId() + " was not found");
         }
 
         if (mission == null) {
-            throw new NullPointerException("Mission with selected id was not found");
+            throw new NullPointerException("Mission with id " + reportDTO.getMissionId() + "was not found");
         }
 
         Report report = new Report();
