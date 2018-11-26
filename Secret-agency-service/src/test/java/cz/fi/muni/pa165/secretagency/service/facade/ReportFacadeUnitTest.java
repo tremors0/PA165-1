@@ -67,9 +67,9 @@ public class ReportFacadeUnitTest extends AbstractTestNGSpringContextTests {
         ReflectionTestUtils.setField(reportFacade, "missionService", missionService);
         ReflectionTestUtils.setField(reportFacade, "agentService", agentService);
 
+        setUpAgent();
         setUpReports();
         setUpMission();
-        setUpAgent();
     }
 
     private void setUpReports() {
@@ -96,6 +96,7 @@ public class ReportFacadeUnitTest extends AbstractTestNGSpringContextTests {
         transferBabisJrToKrym.setEnded(LocalDate.of(2018, 11, 1));
         transferBabisJrToKrym.setLatitude(47.304324);
         transferBabisJrToKrym.setLongitude(39.521161);
+        transferBabisJrToKrym.addReport(transferBabisJrToKrymReport, babis);
     }
 
     private void setUpAgent() {
@@ -143,6 +144,7 @@ public class ReportFacadeUnitTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void deleteReport() {
+        when(reportService.getEntityById(transferBabisJrToKrymReport.getId())).thenReturn(transferBabisJrToKrymReport);
         reportFacade.deleteReport(transferBabisJrToKrymReport.getId());
         verify(reportService).deleteEntityById(transferBabisJrToKrymReport.getId());
     }

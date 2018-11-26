@@ -207,8 +207,20 @@ public class Agent {
         if (report == null) {
             throw new NullPointerException("Cannot add report when report is null");
         }
-
         this.reports.add(report);
+    }
+
+    /**
+     * <b>SHOULD NOT BE CALLED MANUALLY.</b><br>
+     *  If you want to add report from agent, use {@link Mission#removeReport(Report, Agent)}
+     * @param report report
+     * @throws NullPointerException when report is null
+     */
+    public void removeReport(Report report) {
+        if (report == null) {
+            throw new NullPointerException("Cannot add report when report is null");
+        }
+        this.reports.remove(report);
     }
 
     @Override
