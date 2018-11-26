@@ -8,7 +8,6 @@ import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.service.exceptions.AgentServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.Set;
  * Time: 2:54 PM
  */
 @Service
-@Transactional
 public class AgentServiceImpl extends GenericServiceImpl<Agent, AgentDao> implements AgentService {
 
     @Override

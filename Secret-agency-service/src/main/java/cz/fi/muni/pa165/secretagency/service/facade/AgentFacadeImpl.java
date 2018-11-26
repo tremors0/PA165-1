@@ -2,12 +2,18 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
+import cz.fi.muni.pa165.secretagency.entity.Department;
+import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.facade.AgentFacade;
 import cz.fi.muni.pa165.secretagency.service.AgentService;
 import cz.fi.muni.pa165.secretagency.service.BeanMappingService;
+import cz.fi.muni.pa165.secretagency.service.DepartmentService;
+import cz.fi.muni.pa165.secretagency.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +34,11 @@ public class AgentFacadeImpl implements AgentFacade {
     @Autowired
     private AgentService agentService;
 
-//    TODO: uncomment
-//    @Autowired
-//    private DepartmentService departmentService;
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private MissionService missionService;
 
     @Override
     public List<AgentDTO> getAllAgents() {
@@ -42,12 +50,11 @@ public class AgentFacadeImpl implements AgentFacade {
         return beanMappingService.mapTo(agentService.getEntityById(id), AgentDTO.class);
     }
 
-//    TODO: uncomment when departmentService ready
     @Override
     public Long createAgent(AgentCreateDTO agentCreateDTO) {
         Agent mappedAgent = beanMappingService.mapTo(agentCreateDTO, Agent.class);
 
-//        mappedAgent.setDepartment(departmentService.getEntityById(agentCreateDTO.getDepartmentId()));
+        mappedAgent.setDepartment(departmentService.getEntityById(agentCreateDTO.getDepartmentId()));
 
         Agent savedAgent = agentService.save(mappedAgent);
         return savedAgent.getId();
@@ -66,6 +73,30 @@ public class AgentFacadeImpl implements AgentFacade {
     @Override
     public AgentDTO getAgentByCodeName(String codename) {
         return beanMappingService.mapTo(agentService.getAgentByCodeName(codename), AgentDTO.class);
+    }
+
+    @Override
+    public void assignAgentToMission(AgentDTO agent, MissionDTO mission) {
+        Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
+        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
+        mappedMission.addAgent(mappedAgent);
+        agentService.save(mappedAgent);
+    }
+
+    @Override
+    public void removeAgentFromMission(AgentDTO agent, MissionDTO mission) {
+        Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
+        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
+        mappedMission.removeAgent(mappedAgent);
+        agentService.save(mappedAgent);
+    }
+
+    @Override
+    public void addAgentToDepartment(AgentDTO agent, DepartmentDTO department) {
+        Department mappedDepartment = beanMappingService.mapTo(departmentService.getEntityById(department.getId()), Department.class);
+        Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
+        mappedDepartment.addAgent(mappedAgent);
+        agentService.save(mappedAgent);
     }
 
     @Override

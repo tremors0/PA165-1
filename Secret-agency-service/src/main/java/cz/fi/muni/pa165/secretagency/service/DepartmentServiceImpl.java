@@ -5,7 +5,6 @@ import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import cz.fi.muni.pa165.secretagency.service.exceptions.DepartmentServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
  * @author Milos Silhar (433614)
  */
 @Service
-@Transactional
 public class DepartmentServiceImpl extends GenericServiceImpl<Department, DepartmentDao> implements DepartmentService {
 
     @Override
