@@ -18,10 +18,8 @@ public class AgentDTO {
     private Set<LanguageEnum> languages = new HashSet<>();
     private AgentRankEnum rank;
     private String codeName;
-
-    //    TODO: uncomment when dto ready
-//    private List<MissionDTO> missions = new ArrayList<MissionDTO>();
-//    private DepartmentDTO department;
+    private List<MissionDTO> missions = new ArrayList<MissionDTO>();
+    private DepartmentDTO department;
     private List<ReportDTO> reports = new ArrayList<>();
 
     public Long getId() {
@@ -80,6 +78,22 @@ public class AgentDTO {
         this.reports = reports;
     }
 
+    public List<MissionDTO> getMissions() {
+        return missions;
+    }
+
+    public void setMissions(List<MissionDTO> missions) {
+        this.missions = missions;
+    }
+
+    public DepartmentDTO getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentDTO department) {
+        this.department = department;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,6 +120,9 @@ public class AgentDTO {
                 ", languages=" + languages +
                 ", rank=" + rank +
                 ", codeName='" + codeName + '\'' +
+                ", missions=" + missions +
+                ", department=" + department +
+                ", reports=" + reports +
                 '}';
     }
 }
