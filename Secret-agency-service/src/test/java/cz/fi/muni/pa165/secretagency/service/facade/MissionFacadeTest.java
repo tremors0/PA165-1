@@ -84,17 +84,9 @@ public class MissionFacadeTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void createTest() {
-        /* MissionCreateDTO missionCreateDTO = new MissionCreateDTO();
-        missionCreateDTO.setLatitude(mission1.getLatitude());
-        missionCreateDTO.setLongitude(mission1.getLongitude());
-        missionCreateDTO.setStarted(mission1.getStarted());
-        missionCreateDTO.setEnded(mission1.getEnded());
-        missionCreateDTO.setMissionType(mission1.getMissionType());
-
-        Long newMissionId = missionFacade.createMission(missionCreateDTO);
-
-        MissionDTO newMission = missionFacade.getMissionById(newMissionId);
-        Assert.assertEquals(newMission.getLatitude(), missionCreateDTO.getLatitude()); */
+        MissionCreateDTO missionCreateDTO = beanMappingService.mapTo(mission1, MissionCreateDTO.class);
+        when(missionService.save(mission1)).thenReturn(mission1);
+        Assert.assertEquals(mission1.getId(), missionFacade.createMission(missionCreateDTO));
     }
 
     @Test
