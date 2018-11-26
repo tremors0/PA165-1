@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
  * DTO for editing text of the existing report. There is no need to override equals and hashcode
  *    because this class should not be used in a collection.
  *
- * @author Jan Pavlu
+ * @author Jan Pavlu (487548)
  */
 public class ReportUpdateTextDTO {
 

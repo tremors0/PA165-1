@@ -3,7 +3,6 @@ package cz.fi.muni.pa165.secretagency.dto;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 /**
  * DTO for editing specialization of existing department
