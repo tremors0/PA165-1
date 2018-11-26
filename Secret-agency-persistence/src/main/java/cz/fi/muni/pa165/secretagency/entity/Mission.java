@@ -178,6 +178,18 @@ public class Mission {
         agent.addMission(this);
     }
 
+    /**
+     * @param agent agent, which should be removed
+     * @throws NullPointerException when agent is null
+     */
+    public void removeAgent(Agent agent) {
+        if (agent == null) {
+            throw new NullPointerException("Cannot remove agent from mission if agent is null");
+        }
+        this.agents.remove(agent);
+        agent.removeMission(this);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

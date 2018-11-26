@@ -18,7 +18,7 @@ public class AgentDTO {
     private Set<LanguageEnum> languages = new HashSet<>();
     private AgentRankEnum rank;
     private String codeName;
-    private List<MissionDTO> missions = new ArrayList<MissionDTO>();
+    private List<MissionDTO> missions = new ArrayList<>();
     private DepartmentDTO department;
     private List<ReportDTO> reports = new ArrayList<>();
 

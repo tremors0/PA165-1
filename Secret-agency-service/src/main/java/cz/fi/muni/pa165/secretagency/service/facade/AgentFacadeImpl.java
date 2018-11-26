@@ -79,7 +79,7 @@ public class AgentFacadeImpl implements AgentFacade {
     public void assignAgentToMission(AgentDTO agent, MissionDTO mission) {
         Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
         Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedAgent.addMission(mappedMission);
+        mappedMission.addAgent(mappedAgent);
         agentService.save(mappedAgent);
     }
 
@@ -87,7 +87,7 @@ public class AgentFacadeImpl implements AgentFacade {
     public void removeAgentFromMission(AgentDTO agent, MissionDTO mission) {
         Mission mappedMission = beanMappingService.mapTo(missionService.getEntityById(mission.getId()), Mission.class);
         Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedAgent.removeMission(mappedMission);
+        mappedMission.removeAgent(mappedAgent);
         agentService.save(mappedAgent);
     }
 
@@ -95,7 +95,7 @@ public class AgentFacadeImpl implements AgentFacade {
     public void addAgentToDepartment(AgentDTO agent, DepartmentDTO department) {
         Department mappedDepartment = beanMappingService.mapTo(departmentService.getEntityById(department.getId()), Department.class);
         Agent mappedAgent = beanMappingService.mapTo(agent, Agent.class);
-        mappedAgent.setDepartment(mappedDepartment);
+        mappedDepartment.addAgent(mappedAgent);
         agentService.save(mappedAgent);
     }
 
