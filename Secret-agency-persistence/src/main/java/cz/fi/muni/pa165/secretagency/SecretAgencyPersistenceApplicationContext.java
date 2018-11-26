@@ -4,6 +4,7 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
@@ -25,14 +26,25 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = "cz.fi.muni.pa165.secretagency")
 public class SecretAgencyPersistenceApplicationContext {
 
+    /**
+     * Enables automatic translation of exceptions to DataAccessExceptions.
+     */
     @Bean
-    public JpaTransactionManager transactionManager(){
-        return new JpaTransactionManager(entityManagerFactory().getObject());
+    public PersistenceExceptionTranslationPostProcessor postProcessor() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
-        LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean ();
+    public JpaTransactionManager transactionManager() {
+        return new JpaTransactionManager(entityManagerFactory().getObject());
+    }
+
+    /**
+     * Starts up a container that emulates behavior prescribed in JPA spec for container-managed EntityManager
+     */
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
         jpaFactoryBean.setDataSource(db());
         jpaFactoryBean.setLoadTimeWeaver(instrumentationLoadTimeWeaver());
         jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
@@ -40,7 +52,7 @@ public class SecretAgencyPersistenceApplicationContext {
     }
 
     @Bean
-    public LocalValidatorFactoryBean localValidatorFactoryBean(){
+    public LocalValidatorFactoryBean localValidatorFactoryBean() {
         return new LocalValidatorFactoryBean();
     }
 
@@ -50,7 +62,7 @@ public class SecretAgencyPersistenceApplicationContext {
     }
 
     @Bean
-    public DataSource db(){
+    public DataSource db() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder.setType(EmbeddedDatabaseType.DERBY).build();
     }

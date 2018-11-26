@@ -59,7 +59,7 @@ public class GenericDaoTests extends AbstractTestNGSpringContextTests {
         Assert.assertNull(dep);
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test(expectedExceptions = {org.springframework.dao.InvalidDataAccessApiUsageException.class})
     public void deleteEntityByIdNotFound() {
         genericDao.deleteEntityById(1L);
     }
