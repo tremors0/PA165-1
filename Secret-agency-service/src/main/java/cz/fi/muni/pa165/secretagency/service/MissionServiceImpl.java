@@ -5,7 +5,6 @@ import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.service.exceptions.MissionServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * @author Adam Skurla (487588)
  */
 @Service
-@Transactional
 public class MissionServiceImpl extends GenericServiceImpl<Mission, MissionDao> implements MissionService {
 
     @Override
