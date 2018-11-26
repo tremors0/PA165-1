@@ -151,19 +151,35 @@ public class Mission {
     /**
      * Add report about mission from agent.
      * @param report report about mission
-     * @throws NullPointerException when report is null
+     * @throws NullPointerException when report or agent is null
      */
     public void addReport(Report report, Agent agent) {
         if (report == null) {
             throw new NullPointerException("Cannot add report for mission when report is null");
         }
         if (agent == null) {
-            throw new NullPointerException("Cannot add report for mission when report is null");
+            throw new NullPointerException("Cannot add report for mission when agent is null");
         }
         this.reports.add(report);
         agent.addReport(report);
         report.setMission(this);
         report.setAgent(agent);
+    }
+
+    /**
+     * Remove report about mission from agent.
+     * @param report report about mission
+     * @throws NullPointerException when report is or agent is null
+     */
+    public void removeReport(Report report, Agent agent) {
+        if (report == null) {
+            throw new NullPointerException("Cannot remove report for mission when report is null");
+        }
+        if (agent == null) {
+            throw new NullPointerException("Cannot remove report for mission when agent is null");
+        }
+        this.reports.remove(report);
+        agent.removeReport(report);
     }
 
     /**

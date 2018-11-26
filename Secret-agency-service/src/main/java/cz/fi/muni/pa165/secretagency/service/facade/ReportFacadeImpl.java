@@ -82,6 +82,12 @@ public class ReportFacadeImpl implements ReportFacade {
 
     @Override
     public void deleteReport(Long reportId) {
+        Report report = reportService.getEntityById(reportId);
+        if (report == null) {
+            throw new NullPointerException("Report with given ID doesn't exist");
+        }
+        Mission mission = report.getMission();
+        mission.removeReport(report, report.getAgent());
         reportService.deleteEntityById(reportId);
     }
 
