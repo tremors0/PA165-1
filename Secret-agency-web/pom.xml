@@ -15,14 +15,20 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!-- Embedded tomcat server etc.-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- Support for hot swapping -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
-
-    <!-- Source: https://github.com/fi-muni/PA165/blob/master/hello-tom-web/pom.xml-->
     <build>
         <plugins>
             <plugin>
