@@ -15,6 +15,19 @@ import java.util.Set;
  * @author (Adam Kral<433328>)
  */
 public interface AgentService extends GenericService<Agent> {
+
+    /**
+     * Try to authenticate a user/agent. Return true only if the hashed password matches the records.
+     * @throws NullPointerException when agent is null
+     */
+    boolean authenticate(Agent agent, String password);
+
+    /**
+     * Check if the given agent is admin (his rank must be agent in charge).
+     * @throws NullPointerException when agent is null
+     */
+    boolean isAdmin(Agent agent);
+
     /**
      * Get all agents by a given rank
      * @param rankEnum given rank

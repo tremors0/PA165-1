@@ -5,10 +5,7 @@ import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.entity.Report;
 import cz.fi.muni.pa165.secretagency.enums.*;
-import cz.fi.muni.pa165.secretagency.service.AgentService;
-import cz.fi.muni.pa165.secretagency.service.DepartmentService;
-import cz.fi.muni.pa165.secretagency.service.MissionService;
-import cz.fi.muni.pa165.secretagency.service.ReportService;
+import cz.fi.muni.pa165.secretagency.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,13 +40,16 @@ public class InitDataFacadeImpl implements InitDataFacade {
     public void loadInitData() {
         // creating agents
         Agent babis = createAgent("Andrej Babis", LocalDate.of(1970, 6, 7),
-                getSetOfLanguages(LanguageEnum.SK), AgentRankEnum.AGENT_IN_CHARGE, "Bures");
+                getSetOfLanguages(LanguageEnum.SK), AgentRankEnum.AGENT_IN_CHARGE, "Bures",
+                "nikdyNeodstoupim");
         Agent bond = createAgent("James Bond", LocalDate.of(1950, 2,28),
-                getSetOfLanguages(LanguageEnum.EN, LanguageEnum.JP), AgentRankEnum.SENIOR, "007");
+                getSetOfLanguages(LanguageEnum.EN, LanguageEnum.JP), AgentRankEnum.SENIOR, "007",
+                "Shaken,notStirred");
         Agent orange = createAgent("John A. Thornburn", LocalDate.of(1905, 3, 10),
-                getSetOfLanguages(LanguageEnum.EN), AgentRankEnum.JUNIOR, "Orange");
+                getSetOfLanguages(LanguageEnum.EN), AgentRankEnum.JUNIOR, "Orange", "vietnam");
         Agent zMan = createAgent("Milos Zeman", LocalDate.of(1938, 3, 7),
-                getSetOfLanguages(LanguageEnum.CZ, LanguageEnum.RU), AgentRankEnum.SENIOR, "Ovar");
+                getSetOfLanguages(LanguageEnum.CZ, LanguageEnum.RU), AgentRankEnum.SENIOR, "Ovar",
+                "putinJeKamosNeNepritel");
 
         // creating departments
         Department prague = createDepartment("Prague", "Czech Republic", 50.08804, 14.42076,
@@ -95,13 +95,14 @@ public class InitDataFacadeImpl implements InitDataFacade {
      * @return created agent
      */
     private Agent createAgent(String name, LocalDate birthday, Set<LanguageEnum> languages,
-                             AgentRankEnum rank, String codeName) {
+                             AgentRankEnum rank, String codeName, String password) {
         Agent agent = new Agent();
         agent.setName(name);
         agent.setBirthDate(birthday);
         agent.setLanguages(languages);
         agent.setRank(rank);
         agent.setCodeName(codeName);
+        agent.setPasswordHash(AgentServiceImpl.createHash(password));
         return agent;
     }
 

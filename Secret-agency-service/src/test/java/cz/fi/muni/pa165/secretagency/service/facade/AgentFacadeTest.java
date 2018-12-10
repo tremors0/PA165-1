@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.secretagency.service.facade;
 
+import cz.fi.muni.pa165.secretagency.dto.AgentAuthenticateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -106,6 +108,24 @@ public class AgentFacadeTest extends AbstractTestNGSpringContextTests {
         assertEquals(2,agents.size());
         assertTrue(agents.contains(jamesBond));
         assertTrue(agents.contains(abbeyChase));
+    }
+
+    @Test
+    public void authenticateTest() {
+        AgentAuthenticateDTO agentAuthenticateDTO = new AgentAuthenticateDTO();
+        agentAuthenticateDTO.setUserId(jamesBond.getId());
+        agentAuthenticateDTO.setPassword("admin");
+
+        when(agentService.getEntityById(jamesBond.getId())).thenReturn(jamesBond);
+        when(agentService.authenticate(jamesBond, agentAuthenticateDTO.getPassword())).thenReturn(true);
+        assertTrue(agentFacade.authenticate(agentAuthenticateDTO));
+    }
+
+    @Test
+    public void isAdmin() {
+        when(agentService.getEntityById(jamesBond.getId())).thenReturn(jamesBond);
+        when(agentService.isAdmin(jamesBond)).thenReturn(false);
+        assertFalse(agentFacade.isAdmin(jamesBond.getId()));
     }
 
     @Test

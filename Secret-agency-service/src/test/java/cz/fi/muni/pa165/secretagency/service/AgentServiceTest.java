@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -71,6 +72,34 @@ public class AgentServiceTest extends AbstractTestNGSpringContextTests {
         when(agentDao.save(agent)).thenReturn(agent);
         Agent savedAgent = agentService.save(agent);
         assertEquals(agent, savedAgent);
+    }
+
+    @Test
+    public void authenticateTestCorrectPassword() {
+        Agent agent = new Agent();
+        agent.setPasswordHash(AgentServiceImpl.createHash("mojeDlouheSilneHeslo"));
+        Assert.assertTrue(agentService.authenticate(agent, "mojeDlouheSilneHeslo"));
+    }
+
+    @Test
+    public void authenticateTestIncorrectPassword() {
+        Agent agent = new Agent();
+        agent.setPasswordHash(AgentServiceImpl.createHash("ZmeneneHeslo12"));
+        Assert.assertFalse(agentService.authenticate(agent, "spatneHeslo"));
+    }
+
+    @Test
+    public void isAdminTestNotAdmin() {
+        Agent agent = new Agent();
+        agent.setRank(AgentRankEnum.JUNIOR);
+        Assert.assertFalse(agentService.isAdmin(agent));
+    }
+
+    @Test
+    public void isAdminTestAdmin() {
+        Agent agent = new Agent();
+        agent.setRank(AgentRankEnum.AGENT_IN_CHARGE);
+        Assert.assertTrue(agentService.isAdmin(agent));
     }
 
     /**

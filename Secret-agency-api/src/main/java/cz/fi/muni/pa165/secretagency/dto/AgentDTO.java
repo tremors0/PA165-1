@@ -18,6 +18,7 @@ public class AgentDTO {
     private Set<LanguageEnum> languages = new HashSet<>();
     private AgentRankEnum rank;
     private String codeName;
+    private String passwordHash;
     private List<MissionDTO> missions = new ArrayList<>();
     private DepartmentDTO department;
     private List<ReportDTO> reports = new ArrayList<>();
@@ -94,21 +95,25 @@ public class AgentDTO {
         this.department = department;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AgentDTO)) return false;
         AgentDTO agentDTO = (AgentDTO) o;
-        return Objects.equals(name, agentDTO.name) &&
-                Objects.equals(birthDate, agentDTO.birthDate) &&
-                Objects.equals(languages, agentDTO.languages) &&
-                rank == agentDTO.rank &&
-                Objects.equals(codeName, agentDTO.codeName);
+        return Objects.equals(getCodeName(), agentDTO.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, birthDate, languages, rank, codeName);
+        return Objects.hash(getCodeName());
     }
 
     @Override
@@ -120,6 +125,7 @@ public class AgentDTO {
                 ", languages=" + languages +
                 ", rank=" + rank +
                 ", codeName='" + codeName + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
                 ", missions=" + missions +
                 ", department=" + department +
                 ", reports=" + reports +

@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.secretagency.service.facade;
 
+import cz.fi.muni.pa165.secretagency.dto.AgentAuthenticateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
@@ -24,6 +25,7 @@ import java.util.List;
 @Service
 @Transactional
 public class AgentFacadeImpl implements AgentFacade {
+
     @Autowired
     private BeanMappingService beanMappingService;
 
@@ -103,5 +105,16 @@ public class AgentFacadeImpl implements AgentFacade {
     @Override
     public List<AgentDTO> getSoonRetiringAgents() {
         return beanMappingService.mapTo(agentService.getSoonRetiringAgents(), AgentDTO.class);
+    }
+
+    @Override
+    public boolean authenticate(AgentAuthenticateDTO agentDTO) {
+        Agent agent = agentService.getEntityById(agentDTO.getUserId());
+        return agentService.authenticate(agent, agentDTO.getPassword());
+    }
+
+    @Override
+    public boolean isAdmin(Long agentId) {
+        return agentService.isAdmin(agentService.getEntityById(agentId));
     }
 }
