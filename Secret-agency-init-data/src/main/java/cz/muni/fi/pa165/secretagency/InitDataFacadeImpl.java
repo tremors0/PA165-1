@@ -44,7 +44,7 @@ public class InitDataFacadeImpl implements InitDataFacade {
         // creating agents
         Agent babis = createAgent("Andrej Babis", LocalDate.of(1970, 6, 7),
                 getSetOfLanguages(LanguageEnum.SK), AgentRankEnum.AGENT_IN_CHARGE, "Bures");
-        Agent bond = createAgent("James Bond", LocalDate.of(1950, 28,2),
+        Agent bond = createAgent("James Bond", LocalDate.of(1950, 2,28),
                 getSetOfLanguages(LanguageEnum.EN, LanguageEnum.JP), AgentRankEnum.SENIOR, "007");
         Agent orange = createAgent("John A. Thornburn", LocalDate.of(1905, 3, 10),
                 getSetOfLanguages(LanguageEnum.EN), AgentRankEnum.JUNIOR, "Orange");
