@@ -43,6 +43,7 @@
     <module>Secret-agency-persistence</module>
     <module>Secret-agency-service</module>
     <module>Secret-agency-api</module>
+    <module>Secret-agency-init-data</module>
   </modules>
 
 </project>
