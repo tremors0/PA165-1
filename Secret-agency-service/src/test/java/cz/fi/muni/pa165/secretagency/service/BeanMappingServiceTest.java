@@ -1,23 +1,11 @@
 package cz.fi.muni.pa165.secretagency.service;
 
-import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
-import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
+import cz.fi.muni.pa165.secretagency.dto.*;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.entity.Report;
-import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
-import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
-import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
-import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
-import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
-import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
+import cz.fi.muni.pa165.secretagency.enums.*;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
