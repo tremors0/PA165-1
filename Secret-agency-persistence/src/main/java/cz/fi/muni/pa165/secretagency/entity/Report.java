@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Report {
+public class Report implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

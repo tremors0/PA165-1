@@ -19,9 +19,9 @@ public class AgentDTO {
     private AgentRankEnum rank;
     private String codeName;
     private String passwordHash;
-    private List<MissionDTO> missions = new ArrayList<>();
     private DepartmentDTO department;
-    private List<ReportDTO> reports = new ArrayList<>();
+    private List<Long> missionIds = new ArrayList<>();
+    private List<Long> reportIds = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -71,28 +71,28 @@ public class AgentDTO {
         this.codeName = codeName;
     }
 
-    public List<ReportDTO> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<ReportDTO> reports) {
-        this.reports = reports;
-    }
-
-    public List<MissionDTO> getMissions() {
-        return missions;
-    }
-
-    public void setMissions(List<MissionDTO> missions) {
-        this.missions = missions;
-    }
-
     public DepartmentDTO getDepartment() {
         return department;
     }
 
     public void setDepartment(DepartmentDTO department) {
         this.department = department;
+    }
+
+    public List<Long> getMissionIds() {
+        return missionIds;
+    }
+
+    public void setMissionIds(List<Long> missionIds) {
+        this.missionIds = missionIds;
+    }
+
+    public List<Long> getReportIds() {
+        return reportIds;
+    }
+
+    public void setReportIds(List<Long> reportIds) {
+        this.reportIds = reportIds;
     }
 
     public String getPasswordHash() {
@@ -126,9 +126,9 @@ public class AgentDTO {
                 ", rank=" + rank +
                 ", codeName='" + codeName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
-                ", missions=" + missions +
                 ", department=" + department +
-                ", reports=" + reports +
+                ", missionIds=" + missionIds +
+                ", reportIds=" + reportIds +
                 '}';
     }
 }

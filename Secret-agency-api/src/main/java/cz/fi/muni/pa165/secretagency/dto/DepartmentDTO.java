@@ -25,7 +25,7 @@ public class DepartmentDTO {
 
     private DepartmentSpecialization specialization;
 
-    private List<AgentDTO> agents = new ArrayList<>();
+    private List<Long> agentIds = new ArrayList<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -45,8 +45,13 @@ public class DepartmentDTO {
     public DepartmentSpecialization getSpecialization() { return specialization; }
     public void setSpecialization(DepartmentSpecialization specialization) { this.specialization = specialization; }
 
-    public List<AgentDTO> getAgents() { return agents; }
-    public void setAgents(List<AgentDTO> agents) { this.agents = agents; }
+    public List<Long> getAgentIds() {
+        return agentIds;
+    }
+
+    public void setAgentIds(List<Long> agentIds) {
+        this.agentIds = agentIds;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,7 +79,7 @@ public class DepartmentDTO {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", specialization=" + specialization +
-                ", agents=" + agents +
+                ", agentIds=" + agentIds +
                 '}';
     }
 }

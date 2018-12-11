@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Adam Skurla (487588)
  */
 @Entity
-public class Mission {
+public class Mission implements Identifiable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

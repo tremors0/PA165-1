@@ -19,8 +19,8 @@ public class MissionDTO {
     private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
-    private Set<AgentDTO> agents = new HashSet<>();
-    private Set<ReportDTO> reports = new HashSet<>();
+    private Set<Long> agentIds = new HashSet<>();
+    private Set<Long> reportIds = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -70,20 +70,20 @@ public class MissionDTO {
         this.ended = ended;
     }
 
-    public Set<AgentDTO> getAgents() {
-        return agents;
+    public Set<Long> getAgentIds() {
+        return agentIds;
     }
 
-    public void setAgents(Set<AgentDTO> agents) {
-        this.agents = agents;
+    public void setAgentIds(Set<Long> agentIds) {
+        this.agentIds = agentIds;
     }
 
-    public Set<ReportDTO> getReports() {
-        return reports;
+    public Set<Long> getReportIds() {
+        return reportIds;
     }
 
-    public void setReports(Set<ReportDTO> reports) {
-        this.reports = reports;
+    public void setReportIds(Set<Long> reportIds) {
+        this.reportIds = reportIds;
     }
 
     @Override
@@ -112,8 +112,8 @@ public class MissionDTO {
                 ", missionType=" + missionType +
                 ", started=" + started +
                 ", ended=" + ended +
-                ", agents=" + agents +
-                ", reports=" + reports +
+                ", agentIds=" + agentIds +
+                ", reportIds=" + reportIds +
                 '}';
     }
 }
