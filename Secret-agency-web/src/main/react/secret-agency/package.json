@@ -1,0 +1,36 @@
+{
+  "name": "secret-agency",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-scripts-ts": "3.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
+    "typescript": "^3.2.2",
+    "@types/jest": "^23.3.9",
+    "@types/react-bootstrap": "^0.32.14",
+    "@types/node": "^10.12.2",
+    "rename-cli": "^4.0.1",
+    "copyfiles": "^1.2.0"
+  },
+  "engines": {
+    "npm": ">=6.1.0",
+    "node": ">=9.11.2"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "build": "react-scripts-ts build && npm run rename && npm run copy && npm run rename-css && npm run copy-css",
+    "copy": "copyfiles -f build/static/js/frontend.js ../../resources/static/",
+    "rename": "rename build/static/js/*.js frontend.js",
+    "rename-css": "rename build/static/css/*.css frontend.css",
+    "copy-css": "copyfiles -f build/static/css/frontend.css ../../resources/static/",
+    "lint": "tslint --config tslint.json --project tsconfig.json",
+    "fix-lint": "tslint --config tslint.json --project tsconfig.json --fix"
+  }
+}
