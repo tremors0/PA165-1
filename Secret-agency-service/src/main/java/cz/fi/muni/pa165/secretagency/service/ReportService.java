@@ -56,6 +56,7 @@ public interface ReportService extends GenericService<Report> {
      * Updates text in selected report.
      * @param report updated data
      * @param text new text
+     * @throws NullPointerException when report or text is not set
      */
     void updateReportText(Report report, String text);
 

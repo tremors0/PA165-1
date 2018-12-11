@@ -27,7 +27,7 @@ public interface ReportFacade {
     /**
      * Return report with given id.
      * @param id report id
-     * @return report with given id
+     * @return report with given id. Returns null, when report with given id does not exist.
      */
     ReportDTO getReportById(Long id);
 
@@ -42,12 +42,14 @@ public interface ReportFacade {
     /**
      * Deletes report with given id.
      * @param reportId report id
+     * @throws NullPointerException when report with given id does not exist
      */
     void deleteReport(Long reportId);
 
     /**
      * Updates text in selected report.
      * @param report updated data
+     * @throws NullPointerException when report or text is not set
      */
     void updateReportText(ReportUpdateTextDTO report);
 
