@@ -38,7 +38,7 @@ public class Mission {
     @Nullable
     private LocalDate ended;
 
-    @ManyToMany(mappedBy = "missions")
+    @ManyToMany(mappedBy = "missions", fetch = FetchType.LAZY)
     private Set<Agent> agents = new HashSet<>();
 
     @OneToMany(mappedBy = "mission")

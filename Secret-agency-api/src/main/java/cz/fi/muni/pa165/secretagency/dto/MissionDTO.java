@@ -19,8 +19,6 @@ public class MissionDTO {
     private MissionTypeEnum missionType;
     private LocalDate started;
     private LocalDate ended;
-    private Set<AgentDTO> agents = new HashSet<>();
-    private Set<ReportDTO> reports = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -70,22 +68,6 @@ public class MissionDTO {
         this.ended = ended;
     }
 
-    public Set<AgentDTO> getAgents() {
-        return agents;
-    }
-
-    public void setAgents(Set<AgentDTO> agents) {
-        this.agents = agents;
-    }
-
-    public Set<ReportDTO> getReports() {
-        return reports;
-    }
-
-    public void setReports(Set<ReportDTO> reports) {
-        this.reports = reports;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,8 +94,6 @@ public class MissionDTO {
                 ", missionType=" + missionType +
                 ", started=" + started +
                 ", ended=" + ended +
-                ", agents=" + agents +
-                ", reports=" + reports +
                 '}';
     }
 }

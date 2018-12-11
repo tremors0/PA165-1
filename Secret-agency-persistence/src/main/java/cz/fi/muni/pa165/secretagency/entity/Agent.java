@@ -52,7 +52,7 @@ public class Agent {
     @NotNull
     private Department department;
 
-    @OneToMany(mappedBy = "agent")
+    @OneToMany(mappedBy = "agent", fetch = FetchType.LAZY)
     private List<Report> reports = new ArrayList<>();
 
     /** Create empty Agent **/

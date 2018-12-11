@@ -19,9 +19,7 @@ public class AgentDTO {
     private AgentRankEnum rank;
     private String codeName;
     private String passwordHash;
-    private List<MissionDTO> missions = new ArrayList<>();
     private DepartmentDTO department;
-    private List<ReportDTO> reports = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -71,22 +69,6 @@ public class AgentDTO {
         this.codeName = codeName;
     }
 
-    public List<ReportDTO> getReports() {
-        return reports;
-    }
-
-    public void setReports(List<ReportDTO> reports) {
-        this.reports = reports;
-    }
-
-    public List<MissionDTO> getMissions() {
-        return missions;
-    }
-
-    public void setMissions(List<MissionDTO> missions) {
-        this.missions = missions;
-    }
-
     public DepartmentDTO getDepartment() {
         return department;
     }
@@ -126,9 +108,7 @@ public class AgentDTO {
                 ", rank=" + rank +
                 ", codeName='" + codeName + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
-                ", missions=" + missions +
                 ", department=" + department +
-                ", reports=" + reports +
                 '}';
     }
 }

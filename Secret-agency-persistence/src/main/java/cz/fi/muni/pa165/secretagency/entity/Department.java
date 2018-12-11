@@ -36,7 +36,7 @@ public class Department {
     @Enumerated
     private DepartmentSpecialization specialization;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private List<Agent> agents = new ArrayList<>();
 
     public Department() {
