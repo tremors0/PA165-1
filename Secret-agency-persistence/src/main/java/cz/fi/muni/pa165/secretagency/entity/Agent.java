@@ -35,7 +35,10 @@ public class Agent {
     private AgentRankEnum rank;
 
     @NotNull
+    @Column(unique = true)
     private String codeName;
+
+    private String passwordHash;
 
     @ManyToMany
     @JoinTable(name = "agent_mission",
@@ -147,6 +150,20 @@ public class Agent {
     }
 
     /**
+     * @return hash of the password
+     */
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    /**
+     * @param passwordHash hash of the password
+     */
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    /**
      * @return List of agent's missions
      */
     public List<Mission> getMissions() {
@@ -228,15 +245,11 @@ public class Agent {
         if (this == o) return true;
         if (!(o instanceof Agent)) return false;
         Agent agent = (Agent) o;
-        return Objects.equals(getName(), agent.getName()) &&
-                Objects.equals(getBirthDate(), agent.getBirthDate()) &&
-                Objects.equals(getLanguages(), agent.getLanguages()) &&
-                Objects.equals(getRank(), agent.getRank()) &&
-                Objects.equals(getCodeName(), agent.getCodeName());
+        return Objects.equals(getCodeName(), agent.getCodeName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getBirthDate(), getLanguages(), getRank(), getCodeName());
+        return Objects.hash(getCodeName());
     }
 }

@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.secretagency.facade;
 
+import cz.fi.muni.pa165.secretagency.dto.AgentAuthenticateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
@@ -87,4 +88,14 @@ public interface AgentFacade {
      * @return all soon retiring agents
      */
     List<AgentDTO> getSoonRetiringAgents();
+
+    /**
+     * Try to authenticate an agent. Return true only if the hashed password matches the records.
+     */
+    boolean authenticate(AgentAuthenticateDTO agent);
+
+    /**
+     * Check if the given agent is admin (his rank is agent in charge).
+     */
+    boolean isAdmin(Long agentId);
 }

@@ -9,4 +9,4 @@ matrix:
       node_js:
         - 9
       before_script: cd Secret-agency-web/src/main/react/secret-agency
-      script: npm install && npm run build && npm run test
+      script: npm cache verify && npm install && npm run build && npm run test
