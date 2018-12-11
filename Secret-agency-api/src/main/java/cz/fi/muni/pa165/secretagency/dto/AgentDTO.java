@@ -20,8 +20,8 @@ public class AgentDTO {
     private String codeName;
     private String passwordHash;
     private DepartmentDTO department;
-    private List<Long> missionIds = new ArrayList<>();
-    private List<Long> reportIds = new ArrayList<>();
+    private Set<Long> missionIds = new HashSet<>();
+    private Set<Long> reportIds = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -79,19 +79,19 @@ public class AgentDTO {
         this.department = department;
     }
 
-    public List<Long> getMissionIds() {
+    public Set<Long> getMissionIds() {
         return missionIds;
     }
 
-    public void setMissionIds(List<Long> missionIds) {
+    public void setMissionIds(Set<Long> missionIds) {
         this.missionIds = missionIds;
     }
 
-    public List<Long> getReportIds() {
+    public Set<Long> getReportIds() {
         return reportIds;
     }
 
-    public void setReportIds(List<Long> reportIds) {
+    public void setReportIds(Set<Long> reportIds) {
         this.reportIds = reportIds;
     }
 

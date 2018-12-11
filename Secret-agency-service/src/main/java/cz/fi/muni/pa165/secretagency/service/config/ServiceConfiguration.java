@@ -13,7 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -30,9 +31,9 @@ public class ServiceConfiguration {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
         // convert nested collection of other DTOs to collection of their ids
-        Converter<List<Agent>, List<Long>> agentConvertor = createConvertor();
-        Converter<List<Mission>, List<Long>> missionConvertor = createConvertor();
-        Converter<List<Report>, List<Long>> reportConvertor = createConvertor();
+        Converter<Collection<Agent>, Set<Long>> agentConvertor = createConvertor();
+        Converter<Collection<Mission>, Set<Long>> missionConvertor = createConvertor();
+        Converter<Collection<Report>, Set<Long>> reportConvertor = createConvertor();
 
         // mapping from Department -> DepartmentDTO
         modelMapper.createTypeMap(Department.class, DepartmentDTO.class)
@@ -56,15 +57,15 @@ public class ServiceConfiguration {
 
     /**
      * Creates convertor for mapping entities to DTOs. If entity has attribute, which is collection of other
-     *   entities, it gets converted to collection of ids of those entities. The reason is to avoid circular
+     *   entities, it gets converted to set of ids of those entities. The reason is to avoid circular
      *   dependencies between DTOs.
      * @param <T> entity, which is converted
      * @return convertor
      */
-    private <T extends Identifiable<Long>> Converter<List<T>, List<Long>> createConvertor() {
+    private <T extends Identifiable<Long>> Converter<Collection<T>, Set<Long>> createConvertor() {
         @SuppressWarnings("Convert2MethodRef")
-        Converter<List<T>, List<Long>> converter = mappingContext -> mappingContext.getSource().stream()
-                .map(t -> t.getId()).collect(Collectors.toList());
+        Converter<Collection<T>, Set<Long>> converter = mappingContext -> mappingContext.getSource().stream()
+                .map(t -> t.getId()).collect(Collectors.toSet());
         return converter;
     }
 }
