@@ -2,9 +2,7 @@ package cz.fi.muni.pa165.secretagency.dto;
 
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * DTO for Department
@@ -25,7 +23,7 @@ public class DepartmentDTO {
 
     private DepartmentSpecialization specialization;
 
-    private List<AgentDTO> agents = new ArrayList<>();
+    private Set<Long> agentIds = new HashSet<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -45,8 +43,13 @@ public class DepartmentDTO {
     public DepartmentSpecialization getSpecialization() { return specialization; }
     public void setSpecialization(DepartmentSpecialization specialization) { this.specialization = specialization; }
 
-    public List<AgentDTO> getAgents() { return agents; }
-    public void setAgents(List<AgentDTO> agents) { this.agents = agents; }
+    public Set<Long> getAgentIds() {
+        return agentIds;
+    }
+
+    public void setAgentIds(Set<Long> agentIds) {
+        this.agentIds = agentIds;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,7 +77,7 @@ public class DepartmentDTO {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", specialization=" + specialization +
-                ", agents=" + agents +
+                ", agentIds=" + agentIds +
                 '}';
     }
 }

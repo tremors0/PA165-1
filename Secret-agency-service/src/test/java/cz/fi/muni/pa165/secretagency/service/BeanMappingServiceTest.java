@@ -1,23 +1,11 @@
 package cz.fi.muni.pa165.secretagency.service;
 
-import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
-import cz.fi.muni.pa165.secretagency.dto.ReportCreateDTO;
-import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
+import cz.fi.muni.pa165.secretagency.dto.*;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.entity.Report;
-import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
-import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
-import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
-import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
-import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
-import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
+import cz.fi.muni.pa165.secretagency.enums.*;
 import cz.fi.muni.pa165.secretagency.service.config.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -108,7 +96,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapDepartmentToDepartmentDtoTest() {
         Department department = new Department();
-        department.setId(1l);
+        department.setId(1L);
         department.setCity("london");
         department.setCountry("uk");
         department.setLatitude(2.0);
@@ -118,7 +106,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
         DepartmentDTO departmentDTO = beanMappingService.mapTo(department, DepartmentDTO.class);
 
         Assert.assertEquals(department.getId(), departmentDTO.getId());
-        Assert.assertEquals(department.getAgents().size(), departmentDTO.getAgents().size());
+        Assert.assertEquals(department.getAgents().size(), departmentDTO.getAgentIds().size());
         Assert.assertEquals(department.getCity(), departmentDTO.getCity());
         Assert.assertEquals(department.getCountry(), departmentDTO.getCountry());
         Assert.assertEquals(department.getLatitude(), departmentDTO.getLatitude());
@@ -129,7 +117,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapDepartmentDtoToDepartmentTest() {
         DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setId(1l);
+        departmentDTO.setId(1L);
         departmentDTO.setCity("london");
         departmentDTO.setCountry("uk");
         departmentDTO.setLatitude(2.0);
@@ -139,7 +127,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
         Department department = beanMappingService.mapTo(departmentDTO, Department.class);
 
         Assert.assertEquals(department.getId(), departmentDTO.getId());
-        Assert.assertEquals(department.getAgents().size(), departmentDTO.getAgents().size());
+        Assert.assertEquals(department.getAgents().size(), departmentDTO.getAgentIds().size());
         Assert.assertEquals(department.getCity(), departmentDTO.getCity());
         Assert.assertEquals(department.getCountry(), departmentDTO.getCountry());
         Assert.assertEquals(department.getLatitude(), departmentDTO.getLatitude());
@@ -150,7 +138,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
    @Test
    public void mapAgentToAgentDtoTest() {
         Agent agent = new Agent();
-        agent.setId(1l);
+        agent.setId(1L);
         agent.setName("bond");
         agent.setLanguages(Collections.singleton(LanguageEnum.EN));
         agent.setCodeName("007");
@@ -170,7 +158,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapAgentDtoToAgentTest() {
         AgentDTO agentDTO = new AgentDTO();
-        agentDTO.setId(1l);
+        agentDTO.setId(1L);
         agentDTO.setName("bond");
         agentDTO.setLanguages(Collections.singleton(LanguageEnum.EN));
         agentDTO.setCodeName("007");
@@ -190,7 +178,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapReportToReportDtoTest() {
         Report report = new Report();
-        report.setId(42l);
+        report.setId(42L);
         report.setText("report");
         report.setReportStatus(ReportStatus.APPROVED);
         report.setMissionResult(MissionResultReportEnum.COMPLETED);
@@ -208,7 +196,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapReportDtoToReportTest() {
         ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setId(42l);
+        reportDTO.setId(42L);
         reportDTO.setText("report");
         reportDTO.setReportStatus(ReportStatus.APPROVED);
         reportDTO.setMissionResult(MissionResultReportEnum.COMPLETED);
@@ -226,7 +214,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapMissionToMissionDtoTest() {
         Mission mission = new Mission();
-        mission.setId(142l);
+        mission.setId(142L);
         mission.setLatitude(3.4);
         mission.setLongitude(54.1);
         mission.setStarted(LocalDate.of(2013, 4, 9));
@@ -246,7 +234,7 @@ public class BeanMappingServiceTest extends AbstractTestNGSpringContextTests
     @Test
     public void mapMissionDtoToMissionTest() {
         MissionDTO missionDTO = new MissionDTO();
-        missionDTO.setId(142l);
+        missionDTO.setId(142L);
         missionDTO.setLatitude(3.4);
         missionDTO.setLongitude(54.1);
         missionDTO.setStarted(LocalDate.of(2013, 4, 9));
