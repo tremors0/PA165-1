@@ -27,7 +27,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         String codeName = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        // TODO - create custom exception
         AgentDTO agentDTO;
         try {
             agentDTO = agentFacade.getAgentByCodeName(codeName);
