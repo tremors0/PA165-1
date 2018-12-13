@@ -1,0 +1,35 @@
+.LoginPage {
+    background: linear-gradient(180deg, #95A0A4 50%, #eee 50%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginPage .avatar {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.LoginPage__form {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(223, 223, 223, 0.8);
+    padding: 20px;
+}
+
+.LoginPage__form .label-top {
+    font-weight: normal;
+}
+
+.LoginPage__error {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 10px;
+}
