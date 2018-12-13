@@ -19,7 +19,7 @@ public class BeanMappingServiceImpl implements BeanMappingService {
     public  <T> List<T> mapTo(Collection<?> objects, Class<T> mapToClass) {
         List<T> mappedCollection = new ArrayList<>();
         for (Object object : objects) {
-            mappedCollection.add(modelMapper.map(object, mapToClass));
+            mappedCollection.add(mapTo(object, mapToClass));
         }
         return mappedCollection;
     }
@@ -28,7 +28,7 @@ public class BeanMappingServiceImpl implements BeanMappingService {
     public <T> Set<T> mapToSet(Collection<?> objects, Class<T> mapToClass) {
         Set<T> mappedSet = new HashSet<>();
         for (Object o : objects) {
-            mappedSet.add(modelMapper.map(objects, mapToClass));
+            mappedSet.add(mapTo(o, mapToClass));
         }
         return mappedSet;
     }
