@@ -40,9 +40,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         authenticateDTO.setPassword(password);
 
 
-        // TODO - throw custom exception when result is false
         if (!agentFacade.authenticate(authenticateDTO)) {
-            throw new BadCredentialsException("Invalid password or e-mail");
+            throw new BadCredentialsException("Invalid password");
         }
 
         String userRole = agentDTO.getRank() == AgentRankEnum.AGENT_IN_CHARGE ? "ADMIN" : "USER";
