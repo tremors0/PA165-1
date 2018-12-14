@@ -51,6 +51,7 @@ public interface AgentFacade {
      * List of all agents with given code name
      * @param codename agent's codename
      * @return agents with given codename
+     * @throws NullPointerException when with given id does not exist
      */
     AgentDTO getAgentByCodeName(String codename);
 

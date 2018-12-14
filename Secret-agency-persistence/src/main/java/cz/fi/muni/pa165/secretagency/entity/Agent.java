@@ -15,7 +15,7 @@ import java.util.*;
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Agent {
+public class Agent implements Identifiable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

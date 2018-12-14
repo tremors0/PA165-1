@@ -70,6 +70,10 @@ public class AgentFacadeImpl implements AgentFacade {
 
     @Override
     public AgentDTO getAgentByCodeName(String codename) {
+        Agent agent = agentService.getAgentByCodeName(codename);
+        if (agent == null) {
+            throw new NullPointerException("Agent with codename " + codename + " does not exist");
+        }
         return beanMappingService.mapTo(agentService.getAgentByCodeName(codename), AgentDTO.class);
     }
 

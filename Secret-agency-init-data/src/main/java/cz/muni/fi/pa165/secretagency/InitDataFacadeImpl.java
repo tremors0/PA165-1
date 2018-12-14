@@ -49,7 +49,7 @@ public class InitDataFacadeImpl implements InitDataFacade {
                 getSetOfLanguages(LanguageEnum.EN), AgentRankEnum.JUNIOR, "Orange", "vietnam");
         Agent zMan = createAgent("Milos Zeman", LocalDate.of(1938, 3, 7),
                 getSetOfLanguages(LanguageEnum.CZ, LanguageEnum.RU), AgentRankEnum.SENIOR, "Ovar",
-                "putinJeKamosNeNepritel");
+                "putin");
 
         // creating departments
         Department prague = createDepartment("Prague", "Czech Republic", 50.08804, 14.42076,

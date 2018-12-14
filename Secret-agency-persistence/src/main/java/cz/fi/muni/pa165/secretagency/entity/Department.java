@@ -16,7 +16,7 @@ import java.util.Objects;
  * @author Milos Silhar (433614)
  */
 @Entity
-public class Department {
+public class Department implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
