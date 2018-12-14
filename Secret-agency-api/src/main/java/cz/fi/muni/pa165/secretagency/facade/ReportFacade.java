@@ -70,6 +70,7 @@ public interface ReportFacade {
      * @param dateFrom bottom border of interval
      * @param dateTo top border of interval
      * @return all reports within interval
+     * @throws NullPointerException when any of parameters is null
      */
     List<ReportDTO> getReportsFromInterval(LocalDate dateFrom, LocalDate dateTo);
 
@@ -77,6 +78,7 @@ public interface ReportFacade {
      * Get all reports with specific mission result report
      * @param missionResultReport mission result report
      * @return all reports with specified mission result report
+     * @throws NullPointerException when missionResultReport is null
      */
     List<ReportDTO> getReportsWithResult(MissionResultReportEnum missionResultReport);
 
@@ -84,6 +86,7 @@ public interface ReportFacade {
      * Get all reports with specified report status
      * @param reportStatus report status
      * @return all reports with specified report status
+     * @throws NullPointerException when report status is null
      */
     List<ReportDTO> getReportsWithStatus(ReportStatus reportStatus);
 
