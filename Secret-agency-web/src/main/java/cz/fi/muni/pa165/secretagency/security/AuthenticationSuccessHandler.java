@@ -22,6 +22,8 @@ import java.io.IOException;
 @Component
 public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    public static final String AUTHENTICATED_USER_SESSION_KEY = "authenticatedUser";
+
     @Autowired
     private AgentFacade agentFacade;
 
@@ -33,7 +35,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         AgentDTO loggedAgent = agentFacade.getAgentByCodeName(authentication.getName());
-        request.getSession().setAttribute("loggedAgent", loggedAgent);
+        request.getSession().setAttribute(AUTHENTICATED_USER_SESSION_KEY, loggedAgent);
 
         // Object -> JSON
         ObjectMapper objectMapper = new ObjectMapper();
