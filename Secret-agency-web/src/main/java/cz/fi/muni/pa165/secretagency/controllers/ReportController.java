@@ -14,6 +14,7 @@ import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,11 +106,12 @@ public class ReportController {
         if (authenticatedAgent.getRank() != AgentRankEnum.AGENT_IN_CHARGE) {
             throw new AuthorizationException();
         }
-        reportFacade.approveReport(id);
+        reportFacade.denyReport(id);
     }
 
     @RequestMapping(value = "/interval/{dateFrom}/{dateTo}")
-    public List<ReportDTO> getReportsFromInterval(@PathVariable LocalDate dateFrom, @PathVariable LocalDate dateTo) {
+    public List<ReportDTO> getReportsFromInterval(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateFrom,
+                                                  @PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateTo) {
         logger.debug("Get reports from interval {} - {}", dateFrom.toString(), dateTo.toString());
         return reportFacade.getReportsFromInterval(dateFrom, dateTo);
     }
