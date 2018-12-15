@@ -9,4 +9,5 @@ public abstract class ApiUris {
     public static final String ROOT_URI_REST = "rest/";
     public static final String ROOT_URI_DEPARTMENTS   = "departments";
     public static final String ROOT_URI_AGENTS = "agents";
+    public static final String ROOT_URI_REPORTS = "reports";
 }
