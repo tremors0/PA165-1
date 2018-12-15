@@ -9,6 +9,7 @@ import {TopBar} from "./components/top-bar/TopBar"
 import {AgentsPage} from "./components/agents-page/AgentsPage";
 import { Route, BrowserRouter } from "react-router-dom";
 import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
+import {ReportsPage} from "./components/reports-page/ReportsPage";
 
 export interface ITab {
     title: string,
@@ -77,6 +78,7 @@ class App extends React.Component<{}, IState> {
                 {title: "Agents", link: "agents"},
                 {title: "Missions", link: "missions"},
                 {title: "Departments", link: "departments"},
+                {title: "Reports", link: "reports"},
             ]
         }
     }
@@ -109,6 +111,9 @@ class App extends React.Component<{}, IState> {
                 </BrowserRouter>
                 <BrowserRouter>
                     <Route path="/departments" component={DepartmentsPage}/>
+                </BrowserRouter>
+                <BrowserRouter>
+                    <Route path="/reports" component={ReportsPage}/>
                 </BrowserRouter>
             </div>
         );
