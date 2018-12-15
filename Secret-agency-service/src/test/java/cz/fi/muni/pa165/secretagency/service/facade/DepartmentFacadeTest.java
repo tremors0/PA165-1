@@ -2,7 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateSpecializationDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import cz.fi.muni.pa165.secretagency.facade.DepartmentFacade;
@@ -24,7 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = ServiceConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -80,17 +81,22 @@ public class DepartmentFacadeTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void changeSpecialization() {
+    public void updateDepartment() {
         Department department = new Department();
         department.setId(3L);
         department.setCountry("test");
         department.setSpecialization(DepartmentSpecialization.INTERNATIONAL_RELATIONSHIP);
+
         when(departmentService.getEntityById(department.getId())).thenReturn(department);
-        DepartmentUpdateSpecializationDTO dto = new DepartmentUpdateSpecializationDTO();
-        dto.setDepartmentId(department.getId());
+        DepartmentUpdateDTO dto = new DepartmentUpdateDTO();
+        dto.setId(department.getId());
         dto.setSpecialization(DepartmentSpecialization.ASSASSINATION);
-        departmentFacade.changeSpecialization(dto);
-        verify(departmentService).changeSpecialization(department, DepartmentSpecialization.ASSASSINATION);
+        dto.setCountry("test");
+        Department mappedDepartment = beanMappingService.mapTo(dto, Department.class);
+        departmentFacade.editDepartment(dto);
+
+
+        verify(departmentService).updateDepartment(mappedDepartment);
     }
 
     @Test
