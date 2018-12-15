@@ -33,20 +33,20 @@ import static cz.fi.muni.pa165.secretagency.security.AuthenticationSuccessHandle
 @RequestMapping({ApiUris.ROOT_URI_REPORTS, ApiUris.ROOT_URI_REST + ApiUris.ROOT_URI_REPORTS})
 public class ReportController {
 
-    final static Logger logger = LoggerFactory.getLogger(DepartmentsController.class);
+    final static Logger logger = LoggerFactory.getLogger(ReportController.class);
 
     @Autowired
     private ReportFacade reportFacade;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<ReportDTO> getAll() {
-        logger.debug("Get All departments");
+        logger.debug("Get All reports");
         return reportFacade.getAllReports();
     }
 
     @RequestMapping(value = "/report/{id}", method = RequestMethod.GET)
     public ReportDTO getReportById(@PathVariable Long id) throws ResourceNotFoundException {
-        logger.debug("Get department with id {}", id);
+        logger.debug("Get report with id {}", id);
         ReportDTO reportDTO = reportFacade.getReportById(id);
         if (reportDTO == null) {
             throw new ResourceNotFoundException();
@@ -57,7 +57,6 @@ public class ReportController {
     @RequestMapping(method = RequestMethod.POST)
     public ReportDTO createReport(@Valid @RequestBody ReportCreateDTO reportCreateDTO) {
         logger.debug("Create report with values: {}", reportCreateDTO);
-        // TODO - wrap with custom exception
         Long createdReportId = reportFacade.createReport(reportCreateDTO);
         return reportFacade.getReportById(createdReportId);
     }
