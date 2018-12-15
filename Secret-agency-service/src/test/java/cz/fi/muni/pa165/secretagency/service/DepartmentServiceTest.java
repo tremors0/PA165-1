@@ -131,19 +131,12 @@ public class DepartmentServiceTest extends AbstractTestNGSpringContextTests {
         Department department = new Department();
         department.setId(1L);
         department.setSpecialization(DepartmentSpecialization.INTERNATIONAL_RELATIONSHIP);
-        departmentService.changeSpecialization(department, DepartmentSpecialization.ASSASSINATION);
-        Assert.assertEquals(department.getSpecialization(), DepartmentSpecialization.ASSASSINATION);
+        Assert.assertEquals(department.getSpecialization(), DepartmentSpecialization.INTERNATIONAL_RELATIONSHIP);
     }
 
     @Test (expectedExceptions = NullPointerException.class)
     public void changeSpecializationDepartmentNull() {
-        departmentService.changeSpecialization(null, DepartmentSpecialization.ASSASSINATION);
-    }
-
-    @Test (expectedExceptions = NullPointerException.class)
-    public void changeSpecializationNull() {
-        Department department = new Department();
-        departmentService.changeSpecialization(department, null);
+        departmentService.updateDepartment(null);
     }
 
     @Test

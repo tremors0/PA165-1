@@ -25,8 +25,8 @@ export const getSpecializations = (): Promise<string[]> => (
     )
 );
 
-export const editDepartment = (department: IDepartment): Promise<IDepartment> => (
-    PUT(`${REST_URL_BASE}/departments/${department.id}`, department).then(
+export const editDepartment = (data: IDepartment): Promise<IDepartment> => (
+    PUT(`${REST_URL_BASE}/departments/${data.id}`, data).then(
         response => {
             return response.data as IDepartment;
         }

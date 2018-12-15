@@ -101,6 +101,7 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
     };
 
     private onEdit = async (department: IDepartment) => {
+        console.log(department);
         const editedDepartment = await editDepartment(department);
         console.log(editedDepartment);
     };

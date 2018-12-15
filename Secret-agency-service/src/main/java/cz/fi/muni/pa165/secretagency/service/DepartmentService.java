@@ -37,12 +37,11 @@ public interface DepartmentService extends GenericService<Department> {
     List<Department> getDepartmentsBySpecialization(DepartmentSpecialization specialization);
 
     /**
-     * Changes specialization of given department
-     * @param department Department to change specialization
-     * @param newSpecialization new specialization of given department
-     * @throws NullPointerException if department or specialization is null
+     * Updates not realtional properties of department
+     * @param department department to be updated
+     * @throws NullPointerException if department is null
      */
-    void changeSpecialization(Department department, DepartmentSpecialization newSpecialization);
+    Department updateDepartment(Department department);
 
     /**
      * Gets all departments in area around given point on the earth

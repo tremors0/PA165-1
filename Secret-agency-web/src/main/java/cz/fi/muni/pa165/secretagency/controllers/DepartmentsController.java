@@ -3,7 +3,7 @@ package cz.fi.muni.pa165.secretagency.controllers;
 import cz.fi.muni.pa165.secretagency.ApiUris;
 import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateSpecializationDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import cz.fi.muni.pa165.secretagency.exceptions.InvalidRequestRemainingAgentsInDepartment;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
@@ -93,22 +93,24 @@ public class DepartmentsController {
     }
 
     /**
-     * @param specialization department specialization
+     * @param departmentUpdateDTO department to update
      * @return DepartmentDTO updated department
      */
-    @RequestMapping(value = "/specializations", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public final DepartmentDTO changeDepartmentSpecialization(
-            @RequestBody DepartmentUpdateSpecializationDTO specialization
+    public final DepartmentDTO updateDepartment(
+            @PathVariable("id") Long id,
+            @RequestBody DepartmentUpdateDTO departmentUpdateDTO
     ) throws ResourceNotFoundException {
 
-        logger.debug("rest update Department specialization({})", specialization);
+        logger.debug("rest update Department ({})", departmentUpdateDTO);
 
         try {
-            departmentFacade.changeSpecialization(specialization);
-            return departmentFacade.getDepartmentById(specialization.getDepartmentId());
+            departmentFacade.editDepartment(departmentUpdateDTO);
+            return departmentFacade.getDepartmentById(id);
         } catch (Exception ex) {
-            throw new ResourceNotFoundException();
+            throw ex;
+//            throw new ResourceNotFoundException();
         }
     }
 

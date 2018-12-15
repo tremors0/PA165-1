@@ -2,7 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateSpecializationDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.entity.Department;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 import cz.fi.muni.pa165.secretagency.facade.DepartmentFacade;
@@ -47,8 +47,10 @@ public class DepartmentFacadeImpl implements DepartmentFacade {
     }
 
     @Override
-    public void changeSpecialization(DepartmentUpdateSpecializationDTO dto) {
-        departmentService.changeSpecialization(departmentService.getEntityById(dto.getDepartmentId()), dto.getSpecialization());
+    public DepartmentDTO editDepartment(DepartmentUpdateDTO dto) {
+        Department mappedDepartment = beanMappingService.mapTo(dto, Department.class);
+        departmentService.updateDepartment(mappedDepartment);
+        return beanMappingService.mapTo(departmentService.getEntityById(dto.getId()), DepartmentDTO.class);
     }
 
     @Override
