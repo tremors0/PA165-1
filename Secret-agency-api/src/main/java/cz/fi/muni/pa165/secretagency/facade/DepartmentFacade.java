@@ -2,7 +2,7 @@ package cz.fi.muni.pa165.secretagency.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.DepartmentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.DepartmentDTO;
-import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateSpecializationDTO;
+import cz.fi.muni.pa165.secretagency.dto.DepartmentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.DepartmentSpecialization;
 
 import java.util.List;
@@ -34,10 +34,11 @@ public interface DepartmentFacade {
     Long createDepartment(DepartmentCreateDTO departmentCreateDTO);
 
     /**
-     * Changes specialization of department
-     * @param departmentUpdateSpecializationDTO data about specialization change
+     *
+     * @param departmentUpdateSpecializationDTO department with updating properties
+     * @return updated department
      */
-    void changeSpecialization(DepartmentUpdateSpecializationDTO departmentUpdateSpecializationDTO);
+    DepartmentDTO editDepartment(DepartmentUpdateDTO departmentUpdateSpecializationDTO);
 
     /**
      * Get all possible specializations

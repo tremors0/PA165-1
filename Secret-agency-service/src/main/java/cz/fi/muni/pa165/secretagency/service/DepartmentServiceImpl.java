@@ -41,14 +41,11 @@ public class DepartmentServiceImpl extends GenericServiceImpl<Department, Depart
     }
 
     @Override
-    public void changeSpecialization(Department department, DepartmentSpecialization newSpecialization) {
+    public Department updateDepartment(Department department) {
         if (department == null) {
             throw new NullPointerException("department cannot be null");
         }
-        if (newSpecialization == null) {
-            throw new NullPointerException("newSpecialization cannot be null");
-        }
-        department.setSpecialization(newSpecialization);
+        return getDao().merge(department);
     }
 
     @Override
