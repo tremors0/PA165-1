@@ -4,4 +4,5 @@ export interface IDepartment {
     readonly country: string;
     readonly latitude: number;
     readonly longitude: number;
+    readonly specialization: string;
 }
