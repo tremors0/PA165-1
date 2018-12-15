@@ -2,6 +2,11 @@ import * as React from "react";
 import {IReport} from "../../types/Report";
 import * as reportService from "../../services/reportService";
 
+interface IProps {
+    isAuthenticatedUserAdmin: boolean;
+    authenticatedUserId: number;
+}
+
 interface IReportPageState {
     reports: IReport[],
     isLoaded: boolean,
@@ -12,9 +17,9 @@ type IState = IReportPageState;
 /**
  * Component for reports page.
  */
-export class ReportsPage extends React.PureComponent<{}, IState> {
+export class ReportsPage extends React.PureComponent<IProps, IState> {
 
-    constructor(props: {}) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -25,8 +30,20 @@ export class ReportsPage extends React.PureComponent<{}, IState> {
 
     public componentDidMount() {
         reportService.getAllReports().then((reports) => {
-           this.setState((prevState) => ({...prevState, isLoaded: true, reports}));
+            const displayedReports = this.filterReports(reports);
+            this.setState((prevState) => ({...prevState, isLoaded: true, reports: displayedReports}));
         });
+    }
+
+    /**
+     * Admin can view all reports. User can view only his own reports. Returns filtered reports.
+     * @param reports reports
+     */
+    private filterReports(reports: IReport[]): IReport[] {
+        if (!this.props.isAuthenticatedUserAdmin) {
+            return reports.filter((report) => report.agent.id === this.props.authenticatedUserId);
+        }
+        return reports;
     }
 
     public render(): JSX.Element {
@@ -34,10 +51,16 @@ export class ReportsPage extends React.PureComponent<{}, IState> {
            return <div>Loading table...</div>;
         }
 
+        const isAnyRowVisible = this.state.reports.length !== 0;
+
+        if (!isAnyRowVisible) {
+            return <div className={'alert alert-info'}>There are no reports from current user</div>;
+        }
+
         const tableRows = this.state.reports.map((report) => (
             <tr key={report.id}>
                 <td>{report.mission && report.mission.id}</td>
-                <td>{report.agent && report.agent.codeName}</td>
+                {this.props.isAuthenticatedUserAdmin && <td>{report.agent && report.agent.codeName}</td>}
                 <td>{report.date}</td>
                 <td>{report.missionResult}</td>
                 <td>{report.reportStatus}</td>
@@ -51,7 +74,7 @@ export class ReportsPage extends React.PureComponent<{}, IState> {
                     <thead>
                     <tr>
                         <th>Mission</th>
-                        <th>Agent</th>
+                        {this.props.isAuthenticatedUserAdmin && <th>Agent</th>}
                         <th>Date</th>
                         <th>Mission result</th>
                         <th>Report status</th>

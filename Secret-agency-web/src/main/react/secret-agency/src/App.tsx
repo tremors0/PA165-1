@@ -113,7 +113,10 @@ class App extends React.Component<{}, IState> {
                     <Route path="/departments" component={DepartmentsPage}/>
                 </BrowserRouter>
                 <BrowserRouter>
-                    <Route path="/reports" component={ReportsPage}/>
+                    <Route path="/reports" component={() => (
+                        <ReportsPage authenticatedUserId={this.state.authenticatedAgent!.id}
+                                     isAuthenticatedUserAdmin={this.state.authenticatedAgent!.rank === "AGENT_IN_CHARGE"}/>
+                    )}/>
                 </BrowserRouter>
             </div>
         );

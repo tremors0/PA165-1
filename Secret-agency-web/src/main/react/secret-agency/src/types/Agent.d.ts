@@ -9,5 +9,7 @@ export interface IAgent {
   // private DepartmentDTO department;
   readonly missionIds: number[];
   readonly reportIds: number[];
-  readonly rank: string;
+  readonly rank: Rank;
 }
+
+type Rank = "TRAINEE" | "JUNIOR" | "SENIOR" | "AGENT_IN_CHARGE";
