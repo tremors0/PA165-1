@@ -5,7 +5,6 @@ import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
 import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
 import cz.fi.muni.pa165.secretagency.dto.ReportDTO;
-import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
@@ -20,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,7 +70,7 @@ public class AgentsController {
         }
         List<ReportDTO> reportDTOS = this.reportFacade.getAllReports();
         for (ReportDTO report: reportDTOS) {
-            if (report.getAgentDTO().getId().equals(id)) {
+            if (report.getAgent().getId().equals(id)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
