@@ -1,14 +1,14 @@
 import * as React from "react";
 import "./TopBar.css";
 import {ITab} from "../../App";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 export function TopBar(props: any) {
     const tabs = props.tabs.map((tab: ITab, index: number) =>
         <li key={index}>
-            <Link to={tab.link}>
+            <NavLink to={tab.link}>
                 {tab.title}
-            </Link>
+            </NavLink>
         </li>
     );
     return (
