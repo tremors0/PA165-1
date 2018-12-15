@@ -3,6 +3,7 @@ import axios, {AxiosPromise} from "axios";
 // absolute path is used to be able send requests both from node server and tomcat
 export const URL_BASE = "http://localhost:8080/pa165";
 export const REST_URL_BASE = "http://localhost:8080/pa165/rest";
+export const ROUTING_URL_BASE = "/pa165/secretAgency";
 
 // helper request methods - for authorized request
 export function GET<T>(url: string): AxiosPromise<T> {

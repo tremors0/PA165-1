@@ -7,8 +7,9 @@ import * as secretAgencyRepository from "./repository/secretAgecyRepository";
 import {IAgent} from "./types/Agent";
 import {TopBar} from "./components/top-bar/TopBar"
 import {AgentsPage} from "./components/agents-page/AgentsPage";
-import {BrowserRouter, Route} from "react-router-dom";
+import { Route, BrowserRouter } from "react-router-dom";
 import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
+import {ROUTING_URL_BASE} from "./utils/requestUtils";
 
 export interface ITab {
     title: string,
@@ -74,9 +75,10 @@ class App extends React.Component<{}, IState> {
             authenticatedAgent: null,
             loginError: "",
             tabs: [
-                {title: "Agents", link: "agents"},
-                {title: "Missions", link: "missions"},
-                {title: "Departments", link: "departments"},
+                {title: "Agents", link: `${ROUTING_URL_BASE}/agents`},
+                {title: "Missions", link: `${ROUTING_URL_BASE}/missions`},
+                {title: "Departments", link: `${ROUTING_URL_BASE}/departments`},
+                {title: "Reports", link: `${ROUTING_URL_BASE}/reports`},
             ]
         }
     }
@@ -106,8 +108,8 @@ class App extends React.Component<{}, IState> {
 
                     <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
                     <button className="logout-button" type={'button'} onClick={this.onLogout}>Log out</button>
-                    <Route path="/agents" component={AgentsPage}/>
-                    <Route path="/departments" component={DepartmentsPage}/>
+                    <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
+                    <Route path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
                 </div>
             </BrowserRouter>
         );
