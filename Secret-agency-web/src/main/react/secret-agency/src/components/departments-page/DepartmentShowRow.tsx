@@ -1,6 +1,7 @@
 import {IDepartment} from "../../types/Department";
 import * as React from "react";
 import {MouseEvent} from 'react';
+import {defineAbility} from "../../config/ability";
 
 interface IProps {
     department: IDepartment;
@@ -14,6 +15,6 @@ export const DepartmentShowRow: React.FunctionComponent<IProps> = (props) => {
         <td>{latitude}</td>
         <td>{longitude}</td>
         <td>{specialization}</td>
-        <td><button onClick={props.onStartEdit} className={'btn btn-success'}>Edit</button></td>
+        <td>{defineAbility().can('edit', 'Department') && <button onClick={props.onStartEdit} className={'btn btn-success'}>Edit</button>}</td>
     </tr>
 };

@@ -11,6 +11,7 @@ import {
 import {DepartmentShowRow} from "./DepartmentShowRow";
 import {DepartmentEditRow} from "./DepartmentEditRow";
 import * as Immutable from 'immutable';
+import {defineAbility} from "../../config/ability";
 
 interface IDepartmentsState {
     readonly departments: Immutable.Map<number, IDepartment>;
@@ -27,7 +28,7 @@ interface INewDepartmentState {
     readonly specialization: string;
 }
 
-export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
+export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
     public async componentDidMount() {
         const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
             (department: IDepartment) => [
@@ -49,9 +50,6 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
             editedDepartmentId: null
         });
     };
-    constructor(props: any) {
-        super(props);
-    }
 
     private addDepartment = async (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -148,48 +146,51 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
                         </thead>
                         <tbody>
                         {tableRows}
-                            <tr>
-                                <td>
-                                    <input type={'text'} value={city}
-                                           onChange={this.onCityChange}
-                                    />
-                                </td>
-                                <td>
-                                    <input type={'text'} value={country}
-                                           onChange={this.onCountryChange}
-                                    />
-                                </td>
-                                <td>
-                                    <input type={'text'} value={latitude}
-                                           onChange={this.onLatitudeChange}
-                                    />
-                                </td>
-                                <td>
-                                    <input type={'text'} value={longitude}
-                                           onChange={this.onLongitudeChange}
-                                    />
-                                </td>
-                                <td>
-                                    <select value={specialization}
-                                            onChange={this.onSpecializationChange}
-                                    >
-                                        <option value={""}/>
-                                        {this.state.specializations.map((specializationOption: string) =>
-                                            <option key={specializationOption} value={specializationOption}>{specializationOption}</option>
-                                        )}
-                                    </select>
-                                </td>
-                                <td>
-                                    <button
-                                        className={"btn btn-primary"}
-                                        type={'submit'}
-                                        value={'create'}
-                                        onClick={this.addDepartment}
-                                    >
-                                        Create
-                                    </button>
-                                </td>
-                            </tr>
+                        {defineAbility().can('create', 'Department') &&
+                        <tr>
+                            <td>
+                                <input type={'text'} value={city}
+                                       onChange={this.onCityChange}
+                                />
+                            </td>
+                            <td>
+                                <input type={'text'} value={country}
+                                       onChange={this.onCountryChange}
+                                />
+                            </td>
+                            <td>
+                                <input type={'text'} value={latitude}
+                                       onChange={this.onLatitudeChange}
+                                />
+                            </td>
+                            <td>
+                                <input type={'text'} value={longitude}
+                                       onChange={this.onLongitudeChange}
+                                />
+                            </td>
+                            <td>
+                                <select value={specialization}
+                                        onChange={this.onSpecializationChange}
+                                >
+                                    <option value={""}/>
+                                    {this.state.specializations.map((specializationOption: string) =>
+                                        <option key={specializationOption}
+                                                value={specializationOption}>{specializationOption}</option>
+                                    )}
+                                </select>
+                            </td>
+                            <td>
+                                <button
+                                    className={"btn btn-primary"}
+                                    type={'submit'}
+                                    value={'create'}
+                                    onClick={this.addDepartment}
+                                >
+                                    Create
+                                </button>
+                            </td>
+                        </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
