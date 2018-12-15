@@ -116,7 +116,7 @@ public class ReportController {
         return reportFacade.getReportsFromInterval(dateFrom, dateTo);
     }
 
-    @RequestMapping(value = "/missonResult/{missionResult}")
+    @RequestMapping(value = "/missionResult/{missionResult}")
     public List<ReportDTO> getReportsWithResult(@PathVariable MissionResultReportEnum missionResult) {
         logger.debug("Get reports with result {}", missionResult);
         return reportFacade.getReportsWithResult(missionResult);
