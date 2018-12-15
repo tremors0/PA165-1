@@ -7,7 +7,7 @@ const AUTHENTICATED_AGENT_KEY = 'AUTHENTICATED_AGENT';
  * @param agent authenticated agent
  */
 export function storeAuthenticatedAgent(agent: IAgent): void {
-  localStorage.setItem(AUTHENTICATED_AGENT_KEY, JSON.stringify(agent));
+    localStorage.setItem(AUTHENTICATED_AGENT_KEY, JSON.stringify(agent));
 }
 
 /**
@@ -15,16 +15,21 @@ export function storeAuthenticatedAgent(agent: IAgent): void {
  *   authenticated user is found. Otherwise it returns authenticated agent.
  */
 export function loadAuthenticatedAgent(): IAgent | null {
-  const authenticatedAgentStr = localStorage.getItem(AUTHENTICATED_AGENT_KEY);
-  if (authenticatedAgentStr == null) {
-    return null;
-  }
-  return JSON.parse(authenticatedAgentStr);
+    const authenticatedAgentStr = localStorage.getItem(AUTHENTICATED_AGENT_KEY);
+    if (authenticatedAgentStr == null) {
+        return null;
+    }
+    return JSON.parse(authenticatedAgentStr);
 }
 
 /**
  * Removes agent from local storage after log out.
+ * Returns information if user was deleted.
  */
-export function removeAuthenticatedAgent(): void {
-  localStorage.removeItem(AUTHENTICATED_AGENT_KEY)
+export function removeAuthenticatedAgent(): boolean {
+    if (loadAuthenticatedAgent() == null) {
+        return false;
+    }
+    localStorage.removeItem(AUTHENTICATED_AGENT_KEY);
+    return true;
 }
