@@ -7,16 +7,5 @@ package cz.fi.muni.pa165.secretagency.enums;
  * @author Jan Pavlu (487548)
  */
 public enum MissionResultReportEnum {
-    COMPLETED("COMPLETED"),
-    FAILED("FAILED");
-
-    private String result;
-
-    MissionResultReportEnum(String result) {
-        this.result = result;
-    }
-
-    public String getResult() {
-        return result;
-    }
+    COMPLETED, FAILED
 }
