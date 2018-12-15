@@ -18,8 +18,8 @@ public class ReportDTO {
     private LocalDate date;
     private ReportStatus reportStatus = ReportStatus.NEW;
     private MissionResultReportEnum missionResult;
-    private MissionDTO missionDTO;
-    private AgentDTO agentDTO;
+    private MissionDTO mission;
+    private AgentDTO agent;
 
     public Long getId() {
         return id;
@@ -61,20 +61,20 @@ public class ReportDTO {
         this.missionResult = missionResult;
     }
 
-    public AgentDTO getAgentDTO() {
-        return agentDTO;
+    public AgentDTO getAgent() {
+        return agent;
     }
 
-    public void setAgentDTO(AgentDTO agentDTO) {
-        this.agentDTO = agentDTO;
+    public void setAgent(AgentDTO agent) {
+        this.agent = agent;
     }
 
-    public MissionDTO getMissionDTO() {
-        return missionDTO;
+    public MissionDTO getMission() {
+        return mission;
     }
 
-    public void setMissionDTO(MissionDTO missionDTO) {
-        this.missionDTO = missionDTO;
+    public void setMission(MissionDTO mission) {
+        this.mission = mission;
     }
 
     // automatically generated equals and hashcode
@@ -102,8 +102,8 @@ public class ReportDTO {
                 ", date=" + date +
                 ", reportStatus=" + reportStatus +
                 ", missionResult=" + missionResult +
-                ", missionDTO=" + missionDTO +
-                ", agentDTO=" + agentDTO +
+                ", mission=" + mission +
+                ", agent=" + agent +
                 '}';
     }
 }
