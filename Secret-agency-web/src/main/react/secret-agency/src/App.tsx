@@ -7,7 +7,7 @@ import * as secretAgencyRepository from "./repository/secretAgecyRepository";
 import {IAgent} from "./types/Agent";
 import {TopBar} from "./components/top-bar/TopBar"
 import {AgentsPage} from "./components/agents-page/AgentsPage";
-import { Route, BrowserRouter } from "react-router-dom";
+import {BrowserRouter, Route} from "react-router-dom";
 import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
 
 export interface ITab {
@@ -101,16 +101,15 @@ class App extends React.Component<{}, IState> {
         }
 
         return (
-            <div className="App">
-                <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
-                <button className="logout-button" type={'button'} onClick={this.onLogout}>Log out</button>
-                <BrowserRouter>
+            <BrowserRouter>
+                <div className="App">
+
+                    <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
+                    <button className="logout-button" type={'button'} onClick={this.onLogout}>Log out</button>
                     <Route path="/agents" component={AgentsPage}/>
-                </BrowserRouter>
-                <BrowserRouter>
                     <Route path="/departments" component={DepartmentsPage}/>
-                </BrowserRouter>
-            </div>
+                </div>
+            </BrowserRouter>
         );
     }
 }
