@@ -10,9 +10,10 @@ import {
 } from "../../services/departmentService";
 import {DepartmentShowRow} from "./DepartmentShowRow";
 import {DepartmentEditRow} from "./DepartmentEditRow";
+import * as Immutable from 'immutable';
 
 interface IDepartmentsState {
-    readonly departments: IDepartment[];
+    readonly departments: Immutable.Map<number, IDepartment>;
     readonly newDepartment: INewDepartmentState;
     readonly specializations: string[];
     readonly editedDepartmentId: number | null;
@@ -28,7 +29,11 @@ interface INewDepartmentState {
 
 export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
     public async componentDidMount() {
-        const departments = await getAllDepartments();
+        const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
+            (department: IDepartment) => [
+                department.id, department
+            ]
+        ));
         const specializations = await getSpecializations();
         const newDepartment = {
             city: '',
@@ -61,7 +66,7 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
         };
         const createdDepartment = await createDepartment(department);
         this.setState((prevState) => ({
-            departments: [...prevState.departments, createdDepartment]
+            departments: prevState.departments.set(createdDepartment.id, createdDepartment)
         }));
     };
 
@@ -101,26 +106,30 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
     };
 
     private onEdit = async (department: IDepartment) => {
-        console.log(department);
         const editedDepartment = await editDepartment(department);
         console.log(editedDepartment);
+        this.setState((prevState) => ({
+            departments: prevState.departments.set(editedDepartment.id, editedDepartment)
+        }));
+        this.setState(_ => ({editedDepartmentId: null}));
     };
 
     public render() {
         if (this.state) {
-            const tableRows = this.state.departments.map(department =>
-                this.state.editedDepartmentId === department.id ?
+            const { departments } = this.state;
+            const tableRows = departments.keySeq().map((key: number) =>
+                this.state.editedDepartmentId === key ?
                     <DepartmentEditRow
-                        key={department.id}
+                        key={key}
                         specializations={this.state.specializations}
-                        department={department}
+                        department={departments.get(key)}
                         onCancelEdit={this.onCancelEditing}
                         onEdit={this.onEdit}
                     /> :
                 <DepartmentShowRow
-                    key={department.id}
-                    department={department}
-                    onStartEdit={this.startEditDepartment.bind(this, department.id)}
+                    key={key}
+                    department={departments.get(key)}
+                    onStartEdit={this.startEditDepartment.bind(this, key)}
                 />
             );
             const {city, country,latitude, longitude, specialization} = this.state.newDepartment;
@@ -164,6 +173,7 @@ export class DepartmentsPage extends React.Component<any, IDepartmentsState> {
                                     <select value={specialization}
                                             onChange={this.onSpecializationChange}
                                     >
+                                        <option value={""}/>
                                         {this.state.specializations.map((specializationOption: string) =>
                                             <option key={specializationOption} value={specializationOption}>{specializationOption}</option>
                                         )}

@@ -37,7 +37,6 @@ export class DepartmentEditRow extends React.Component<IProps, IState> {
     };
 
     private onLongitudeChange = (event: ChangeEvent<HTMLInputElement>): void => {
-        console.log(parseFloat(event.currentTarget.value));
         const longitude = parseFloat(event.currentTarget.value);
         this.setState((prevState) => ({department: {...prevState.department, longitude}}));
     };
@@ -97,7 +96,7 @@ export class DepartmentEditRow extends React.Component<IProps, IState> {
                         value={'create'}
                         onClick={this.edit}
                     >
-                        Create
+                        Save
                     </button>
                     <button
                         className={"btn btn-info"}

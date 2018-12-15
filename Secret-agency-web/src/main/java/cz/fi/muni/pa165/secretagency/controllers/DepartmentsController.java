@@ -109,8 +109,7 @@ public class DepartmentsController {
             departmentFacade.editDepartment(departmentUpdateDTO);
             return departmentFacade.getDepartmentById(id);
         } catch (Exception ex) {
-            throw ex;
-//            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
     }
 
