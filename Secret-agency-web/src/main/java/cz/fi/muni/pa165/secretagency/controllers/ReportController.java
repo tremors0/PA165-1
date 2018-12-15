@@ -8,9 +8,9 @@ import cz.fi.muni.pa165.secretagency.dto.ReportUpdateTextDTO;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.MissionResultReportEnum;
 import cz.fi.muni.pa165.secretagency.enums.ReportStatus;
+import cz.fi.muni.pa165.secretagency.exceptions.AuthorizationException;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
 import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
-import cz.fi.muni.pa165.secretagency.service.exceptions.ReportServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,7 +45,7 @@ public class ReportController {
     }
 
     @RequestMapping(value = "/report/{id}", method = RequestMethod.GET)
-    public ReportDTO getReportById(@PathVariable Long id) {
+    public ReportDTO getReportById(@PathVariable Long id) throws ResourceNotFoundException {
         logger.debug("Get department with id {}", id);
         ReportDTO reportDTO = reportFacade.getReportById(id);
         if (reportDTO == null) {
@@ -89,11 +88,10 @@ public class ReportController {
         logger.debug("Approve report with id {}", id);
         AgentDTO authenticatedAgent = (AgentDTO) request.getSession().getAttribute(AUTHENTICATED_USER_SESSION_KEY);
         if (authenticatedAgent == null) {
-            throw new ResourceNotFoundException();
+            throw new RuntimeException("Unable to retrieve data about authenticated user");
         }
         if (authenticatedAgent.getRank() != AgentRankEnum.AGENT_IN_CHARGE) {
-            // TODO throw custom exception
-            throw new RuntimeException("You don't have permission to approve reports");
+            throw new AuthorizationException();
         }
         reportFacade.approveReport(id);
     }
@@ -103,11 +101,10 @@ public class ReportController {
         logger.debug("Deny report with id {}", id);
         AgentDTO authenticatedAgent = (AgentDTO) request.getSession().getAttribute(AUTHENTICATED_USER_SESSION_KEY);
         if (authenticatedAgent == null) {
-            throw new NullPointerException("Unable to retrieve data about authenticated user");
+            throw new RuntimeException("Unable to retrieve data about authenticated user");
         }
         if (authenticatedAgent.getRank() != AgentRankEnum.AGENT_IN_CHARGE) {
-            // TODO throw custom exception
-            throw new RuntimeException("You don't have permission to approve reports");
+            throw new AuthorizationException();
         }
         reportFacade.approveReport(id);
     }
@@ -133,11 +130,11 @@ public class ReportController {
     @RequestMapping(value = "/report/{reportId}/mentionedAgents")
     public Set<AgentDTO> getAgentsMentionedInReport(@PathVariable  Long reportId) {
         logger.debug("Get agents mentioned in report {}", reportId);
-        Set<AgentDTO> mentionedAgents = new HashSet<>();
+        Set<AgentDTO> mentionedAgents;
         try {
             mentionedAgents = reportFacade.getAgentsMentionedInReport(reportId);
-        } catch (ReportServiceException ex) {
-            // TODO throw custom exception
+        } catch (NullPointerException ex) {
+            throw new ResourceNotFoundException();
         }
         return mentionedAgents;
     }
