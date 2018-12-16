@@ -1,7 +1,6 @@
 import * as React from "react";
 import "../SharedStyles.css";
 import {IMission} from "../../types/Mission";
-import {getAllMissions} from "../../services/missionService";
 
 interface IMissionsState {
     missions: IMission[]
@@ -10,14 +9,6 @@ interface IMissionsState {
 export class MissionsPage extends React.Component<any, IMissionsState> {
     constructor(props: any) {
         super(props);
-
-        // TODO finish after RestController is ready
-        getAllMissions().then(
-            response => {
-                const missions = response.data as IMission[];
-                this.setState({missions});
-            }
-        )
     }
 
     public render() {
