@@ -112,7 +112,7 @@ class App extends React.Component<{}, IState> {
                 <div className="App">
                     <div className={"header"}>
                         <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
-                        <button className="logout-button" type={'button'} onClick={this.onLogout}>Log out</button>
+                        <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
                     </div>
                     <div className={"content"}>
                         <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
