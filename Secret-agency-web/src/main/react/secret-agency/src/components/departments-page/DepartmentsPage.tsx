@@ -15,12 +15,13 @@ import {defineAbility} from "../../config/ability";
 
 interface IDepartmentsState {
     readonly departments: Immutable.Map<number, IDepartment>;
-    readonly newDepartment: INewDepartmentState;
+    readonly newDepartment: INewDepartment;
     readonly specializations: string[];
     readonly editedDepartmentId: number | null;
+    readonly formErrors: string[];
 }
 
-interface INewDepartmentState {
+interface INewDepartment {
     readonly city: string;
     readonly country: string;
     readonly latitude: string;
@@ -47,7 +48,8 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
             departments,
             newDepartment,
             specializations,
-            editedDepartmentId: null
+            editedDepartmentId: null,
+            formErrors: [],
         });
     };
 
@@ -62,10 +64,42 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
             longitude: parseFloat(longitude),
             specialization
         };
-        const createdDepartment = await createDepartment(department);
-        this.setState((prevState) => ({
-            departments: prevState.departments.set(createdDepartment.id, createdDepartment)
-        }));
+        const errors = this.validate(department);
+        if (errors.length === 0) {
+            const createdDepartment = await createDepartment(department);
+            this.setState((prevState) => ({
+                departments: prevState.departments.set(createdDepartment.id, createdDepartment)
+            }));
+            this.setState(_ => ({editedDepartmentId: null}));
+        } else {
+            this.setState( _ => ({formErrors: errors}));
+        }
+
+    };
+
+    private validate = (department: IDepartment): string[] => {
+        const {city, country,latitude, longitude, specialization} = department;
+        const errors = [];
+        if (!city.trim()) {
+            errors.push("City must be set");
+        }
+
+        if (!country.trim()) {
+            errors.push("Country must be set");
+        }
+
+        if (isNaN(latitude) || latitude > 90 || latitude < - 90) {
+            errors.push("Latitude must be a number between -90 and 90");
+        }
+
+        if (isNaN(longitude) || longitude > 180 || latitude < -180) {
+            errors.push("Longitude must be a number between -180 and 180");
+        }
+
+        if (!specialization.trim()) {
+            errors.push("Specialization must be set");
+        }
+        return errors;
     };
 
     private onCityChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -104,12 +138,16 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
     };
 
     private onEdit = async (department: IDepartment) => {
-        const editedDepartment = await editDepartment(department);
-        console.log(editedDepartment);
-        this.setState((prevState) => ({
-            departments: prevState.departments.set(editedDepartment.id, editedDepartment)
-        }));
-        this.setState(_ => ({editedDepartmentId: null}));
+        const errors = this.validate(department);
+        if (errors.length === 0) {
+            const editedDepartment = await editDepartment(department);
+            this.setState((prevState) => ({
+                departments: prevState.departments.set(editedDepartment.id, editedDepartment)
+            }));
+            this.setState(_ => ({editedDepartmentId: null}));
+        } else {
+            this.setState( _ => ({formErrors: errors}));
+        }
     };
 
     public render() {
@@ -133,6 +171,11 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
             const {city, country,latitude, longitude, specialization} = this.state.newDepartment;
             return (
                 <div className="table-wrapper">
+                    {this.state.formErrors.length > 0 && <div className={'alert alert-danger'}>
+                        {this.state.formErrors.map((error: string, index) =>
+                            <p key={index}>{error}</p>
+                        )}
+                    </div>}
                     <table className="data-table">
                         <thead>
                         <tr>
