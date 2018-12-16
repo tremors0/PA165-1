@@ -1,0 +1,184 @@
+package cz.fi.muni.pa165.secretagency.controllers;
+
+import cz.fi.muni.pa165.secretagency.ApiUris;
+import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
+import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
+import cz.fi.muni.pa165.secretagency.exceptions.InvalidDeleteRequestException;
+import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.secretagency.facade.MissionFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * REST controller for missions.
+ *
+ * @author Milos Silhar (433614)
+ */
+@RestController
+@RequestMapping(ApiUris.ROOT_URI_REST + ApiUris.ROOT_URI_MISSIONS)
+public class MissionsController {
+    final  static Logger logger = LoggerFactory.getLogger(MissionsController.class);
+
+    @Autowired
+    private MissionFacade missionFacade;
+
+    /**
+     * Get list of all missions
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions
+     *
+     * @return List of all missions
+     */
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionDTO> getMissions() {
+        logger.debug("rest get all missions");
+        return missionFacade.getAllMissions();
+    }
+
+    /**
+     * Get list of all active missions
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/active
+     *
+     * @return List of all active missions
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionDTO> getActiveMissions() {
+        logger.debug("rest get all missions");
+        return missionFacade.getActiveMissions();
+    }
+
+    /**
+     * Get mission with given id
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/{id}
+     *
+     * @param id Identifier for mission
+     * @return MissionDTO
+     * @throws ResourceNotFoundException When mission with given id is not found
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final MissionDTO getMission(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        logger.debug("rest get mission with id: {}", id);
+
+        try {
+            MissionDTO mission = missionFacade.getMissionById(id);
+            return mission;
+        }
+        catch (Exception e) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
+     * Get missions in specific place
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/place/{latitude}/{longitude}
+     *
+     * @param latitude Latitude of the place
+     * @param longitude Longitude of the place
+     * @return List of missions in place
+     */
+    @RequestMapping(value = "/place/{latitude}/{longitude}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionDTO> getMissionsInPlace(@PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
+        logger.debug("rest get missions in place [{}, {}]", latitude, longitude);
+
+        return missionFacade.getMissionsInPlace(latitude, longitude);
+    }
+
+    /**
+     * Get missions from specific time period
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/interval/{from:yyyy-MM-dd}/{to:yyyy-MM-dd}
+     *
+     * @param dateFrom Start of the time period, in format yyyy-MM-dd
+     * @param dateTo End of the time period, in format yyyy-MM-dd
+     * @return List of missions in time period
+     */
+    @RequestMapping(value = "/interval/{dateFrom}/{dateTo}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionDTO> getMissionsStartedInInterval(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateFrom,
+                                                  @PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateTo) {
+        logger.debug("rest get missions in date interval [{}, {}]", dateFrom, dateTo);
+
+        return missionFacade.getMissionsStartedInInterval(dateFrom, dateTo);
+    }
+
+    /**
+     * Get all types of missions
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/types
+     *
+     * @return List of all types of missions
+     */
+    @RequestMapping(value = "/types", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionTypeEnum> getMissionTypes() {
+        logger.debug("rest get mission types");
+
+        return Arrays.asList(MissionTypeEnum.values());
+    }
+
+    /**
+     * Get all missions with specific type
+     * curl --cookie {COOKIE_VALUE} -i -X GET http://localhost:8080/pa165/rest/missions/type/{missionType}
+     *
+     * @param missionTypeEnum Type of mission
+     * @return List of all missions with type
+     */
+    @RequestMapping(value = "/type/{missionType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final List<MissionDTO> getMissionsWithType(@PathVariable("missionType") MissionTypeEnum missionTypeEnum) {
+        logger.debug("rest get missions with type {}", missionTypeEnum);
+
+        return missionFacade.getMissionsWithType(missionTypeEnum);
+    }
+
+    /**
+     * Creates new mission
+     * curl --cookie "{COOKIE_VALUE}" -X POST -i -H "Content-Type: application/json" --data
+     * '{ "latitude": "23.52", "longitude": "15.22", "missionType": "SABOTAGE", "started":"2013-02-11"}'
+     * http://localhost:8080/pa165/rest/missions
+     *
+     * @param missionCreateDTO MissionCreateDTO with required fields for creation
+     * @return The created mission MissionDTO
+     */
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public final MissionDTO createMission(@Valid @RequestBody MissionCreateDTO missionCreateDTO) {
+        logger.debug("rest create mission");
+
+        Long missionId = missionFacade.createMission(missionCreateDTO);
+        return missionFacade.getMissionById(missionId);
+    }
+
+    /**
+     * Delete one mission
+     * curl --cookie {COOKIE_VALUE} -i -X DELETE http://localhost:8080/pa165/rest/missions/{id}
+     *
+     * @param id Identifier for mission
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final void deleteMission(@PathVariable("id") Long id) {
+        logger.debug("rest delete mission with id: {}", id);
+
+        try {
+            MissionDTO missionDTO = missionFacade.getMissionById(id);
+            if (!missionDTO.getReportIds().isEmpty()) {
+                throw new InvalidDeleteRequestException();
+            }
+            if (!missionDTO.getAgentIds().isEmpty()) {
+                throw new InvalidDeleteRequestException();
+            }
+            missionFacade.deleteMission(id);
+        }
+        catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+}
