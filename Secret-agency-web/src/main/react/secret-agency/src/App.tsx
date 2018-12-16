@@ -115,14 +115,14 @@ class App extends React.Component<{}, IState> {
                         <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
                     </div>
                     <div className={"content"}>
-                        <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
-                        <Route path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
-                        <Route path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
                             <ReportsPage {...props}
                                          authenticatedUserId={authenticatedAgentId}
                                          isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>
                         )}/>
-                        <Route path={`${ROUTING_URL_BASE}/report/new`} render={(props) => (
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports/new`} render={(props) => (
                             <ReportNewForm {...props} authenticatedAgentId={authenticatedAgentId}/>
                         )} />
                     </div>

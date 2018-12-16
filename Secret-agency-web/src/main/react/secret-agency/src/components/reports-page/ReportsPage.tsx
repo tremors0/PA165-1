@@ -91,7 +91,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
                     </table>
                 </div>
                 <Button bsStyle="primary" className={'ReportsPage__createNewReport'}>
-                    <Link to={`${ROUTING_URL_BASE}/report/new`}>Create report</Link>
+                    <Link to={`${ROUTING_URL_BASE}/reports/new`}>Create report</Link>
                 </Button>
             </div>
         );
