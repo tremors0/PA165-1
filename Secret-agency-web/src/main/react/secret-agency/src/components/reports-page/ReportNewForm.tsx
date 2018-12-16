@@ -66,6 +66,10 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
         this.setState(prevState => ({...prevState, missionId}));
     };
 
+    private onCloseCreateAlert = (): void => {
+        this.setState(prevState => ({...prevState, createError: ""}));
+    };
+
     private onSubmit = (e: FormEvent<Button>): void => {
         e.preventDefault();
 
@@ -186,7 +190,9 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
             <div className={'ReportNewForm'}>
                 <h2>Create new report {this.state.missionId != null && `for mission ${this.state.missionId}`}</h2>
 
-                <AlertCloseable bsStyle={'danger'} isVisible={this.state.createError !== ""}>
+                <AlertCloseable bsStyle={'danger'}
+                                isVisible={this.state.createError !== ""}
+                                onHide={this.onCloseCreateAlert}>
                     {this.state.createError}
                 </AlertCloseable>);
 

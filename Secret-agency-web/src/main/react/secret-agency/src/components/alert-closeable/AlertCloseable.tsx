@@ -26,7 +26,9 @@ export class AlertCloseable extends React.PureComponent<IProps, IState> {
 
     private onHide = (): void => {
         this.setState(prevState => ({...prevState, isVisible: false}));
-        this.props.onHide != null && this.props.onHide();
+        if (this.props.onHide != null) {
+            this.props.onHide();
+        }
     };
 
     constructor(props: IProps) {
