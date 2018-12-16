@@ -3,7 +3,7 @@ import * as React from 'react';
 import {ChangeEvent, MouseEvent} from "react";
 
 interface IState {
-    readonly department: IDepartment
+    readonly department: IDepartment;
 }
 
 interface IProps {
@@ -33,7 +33,7 @@ export class DepartmentEditRow extends React.Component<IProps, IState> {
 
     private onLatitudeChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const latitude = parseFloat(event.currentTarget.value);
-        this.setState((prevState) => ( {department:  { ...prevState.department, latitude }}));
+        this.setState((prevState) => ({department: {...prevState.department, latitude}}));
     };
 
     private onLongitudeChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -71,12 +71,14 @@ export class DepartmentEditRow extends React.Component<IProps, IState> {
                     />
                 </td>
                 <td>
-                    <input type={'text'} value={latitude}
+                    <input value={latitude}
+                           type='number'
                            onChange={this.onLatitudeChange}
                     />
                 </td>
                 <td>
-                    <input type={'text'} value={longitude}
+                    <input value={longitude}
+                           type='number'
                            onChange={this.onLongitudeChange}
                     />
                 </td>
