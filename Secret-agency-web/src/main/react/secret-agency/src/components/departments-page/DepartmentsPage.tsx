@@ -64,10 +64,17 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
             longitude: parseFloat(longitude),
             specialization
         };
-        const createdDepartment = await createDepartment(department);
-        this.setState((prevState) => ({
-            departments: prevState.departments.set(createdDepartment.id, createdDepartment)
-        }));
+        const errors = this.validate(department);
+        if (errors.length === 0) {
+            const createdDepartment = await createDepartment(department);
+            this.setState((prevState) => ({
+                departments: prevState.departments.set(createdDepartment.id, createdDepartment)
+            }));
+            this.setState(_ => ({editedDepartmentId: null}));
+        } else {
+            this.setState( _ => ({formErrors: errors}));
+        }
+
     };
 
     private validate = (department: IDepartment): string[] => {
