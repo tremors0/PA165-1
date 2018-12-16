@@ -34,9 +34,8 @@ public class BeanMappingServiceImpl implements BeanMappingService {
     }
 
     @Override
-    public  <T> T mapTo(Object u, Class<T> mapToClass)
-    {
-        return modelMapper.map(u,mapToClass);
+    public  <T> T mapTo(Object u, Class<T> mapToClass) {
+        return modelMapper.map(u, mapToClass);
     }
 
     public ModelMapper getMapper(){

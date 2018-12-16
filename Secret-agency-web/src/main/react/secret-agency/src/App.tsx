@@ -10,6 +10,7 @@ import {AgentsPage} from "./components/agents-page/AgentsPage";
 import { Route, BrowserRouter } from "react-router-dom";
 import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
 import {ROUTING_URL_BASE} from "./utils/requestUtils";
+import {ReportsPage} from "./components/reports-page/ReportsPage";
 
 export interface ITab {
     title: string,
@@ -110,6 +111,10 @@ class App extends React.Component<{}, IState> {
                     <button className="logout-button" type={'button'} onClick={this.onLogout}>Log out</button>
                     <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
                     <Route path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
+                    <Route path={`${ROUTING_URL_BASE}/reports`} component={() => (
+                        <ReportsPage authenticatedUserId={this.state.authenticatedAgent!.id}
+                                     isAuthenticatedUserAdmin={this.state.authenticatedAgent!.rank === "AGENT_IN_CHARGE"}/>
+                    )}/>
                 </div>
             </BrowserRouter>
         );

@@ -27,7 +27,7 @@ public interface ReportFacade {
     /**
      * Return report with given id.
      * @param id report id
-     * @return report with given id
+     * @return report with given id. Returns null, when report with given id does not exist.
      */
     ReportDTO getReportById(Long id);
 
@@ -42,12 +42,14 @@ public interface ReportFacade {
     /**
      * Deletes report with given id.
      * @param reportId report id
+     * @throws NullPointerException when report with given id does not exist
      */
     void deleteReport(Long reportId);
 
     /**
      * Updates text in selected report.
      * @param report updated data
+     * @throws NullPointerException when report or text is not set
      */
     void updateReportText(ReportUpdateTextDTO report);
 
@@ -68,6 +70,7 @@ public interface ReportFacade {
      * @param dateFrom bottom border of interval
      * @param dateTo top border of interval
      * @return all reports within interval
+     * @throws NullPointerException when any of parameters is null
      */
     List<ReportDTO> getReportsFromInterval(LocalDate dateFrom, LocalDate dateTo);
 
@@ -75,6 +78,7 @@ public interface ReportFacade {
      * Get all reports with specific mission result report
      * @param missionResultReport mission result report
      * @return all reports with specified mission result report
+     * @throws NullPointerException when missionResultReport is null
      */
     List<ReportDTO> getReportsWithResult(MissionResultReportEnum missionResultReport);
 
@@ -82,6 +86,7 @@ public interface ReportFacade {
      * Get all reports with specified report status
      * @param reportStatus report status
      * @return all reports with specified report status
+     * @throws NullPointerException when report status is null
      */
     List<ReportDTO> getReportsWithStatus(ReportStatus reportStatus);
 
