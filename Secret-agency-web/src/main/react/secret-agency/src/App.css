@@ -1,9 +1,10 @@
-.App {
-  text-align: center;
+.logout-button {
+    position: absolute;
+    top: 11px;
+    right: 13px;
 }
 
-.logout-button {
-  position: absolute;
-  top: 11px;
-  right: 13px;
+.content {
+    margin: 0 20px;
+    clear: both;
 }
