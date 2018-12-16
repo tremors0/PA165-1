@@ -11,12 +11,12 @@ export interface IReport {
     readonly agent: IAgent;
 }
 
-type MissionResult = "COMPLETED" | "FAILED";
+export type MissionResult = "COMPLETED" | "FAILED";
 type ReportStatus = "NEW" | "UPDATED" | "APPROVED" | "DENIED";
 
 export interface IReportCreate {
     readonly text: string;
     readonly missionResult: MissionResult;
-    readonly agent: IAgent;
-    readonly mission: IMission;
+    readonly agentId: number;
+    readonly missionId: number;
 }

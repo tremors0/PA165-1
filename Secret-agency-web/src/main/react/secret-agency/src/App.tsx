@@ -105,6 +105,7 @@ class App extends React.Component<{}, IState> {
         }
 
         const isAuthenticatedAgentAdmin = this.state.authenticatedAgent!.rank === "AGENT_IN_CHARGE";
+        const authenticatedAgentId = this.state.authenticatedAgent!.id;
 
         return (
             <BrowserRouter>
@@ -116,11 +117,14 @@ class App extends React.Component<{}, IState> {
                     <div className={"content"}>
                         <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
                         <Route path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
-                        <Route path={`${ROUTING_URL_BASE}/reports`} component={() => (
-                            <ReportsPage authenticatedUserId={this.state.authenticatedAgent!.id}
+                        <Route path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
+                            <ReportsPage {...props}
+                                         authenticatedUserId={authenticatedAgentId}
                                          isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>
                         )}/>
-                        <Route path={`${ROUTING_URL_BASE}/report/new`} component={ReportNewForm} />
+                        <Route path={`${ROUTING_URL_BASE}/report/new`} render={(props) => (
+                            <ReportNewForm {...props} authenticatedAgentId={authenticatedAgentId}/>
+                        )} />
                     </div>
                 </div>
             </BrowserRouter>
