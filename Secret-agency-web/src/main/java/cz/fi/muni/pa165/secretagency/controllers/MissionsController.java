@@ -172,6 +172,9 @@ public class MissionsController {
             if (!missionDTO.getReportIds().isEmpty()) {
                 throw new InvalidDeleteRequestException();
             }
+            if (!missionDTO.getAgentIds().isEmpty()) {
+                throw new InvalidDeleteRequestException();
+            }
             missionFacade.deleteMission(id);
         }
         catch (IllegalArgumentException ex) {
