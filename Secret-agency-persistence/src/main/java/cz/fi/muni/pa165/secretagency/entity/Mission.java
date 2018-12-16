@@ -22,6 +22,10 @@ public class Mission implements Identifiable<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    @NotNull
+    private String name;
+
     @NotNull
     private Double latitude;
 
@@ -55,6 +59,20 @@ public class Mission implements Identifiable<Long> {
      */
     public Long getId() {
         return id;
+    }
+
+    /**
+     * @return name of the mission
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name name of the mission
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -207,20 +225,15 @@ public class Mission implements Identifiable<Long> {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof Mission)) return false;
-
-        Mission mission = (Mission) object;
-        return Objects.equals(getLatitude(), mission.getLatitude()) &&
-                Objects.equals(getLongitude(), mission.getLongitude()) &&
-                Objects.equals(getMissionType(), mission.getMissionType()) &&
-                Objects.equals(getStarted(), mission.getStarted()) &&
-                Objects.equals(getEnded(), mission.getEnded());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mission)) return false;
+        Mission mission = (Mission) o;
+        return Objects.equals(getName(), mission.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded());
+        return Objects.hash(getName());
     }
 }

@@ -44,12 +44,14 @@ public class MissionDaoTests extends AbstractTestNGSpringContextTests {
         vietnam.setStarted(LocalDate.of(1955, 1, 1));
         vietnam.setEnded(LocalDate.of(1975, 4, 30));
         vietnam.setMissionType(MissionTypeEnum.SABOTAGE);
+        vietnam.setName("vietnam");
 
         afghanistan = new Mission();
         afghanistan.setLatitude(34.543896);
         afghanistan.setLongitude(69.160652);
         afghanistan.setStarted(LocalDate.of(2001, 5, 5));
         afghanistan.setMissionType(MissionTypeEnum.ASSASSINATION);
+        afghanistan.setName("afghanistan");
 
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
