@@ -15,13 +15,13 @@ import {defineAbility} from "../../config/ability";
 
 interface IDepartmentsState {
     readonly departments: Immutable.Map<number, IDepartment>;
-    readonly newDepartment: INewDepartmentState;
+    readonly newDepartment: INewDepartment;
     readonly specializations: string[];
     readonly editedDepartmentId: number | null;
     readonly formErrors: string[];
 }
 
-interface INewDepartmentState {
+interface INewDepartment {
     readonly city: string;
     readonly country: string;
     readonly latitude: string;
