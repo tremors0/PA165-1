@@ -14,6 +14,7 @@ import java.util.Set;
 public class MissionDTO {
 
     private Long id;
+    private String name;
     private Double latitude;
     private Double longitude;
     private MissionTypeEnum missionType;
@@ -28,6 +29,14 @@ public class MissionDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getLatitude() {
@@ -91,22 +100,19 @@ public class MissionDTO {
         if (this == o) return true;
         if (!(o instanceof MissionDTO)) return false;
         MissionDTO that = (MissionDTO) o;
-        return Objects.equals(getLatitude(), that.getLatitude()) &&
-                Objects.equals(getLongitude(), that.getLongitude()) &&
-                getMissionType() == that.getMissionType() &&
-                Objects.equals(getStarted(), that.getStarted()) &&
-                Objects.equals(getEnded(), that.getEnded());
+        return Objects.equals(getName(), that.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLatitude(), getLongitude(), getMissionType(), getStarted(), getEnded());
+        return Objects.hash(getName());
     }
 
     @Override
     public String toString() {
         return "MissionDTO{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", missionType=" + missionType +

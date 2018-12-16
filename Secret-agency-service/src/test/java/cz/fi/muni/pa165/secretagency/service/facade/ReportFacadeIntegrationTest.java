@@ -87,6 +87,7 @@ public class ReportFacadeIntegrationTest extends AbstractTestNGSpringContextTest
 
     private void setUpMission() {
         transferBabisJrToKrym = new Mission();
+        transferBabisJrToKrym.setName("transferBabisToKrym");
         transferBabisJrToKrym.setMissionType(MissionTypeEnum.SABOTAGE);
         transferBabisJrToKrym.setStarted(LocalDate.of(2017, 5, 1));
         transferBabisJrToKrym.setEnded(LocalDate.of(2018, 11, 1));
