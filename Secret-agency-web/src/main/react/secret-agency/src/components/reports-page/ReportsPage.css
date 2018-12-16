@@ -2,6 +2,11 @@
     margin-top: 10px;
 }
 
-.ReportsPage__createNewReport a{
+.ReportsPage__createNewReport a {
     color: white;
+}
+
+.ReportsPage__actions {
+    display: flex;
+    justify-content: space-between;
 }
