@@ -51,6 +51,7 @@ public class ReportDaoTests extends AbstractTestNGSpringContextTests {
         mission.setLongitude(4d);
         mission.setLatitude(4d);
         mission.setMissionType(MissionTypeEnum.ESPIONAGE);
+        mission.setName("Spy in girl's shower");
         em.persist(mission);
         this.mission = mission;
 

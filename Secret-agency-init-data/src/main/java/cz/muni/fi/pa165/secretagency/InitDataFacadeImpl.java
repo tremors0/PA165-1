@@ -59,9 +59,11 @@ public class InitDataFacadeImpl implements InitDataFacade {
 
         // creating missions
         Mission transportBabisJrToKrym = createMission(47.304324, 39.521161, MissionTypeEnum.SABOTAGE,
-                LocalDate.of(2017, 5, 1), LocalDate.of(2018, 11, 1));
+                LocalDate.of(2017, 5, 1), LocalDate.of(2018, 11, 1),
+                "transportBabisJrToKrym");
         Mission getDrunkDuringCeremony = createMission(50.08804, 14.42076, MissionTypeEnum.SABOTAGE,
-                LocalDate.of(2014, 11, 7), LocalDate.of(2014, 11, 7));
+                LocalDate.of(2014, 11, 7), LocalDate.of(2014, 11, 7),
+                "getDrunkDuringCeremony");
 
         // creating reports
         Report transportBabisJrToKrymReport = createReport("Transport of Babis Jr to Krym was successful.",
@@ -126,13 +128,14 @@ public class InitDataFacadeImpl implements InitDataFacade {
      * @return created mission
      */
     private Mission createMission(Double latitude, Double longitude, MissionTypeEnum missionType, LocalDate started,
-                                 LocalDate ended) {
+                                 LocalDate ended, String name) {
         Mission mission = new Mission();
         mission.setLatitude(latitude);
         mission.setLongitude(longitude);
         mission.setMissionType(missionType);
         mission.setStarted(started);
         mission.setEnded(ended);
+        mission.setName(name);
         return mission;
     }
 

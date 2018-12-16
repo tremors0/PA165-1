@@ -13,6 +13,9 @@ import java.util.Set;
 public class MissionCreateDTO {
 
     @NotNull
+    private String name;
+
+    @NotNull
     private Double latitude;
 
     @NotNull
@@ -27,6 +30,14 @@ public class MissionCreateDTO {
     private LocalDate ended;
 
     private Set<Long> agentIds;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Double getLatitude() {
         return latitude;
@@ -78,8 +89,9 @@ public class MissionCreateDTO {
 
     @Override
     public String toString() {
-        return "ReportCreateDTO{" +
-                "latitude='" + latitude +
+        return "MissionCreateDTO{" +
+                "name='" + name + '\'' +
+                ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", missionType=" + missionType +
                 ", started=" + started +

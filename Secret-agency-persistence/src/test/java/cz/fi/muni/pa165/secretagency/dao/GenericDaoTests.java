@@ -17,6 +17,7 @@ import java.util.List;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class GenericDaoTests extends AbstractTestNGSpringContextTests {
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Qualifier("genericDaoTransactionalDepartment")
     @Autowired
     private GenericDao<Department> genericDao;
