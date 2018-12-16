@@ -7,10 +7,11 @@ import * as secretAgencyRepository from "./repository/secretAgecyRepository";
 import {IAgent} from "./types/Agent";
 import {TopBar} from "./components/top-bar/TopBar"
 import {AgentsPage} from "./components/agents-page/AgentsPage";
-import { Route, BrowserRouter } from "react-router-dom";
+import {BrowserRouter, Route} from "react-router-dom";
 import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
 import {ROUTING_URL_BASE} from "./utils/requestUtils";
 import {ReportsPage} from "./components/reports-page/ReportsPage";
+import {ReportNewForm} from "./components/reports-page/ReportNewForm";
 
 export interface ITab {
     title: string,
@@ -103,18 +104,28 @@ class App extends React.Component<{}, IState> {
                               hideAuthenticationError={this.hideAuthenticationError} />
         }
 
+        const isAuthenticatedAgentAdmin = this.state.authenticatedAgent!.rank === "AGENT_IN_CHARGE";
+        const authenticatedAgentId = this.state.authenticatedAgent!.id;
+
         return (
             <BrowserRouter>
                 <div className="App">
-
-                    <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
-                    <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
-                    <Route path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage}/>
-                    <Route path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
-                    <Route path={`${ROUTING_URL_BASE}/reports`} component={() => (
-                        <ReportsPage authenticatedUserId={this.state.authenticatedAgent!.id}
-                                     isAuthenticatedUserAdmin={this.state.authenticatedAgent!.rank === "AGENT_IN_CHARGE"}/>
-                    )}/>
+                    <div className={"header"}>
+                        <TopBar tabs={this.state.tabs} logout={this.onLogout}/>
+                        <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
+                    </div>
+                    <div className={"content"}>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
+                            <ReportsPage {...props}
+                                         authenticatedUserId={authenticatedAgentId}
+                                         isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports/new`} render={(props) => (
+                            <ReportNewForm {...props} authenticatedAgentId={authenticatedAgentId}/>
+                        )} />
+                    </div>
                 </div>
             </BrowserRouter>
         );
