@@ -105,7 +105,7 @@ public class MissionsController {
      * @return List of missions in time period
      */
     @RequestMapping(value = "/interval/{dateFrom}/{dateTo}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final List<MissionDTO> getMissionsWithInterval(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateFrom,
+    public final List<MissionDTO> getMissionsStartedInInterval(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateFrom,
                                                   @PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dateTo) {
         logger.debug("rest get missions in date interval [{}, {}]", dateFrom, dateTo);
 
