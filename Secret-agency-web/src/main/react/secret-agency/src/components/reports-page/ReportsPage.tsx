@@ -9,6 +9,7 @@ import "./ReportsPage.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPencilAlt, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons'
 import {AlertCloseable} from "../alert-closeable/AlertCloseable";
+import {ReportFilter} from "./ReportFilter";
 
 type NavigateToDetailMode = "EDIT" | "READ-ONLY";
 
@@ -92,6 +93,15 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
 
     private onHideServerError = (): void => {
         this.setState(prevState => ({...prevState, serverError: ""}));
+    };
+
+    private onFilterResult = (result: IReport[] | string) => {
+        if (typeof result === "string") {
+            this.setState(prevState => ({...prevState, serverError: result}));
+            return;
+        }
+
+        this.setState(prevState => ({...prevState, reports: result}));
     };
 
     /********************************************************
@@ -196,10 +206,6 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
 
         const isAnyRowVisible = this.state.reports.length !== 0;
 
-        if (!isAnyRowVisible) {
-            return <div className={'alert alert-info'}>There are no reports from current user</div>;
-        }
-
         const tableRows = this.state.reports.map((report) => (
             <tr key={report.id}>
                 <td>{this.getActionsForReport(report)}</td>
@@ -216,32 +222,42 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
 
         return (
             <div className={'ReportsPage'}>
+                {!isAnyRowVisible ? (
+                    <div className={'alert alert-info'}>
+                        There are no reports to display...
+                    </div>)
+                    : (
+                    <div className={"table-wrapper"}>
+                        <table className={"data-table"}>
+                            <thead>
+                            <tr>
+                                <th>Actions</th>
+                                <th>Mission</th>
+                                {this.props.isAuthenticatedUserAdmin && <th>Agent</th>}
+                                <th>Date</th>
+                                <th>Mission result</th>
+                                <th>Report status</th>
+                                {this.props.isAuthenticatedUserAdmin &&<th>Approve/deny</th>}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
                 <AlertCloseable isVisible={this.state.serverError !== ""}
                                 bsStyle={"danger"}
                                 onHide={this.onHideServerError}>
                     {this.state.serverError}
                 </AlertCloseable>
-                <div className={"table-wrapper"}>
-                    <table className={"data-table"}>
-                        <thead>
-                        <tr>
-                            <th>Actions</th>
-                            <th>Mission</th>
-                            {this.props.isAuthenticatedUserAdmin && <th>Agent</th>}
-                            <th>Date</th>
-                            <th>Mission result</th>
-                            <th>Report status</th>
-                            {this.props.isAuthenticatedUserAdmin &&<th>Approve/deny</th>}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tableRows}
-                        </tbody>
-                    </table>
-                </div>
+
                 <Button bsStyle="primary" className={'ReportsPage__createNewReport'}>
                     <Link to={`${ROUTING_URL_BASE}/reports/new`}>Create report</Link>
                 </Button>
+
+
+                <ReportFilter onSearch={this.onFilterResult}/>
             </div>
         );
     }
