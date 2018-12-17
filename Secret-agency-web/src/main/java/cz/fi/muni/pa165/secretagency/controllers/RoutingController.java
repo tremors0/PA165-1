@@ -16,6 +16,6 @@ public class RoutingController {
 
     @RequestMapping(ApiUris.ROUTING_URL_BASE + "/**")
     public String index() {
-        return "index.html";
+        return "redirect:/";
     }
 }
