@@ -4,16 +4,19 @@ import {Alert, Button} from "react-bootstrap";
 import * as missionService from "../../services/missionService";
 import {Redirect} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
+import {Link} from "react-router-dom";
+import {IMission} from "../../types/Mission";
 
 
 // INTERFACES FOR COMPONENT
-interface IMissionEditPageProps {
+interface IMissionNewPageProps {
     isAuthenticatedUserAdmin: boolean;
     authenticatedUserId: number;
 }
 
-interface IMissionEditPageState {
+interface IMissionNewPageState {
     // form data
+    name: string;
     latitude: number;
     longitude: number;
     missionType: string;
@@ -28,14 +31,15 @@ interface IMissionEditPageState {
 
     // errors
     errorMsg: string;
+    nameError: boolean;
     latitudeError: boolean;
     longitudeError: boolean;
     typeError: boolean;
     startedError: boolean;
 }
 
-type IState = IMissionEditPageState;
-type IProps = IMissionEditPageProps;
+type IState = IMissionNewPageState;
+type IProps = IMissionNewPageProps;
 
 /**
  * Form for creating new mission.
@@ -47,6 +51,7 @@ export class MissionNewPage extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
+            name: "",
             latitude: 0.0,
             longitude: 0.0,
             missionType: "",
@@ -55,10 +60,11 @@ export class MissionNewPage extends React.Component<IProps, IState> {
             redirectToMissionsPage: false,
             isLoading: true,
             errorMsg: "",
+            nameError: true,
             latitudeError: false,
             longitudeError: false,
             typeError: false,
-            startedError: false,
+            startedError: true,
         }
     }
 
@@ -74,6 +80,11 @@ export class MissionNewPage extends React.Component<IProps, IState> {
     /********************************************************
      * EVENT HANDLERS
      *******************************************************/
+    private onNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const missionName = e.currentTarget.value;
+        this.setState(prevState => ({...prevState, name: missionName}));
+    };
+
     private onLatitudeChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const la = parseFloat(e.currentTarget.value);
         this.setState(prevState => ({...prevState, latitude: la}));
@@ -99,10 +110,14 @@ export class MissionNewPage extends React.Component<IProps, IState> {
         e.preventDefault();
 
         // new request - hide previous error
-        this.setState(prevState => ({...prevState, latitudeError: false, longitudeError: false, typeError: false, }));
+        this.setState(prevState => ({...prevState, nameError: false, latitudeError: false, longitudeError: false, typeError: false, startedError: false}));
 
-        let isFormValid = true;
         // validate data
+        let isFormValid = true;
+        if (this.state.name.length < 1) {
+            this.setState(prevState => ({...prevState, nameError: true}));
+            isFormValid=false;
+        }
         if (isNaN(this.state.latitude) || this.state.latitude > 90 || this.state.latitude < - 90) {
             this.setState(prevState => ({...prevState, latitudeError: true}));
             isFormValid=false;
@@ -122,8 +137,22 @@ export class MissionNewPage extends React.Component<IProps, IState> {
         if (!isFormValid) {return;}
 
         // create data for request
-        // const newMission = {latitude: this.state.latitude, longitude: this.state.longitude, missionType: this.state.missionType, started: this.state.started};
-        console.log(this.state.started);
+        const newMission = {
+            name: this.state.name,
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            missionType: this.state.missionType,
+            started: new Date(Date.parse(this.state.started)),
+        } as IMission;
+
+        // save new mission and handle response
+        missionService.createMission(newMission).then((result) => {
+            if (typeof result === "string") {
+                this.setState(prevState => ({...prevState, errorMsg: result}));
+            } else {
+                this.setState((prevState) => ({...prevState, redirectToMissionsPage: true}))
+            }
+        });
     };
 
     private isDate(value: string): boolean {
@@ -148,13 +177,24 @@ export class MissionNewPage extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className={'ReportNewForm'}>
+            <div className={'MissionNewForm'}>
                 <h2>Create new mission</h2>
                 <form className={'MissionNewForm__form'}>
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
+                            <label htmlFor={"nameInput"}>Name</label>
+                            <input type={"text"} className={this.state.nameError ? "form-control is-invalid" : "form-control is-valid"}
+                                   id={"nameInput"} placeholder={"Name"} value={this.state.name} onChange={this.onNameChange}/>
+                            <div className={this.state.nameError ? "invalid-feedback" : "valid-feedback"}>
+                                {this.state.nameError ? "Name is required" : "OK"}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={"form-row"}>
+                        <div className={"col-md-6 mb-3"}>
                             <label htmlFor={"latitudeInput"}>Latitude</label>
-                            <input type={"number"} className={"form-control"} id={"latitudeInput"} placeholder={"Latitude"} value={this.state.latitude} onChange={this.onLatitudeChange}/>
+                            <input type={"number"} className={this.state.latitudeError ? "form-control is-invalid" : "form-control is-valid"}
+                                   id={"latitudeInput"} placeholder={"Latitude"} value={this.state.latitude} onChange={this.onLatitudeChange}/>
                             <div className={this.state.latitudeError ? "invalid-feedback" : "valid-feedback"}>
                                 {this.state.latitudeError ? "Latitude must be a number between -90 and 90!" : "OK"}
                             </div>
@@ -163,7 +203,8 @@ export class MissionNewPage extends React.Component<IProps, IState> {
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
                             <label htmlFor={"longitudeInput"}>Longitude</label>
-                            <input type={"number"} className={"form-control"} id={"longitudeInput"} placeholder={"Longitude"} value={this.state.longitude} onChange={this.onLongitudeChange}/>
+                            <input type={"number"}  className={this.state.longitudeError ? "form-control is-invalid" : "form-control is-valid"}
+                                   id={"longitudeInput"} placeholder={"Longitude"} value={this.state.longitude} onChange={this.onLongitudeChange}/>
                             <div className={this.state.longitudeError ? "invalid-feedback" : "valid-feedback"}>
                                 {this.state.longitudeError ? "Longitude must be a number between -180 and 180!" : "OK"}
                             </div>
@@ -183,7 +224,8 @@ export class MissionNewPage extends React.Component<IProps, IState> {
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
                             <label htmlFor={"startedInput"}>Start date</label>
-                            <input type={"text"} className={"form-control"} id={"startedInput"} placeholder={"Start date"} value={this.state.started} onChange={this.onStartedChange}/>
+                            <input type={"text"}  className={this.state.startedError ? "form-control is-invalid" : "form-control is-valid"}
+                                   id={"startedInput"} placeholder={"Start date"} value={this.state.started} onChange={this.onStartedChange}/>
                             <div className={this.state.startedError ? "invalid-feedback" : "valid-feedback"}>
                                 {this.state.startedError ? "Invalid Date (required format: yyyy-MM-dd)" : "OK"}
                             </div>
@@ -191,8 +233,8 @@ export class MissionNewPage extends React.Component<IProps, IState> {
                     </div>
                 </form>
 
-                <Button bsStyle={"primary"} type={"submit"} onClick={this.onSubmit}>Submit</Button>
-                <Button bsStyle={"dark"} href={`${ROUTING_URL_BASE}/missions`}>Cancel</Button>
+                <Button bsStyle={"primary"} className={"mr-2"} type={"submit"} onClick={this.onSubmit}>Submit</Button>
+                <Link className={"btn btn-dark"} to={`${ROUTING_URL_BASE}/missions`}>Cancel</Link>
             </div>
         )
     }

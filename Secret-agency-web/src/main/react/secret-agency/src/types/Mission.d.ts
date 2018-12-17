@@ -5,12 +5,10 @@ export interface IMission {
     readonly longitude: number;
     readonly started: Date;
     readonly ended: Date;
-    readonly missionType: MissionType;
+    readonly missionType: string;
     readonly agentIds: number[];
     readonly reportIds: number[];
 }
-
-export type MissionType = "SABOTAGE" | "ASSASSINATION" | "ESPIONAGE";
 
 export interface IMissionSelectOption {
     readonly id: number,

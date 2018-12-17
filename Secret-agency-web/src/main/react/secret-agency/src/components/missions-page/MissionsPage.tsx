@@ -3,7 +3,7 @@ import "../SharedStyles.css";
 import * as missionService from "../../services/missionService";
 import {IMission} from "../../types/Mission";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
-import {Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 interface IMissionsState {
     activeMissions: IMission[];
@@ -72,13 +72,11 @@ export class MissionsPage extends React.Component<IProps, IState> {
 
         return (
             <div className={"MissionsPage mb-5"}>
-                <h4>Active Missions <span className={"badge badge-success"}>{this.state.activeMissions.length}</span></h4>
+                <h4 className={"mt-5"}>Active Missions <span className={"badge badge-success"}>{this.state.activeMissions.length}</span></h4>
                 <RenderTable missions={this.state.activeMissions} isShowCompleted={false} isAdmin={this.props.isAuthenticatedUserAdmin}/>
-                <h4>Completed Missions <span className={"badge badge-dark"}>{this.state.completedMissions.length}</span></h4>
+                <h4 className={"mt-5"}>Completed Missions <span className={"badge badge-dark"}>{this.state.completedMissions.length}</span></h4>
                 <RenderTable missions={this.state.completedMissions} isShowCompleted={true} isAdmin={this.props.isAuthenticatedUserAdmin}/>
-                <Button bsStyle="primary" className={'mt-3'} href={`${ROUTING_URL_BASE}/missions/new`}>
-                    Create mission
-                </Button>
+                {this.props.isAuthenticatedUserAdmin && <Link className={"btn btn-success mt-4"} to={`${ROUTING_URL_BASE}/missions/new`}>Create mission</Link>}
             </div>
         )
     }
@@ -97,6 +95,7 @@ function RenderTable(props: ITableProps) {
 
     const rows = props.missions.map(mission =>
         <tr key={mission.id}>
+            <td>{mission.name}</td>
             <td>{mission.latitude}</td>
             <td>{mission.longitude}</td>
             <td>{mission.missionType}</td>
@@ -112,6 +111,7 @@ function RenderTable(props: ITableProps) {
             <table className="data-table">
                 <thead>
                 <tr>
+                    <th>Name</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>Type</th>
