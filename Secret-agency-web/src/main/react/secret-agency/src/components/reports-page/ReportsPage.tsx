@@ -1,12 +1,13 @@
 import * as React from "react";
 import {IReport} from "../../types/Report";
 import * as reportService from "../../services/reportService";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {RouteComponentProps} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Button} from "react-bootstrap";
 import "./ReportsPage.css";
 
-interface IProps {
+interface IReportsPageOwnProps {
     isAuthenticatedUserAdmin: boolean;
     authenticatedUserId: number;
 }
@@ -14,9 +15,11 @@ interface IProps {
 interface IReportPageState {
     reports: IReport[],
     isLoaded: boolean,
+    navigateToDetailId: number,
 }
 
 type IState = IReportPageState;
+type IProps = IReportsPageOwnProps & RouteComponentProps<{}>;
 
 /**
  * Component for reports page.
@@ -36,6 +39,10 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onShowDetail = (reportId: number): void => {
+        this.setState(prevState => ({...prevState, navigateToDetailId: reportId}));
+    };
+
     /********************************************************
      * LIFE-CYCLE METHODS
      *******************************************************/
@@ -45,6 +52,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         this.state = {
             reports: [],
             isLoaded: false,
+            navigateToDetailId: -1, // -1 means don't navigate
         }
     }
 
@@ -74,7 +82,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         if (canUserEdit || this.props.isAuthenticatedUserAdmin) {
             return (
                 <div className={'ReportsPage__actions'}>
-                    <Button bsStyle={'info'}>View</Button>
+                    <Button bsStyle={'info'} onClick={() => this.onShowDetail(report.id)}>View</Button>
                     <Button bsStyle={'success'}>Edit</Button>
                     <Button bsStyle={'danger'} onClick={() => this.onRemoveReport(report.id)}>Delete</Button>
                 </div>
@@ -90,6 +98,11 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
     }
 
     public render(): JSX.Element {
+        // go to detail
+        if (this.state.navigateToDetailId !== -1) {
+            return <Redirect to={`${this.props.match.path}/report/${this.state.navigateToDetailId}`}/>;
+        }
+
         if (!this.state.isLoaded) {
            return <div>Loading table...</div>;
         }

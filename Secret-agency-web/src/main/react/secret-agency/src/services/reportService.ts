@@ -31,3 +31,15 @@ export function deleteReport(reportId: number): Promise<boolean> {
         return false;
     });
 }
+
+/**
+ * Get report with selected id. If report is not found, error message is returned.
+ * @param reportId id of the report
+ */
+export function getReportById(reportId: number): Promise<IReport | string> {
+    return GET<IReport>(`${REST_URL_BASE}/reports/report/${reportId}`).then((report) => {
+        return report.data;
+    }).catch((error) => {
+        return error.response.data as string;
+    });
+}
