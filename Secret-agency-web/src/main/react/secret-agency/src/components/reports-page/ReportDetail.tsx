@@ -1,28 +1,78 @@
 import * as React from "react";
+import {FormEvent} from "react";
 import * as reportService from "../../services/reportService";
 import {RouteComponentProps} from "react-router";
 import {IReport} from "../../types/Report";
 import "./ReportDetail.css";
-import {Alert, Button} from "react-bootstrap";
+import {Alert, Button, FormControl, FormGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
+import {AlertCloseable} from "../alert-closeable/AlertCloseable";
+
+// easiest way, how to add image to page
+const topSecretImgSrc = "https://vignette.wikia.nocookie.net/uncyclopedia/images/2/25/Top_Secret_Stamp.png" +
+                        "/revision/latest?cb=20061106174706";
 
 interface IReportDetailState {
     readonly isLoading: boolean;
     readonly loadingError: string;
+    readonly text: string;
+    readonly submitError: string;
+    readonly serverError: string;
+    readonly wasSaved: boolean;
 }
 
 type IProps = RouteComponentProps<{reportId: string}>;
 type IState = IReportDetailState;
 
 /**
- * Detail view for report.
+ * Detail view for report. Is used for both editing and displaying details of report.
  *
  * @author Jan Pavlu
  */
 export class ReportDetail extends React.PureComponent<IProps, IState> {
 
     private displayedReport: IReport;
+
+    /********************************************************
+     * EVENT HANDLERS
+     *******************************************************/
+    private onTextChange = (e: FormEvent<FormControl>): void => {
+        const text = (e.target as HTMLTextAreaElement).value;
+        this.setState(prevState => ({...prevState, text , submitError: ""}));
+    };
+
+
+    private onSaveClicked = async (): Promise<void> => {
+        if (this.state.text.trim().length < 10) {
+            this.setState(prevState => ({...prevState, submitError: "Text is too short"}));
+            return;
+        }
+
+        // nothing was changed
+        if (this.state.text.trim() === this.displayedReport.text) {
+            return;
+        }
+
+        const updateReportData = {id: this.displayedReport.id, text: this.state.text};
+
+        this.setState(prevState => ({...prevState, isLoading: true, wasSaved: false}));
+        const response = await reportService.updateReport(updateReportData);
+
+        // response is error
+        if (typeof response === "string") {
+            this.setState(prevState => ({...prevState, serverError: response, isLoading: false}));
+            return;
+        }
+
+        // response is updated report
+        this.displayedReport = response;
+        this.setState(prevState => ({...prevState, text: response.text, isLoading: false, wasSaved: true}));
+    };
+
+    private onHideServerError = (): void => {
+        this.setState(prevState => ({...prevState, serverError: ""}));
+    };
 
     /********************************************************
      * LIFE-CYCLE METHODS
@@ -33,11 +83,15 @@ export class ReportDetail extends React.PureComponent<IProps, IState> {
         this.state = {
             isLoading: true,
             loadingError: "",
+            text: "", // used if detail is in editing mode
+            submitError: "",
+            serverError: "",
+            wasSaved: false,
         }
     }
 
     public async componentDidMount(): Promise<void> {
-        this.loadReport(parseInt(this.props.match.params.reportId, 10));
+        await this.loadReport(parseInt(this.props.match.params.reportId, 10));
     }
 
     private async loadReport(reportId: number): Promise<void> {
@@ -47,12 +101,16 @@ export class ReportDetail extends React.PureComponent<IProps, IState> {
             return;
         }
         this.displayedReport = response;
-        this.setState(prevState => ({...prevState, isLoading: false}));
+        this.setState(prevState => ({...prevState, text: response.text, isLoading: false}));
     }
 
     /********************************************************
      * RENDERING
      *******************************************************/
+    private isEditingMode(): boolean {
+        return this.props.location.pathname.indexOf("edit") !== -1;
+    }
+
     public render(): JSX.Element {
         if (this.state.isLoading) {
             return <div>Detail is loading</div>;
@@ -62,16 +120,40 @@ export class ReportDetail extends React.PureComponent<IProps, IState> {
             return <Alert bsStyle={'danger'}>{this.state.loadingError}</Alert>
         }
 
+        const textComponent = this.isEditingMode() ? (
+            (<FormGroup controlId={'ReportDetail__text'}>
+                <FormControl componentClass={'textarea'}
+                             value={this.state.text}
+                             placeholder={'Report must contain at least 10 characters'}
+                             onChange={this.onTextChange}/>
+            </FormGroup>)
+        ) : <div className={"ReportDetail__text"}>{this.displayedReport.text}</div>;
+
         return (
             <div className={"ReportDetail"}>
-                <Button bsStyle={"primary"}><Link to={`${ROUTING_URL_BASE}/reports`}>Back to reports</Link></Button>
+
+                <AlertCloseable isVisible={this.state.serverError !== ""}
+                                bsStyle={'danger'}
+                                onHide={this.onHideServerError}/>
+
+                <Button className={"btn-secondary"}>
+                    <Link to={`${ROUTING_URL_BASE}/reports`}>Back to reports</Link>
+                </Button>
                 <hr />
+
                 <h3>Detail of report {this.props.match.params.reportId}</h3>
-                <div>Mission: <em className={"text-primary"}>{this.displayedReport.mission.name}</em></div>
-                <div>Created at: <em>{this.displayedReport.date}</em></div>
-                <div>Result: <em>{this.displayedReport.missionResult}</em></div>
-                <div>Status: <em>{this.displayedReport.reportStatus}</em></div>
-                <div>Text: <div className={"ReportDetail__text"}>{this.displayedReport.text}</div></div>
+                <div className={"ReportDetail__content-top"}>
+                    <div className={"ReportDetail__baseData"}>
+                        <div>Mission: <em className={"text-primary"}>{this.displayedReport.mission.name}</em></div>
+                        <div>Created at: <em>{this.displayedReport.date}</em></div>
+                        <div>Result: <em>{this.displayedReport.missionResult}</em></div>
+                        <div>Status: <em>{this.displayedReport.reportStatus}</em></div>
+                    </div>
+                    <img title={'Top-secret'} src={topSecretImgSrc} alt={'Top secret logo'} className={"ReportDetail__img"}/>
+                </div>
+                <div>Text: {textComponent}</div>
+                {this.state.wasSaved && <p className={"text-success"}>Report was successfully updated</p>}
+                {this.isEditingMode() && <Button bsStyle={"primary"} onClick={this.onSaveClicked}>Save</Button>}
             </div>
         )
     }

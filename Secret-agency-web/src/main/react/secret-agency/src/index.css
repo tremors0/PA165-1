@@ -8,11 +8,14 @@ body {
 #root {
     height: 100vh;
 }
+.btn a {
+    padding: 10px 0;
+}
 
-.btn-primary a {
+.btn-primary a, .btn-secondary a {
     color: white;
 }
 
-.btn-primary a:hover {
+.btn-primary a:hover, .btn-secondary a:hover {
     text-decoration: none;
 }

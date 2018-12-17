@@ -10,3 +10,13 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
 }
+
+.ReportDetail__content-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ReportDetail__img {
+    margin-right: 100px;
+}

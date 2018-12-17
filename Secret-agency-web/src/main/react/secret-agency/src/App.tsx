@@ -126,9 +126,7 @@ class App extends React.Component<{}, IState> {
                         <Route exact path={`${ROUTING_URL_BASE}/reports/new`} render={(props) => (
                             <ReportNewForm {...props} authenticatedAgentId={authenticatedAgentId}/>
                         )} />
-                        <Route exact
-                               path={`${ROUTING_URL_BASE}/reports/report/:reportId`}
-                               component={ReportDetail}/>
+                        <Route path={`${ROUTING_URL_BASE}/reports/report/:reportId`} component={ReportDetail}/>
                     </div>
                 </div>
             </BrowserRouter>

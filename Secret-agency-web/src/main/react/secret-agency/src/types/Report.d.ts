@@ -20,3 +20,8 @@ export interface IReportCreate {
     readonly agentId: number;
     readonly missionId: number;
 }
+
+export interface IReportUpdate {
+    readonly id: number;
+    readonly text: string;
+}

@@ -1,5 +1,5 @@
-import {IReport, IReportCreate} from "../types/Report";
-import {DELETE, GET, POST, REST_URL_BASE} from "../utils/requestUtils";
+import {IReport, IReportCreate, IReportUpdate} from "../types/Report";
+import {DELETE, GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
 
 
 export function getAllReports(): Promise<IReport[]> {
@@ -42,4 +42,17 @@ export function getReportById(reportId: number): Promise<IReport | string> {
     }).catch((error) => {
         return error.response.data as string;
     });
+}
+
+/**
+ * Update selected report. Returns updated report or error message.
+ * @param reportUpdate data needed for updating report
+ */
+export async function updateReport(reportUpdate: IReportUpdate): Promise<IReport | string> {
+    return PUT<IReport>(`${REST_URL_BASE}/reports/report/${reportUpdate.id}`, reportUpdate)
+        .then(response => {
+            return response.data
+        }).catch(error => {
+            return error.response.data as string;
+        });
 }

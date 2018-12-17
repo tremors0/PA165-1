@@ -7,6 +7,8 @@ import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Button} from "react-bootstrap";
 import "./ReportsPage.css";
 
+type NavigateToDetailMode = "EDIT" | "READ-ONLY";
+
 interface IReportsPageOwnProps {
     isAuthenticatedUserAdmin: boolean;
     authenticatedUserId: number;
@@ -16,6 +18,7 @@ interface IReportPageState {
     reports: IReport[],
     isLoaded: boolean,
     navigateToDetailId: number,
+    navigateToDetailMode: NavigateToDetailMode;
 }
 
 type IState = IReportPageState;
@@ -40,7 +43,12 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
     };
 
     private onShowDetail = (reportId: number): void => {
-        this.setState(prevState => ({...prevState, navigateToDetailId: reportId}));
+        this.setState(prevState => ({...prevState, navigateToDetailId: reportId,
+            navigateToDetailMode: "READ-ONLY"}));
+    };
+
+    private onEditReport = (reportId: number): void => {
+        this.setState(prevState => ({...prevState, navigateToDetailId: reportId, navigateToDetailMode:"EDIT"}))
     };
 
     /********************************************************
@@ -53,6 +61,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
             reports: [],
             isLoaded: false,
             navigateToDetailId: -1, // -1 means don't navigate
+            navigateToDetailMode: "READ-ONLY",
         }
     }
 
@@ -83,7 +92,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
             return (
                 <div className={'ReportsPage__actions'}>
                     <Button bsStyle={'info'} onClick={() => this.onShowDetail(report.id)}>View</Button>
-                    <Button bsStyle={'success'}>Edit</Button>
+                    <Button bsStyle={'success'} onClick={() => this.onEditReport(report.id)}>Edit</Button>
                     <Button bsStyle={'danger'} onClick={() => this.onRemoveReport(report.id)}>Delete</Button>
                 </div>
             );
@@ -97,10 +106,21 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         );
     }
 
+    private getRedirectUrl(): string {
+        const currentPath = this.props.match.path;
+        const detailId = this.state.navigateToDetailId;
+        const mode = this.state.navigateToDetailMode;
+
+        const urlBase = `${currentPath}/report/${detailId}`;
+        return mode === "READ-ONLY" ? urlBase : urlBase + `/edit`;
+
+    }
+
     public render(): JSX.Element {
+        const detailId = this.state.navigateToDetailId;
         // go to detail
-        if (this.state.navigateToDetailId !== -1) {
-            return <Redirect to={`${this.props.match.path}/report/${this.state.navigateToDetailId}`}/>;
+        if (detailId !== -1) {
+            return <Redirect to={this.getRedirectUrl()}/>;
         }
 
         if (!this.state.isLoaded) {
