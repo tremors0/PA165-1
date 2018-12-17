@@ -14,6 +14,13 @@ import java.util.List;
  */
 public interface MissionService extends GenericService<Mission> {
     /**
+     * Updates mission
+     * @param mission Mission to update
+     * @return Updated mission
+     */
+    Mission updateMission(Mission mission);
+
+    /**
      * Gets all missions by given type
      * @param type to filter by
      * @return list of mission with type

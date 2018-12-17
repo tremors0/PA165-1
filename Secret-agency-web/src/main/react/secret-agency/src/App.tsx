@@ -12,7 +12,11 @@ import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
 import {ROUTING_URL_BASE} from "./utils/requestUtils";
 import {ReportsPage} from "./components/reports-page/ReportsPage";
 import {ReportNewForm} from "./components/reports-page/ReportNewForm";
+import {MissionsPage} from "./components/missions-page/MissionsPage";
+import {MissionNewPage} from "./components/missions-page/MissionNewPage";
 import {ReportDetail} from "./components/reports-page/ReportDetail";
+import {MissionEditPage} from "./components/missions-page/MissionEditPage";
+import {MissionDetailPage} from "./components/missions-page/MissionDetailPage";
 
 export interface ITab {
     title: string,
@@ -116,9 +120,29 @@ class App extends React.Component<{}, IState> {
                         <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
                     </div>
                     <div className={"content"}>
-                        <Route exact path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
-                        <Route exact path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
-                        <Route exact path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions`} render={(props) => (
+                            <MissionsPage {...props}
+                                         authenticatedUserId={authenticatedAgentId}
+                                         isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/new`} render={(props) => (
+                            <MissionNewPage {...props}
+                                            isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
+                                            authenticatedUserId={authenticatedAgentId}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/edit/:missionId`} render={(props) => (
+                            <MissionEditPage {...props}
+                                             isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
+                                             missionId={props.match.params.missionId}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/detail/:missionId`} render={(props) => (
+                            <MissionDetailPage {...props}
+                                               isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
+                                               missionId={props.match.params.missionId}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
                             <ReportsPage {...props}
                                          authenticatedUserId={authenticatedAgentId}
                                          isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>

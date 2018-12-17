@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.secretagency.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 
 import java.time.LocalDate;
@@ -36,6 +37,13 @@ public interface MissionFacade {
      * @param missionId of mission for deletion
      */
     void deleteMission(Long missionId);
+
+    /**
+     * Update mission.
+     * @param missionUpdateDTO Update DTO to update mission.
+     * @return Updated MissonDTO
+     */
+    MissionDTO updateMission(MissionUpdateDTO missionUpdateDTO);
 
     /**
      * Gets all missions by given type
