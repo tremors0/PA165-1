@@ -1,35 +1,34 @@
 import {GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
 import {IDepartment} from "../types/Department";
 
-export function getAllDepartments(): Promise<IDepartment[]> {
-    return GET(`${REST_URL_BASE}/departments`).then(
+export const getAllDepartments = (): Promise<IDepartment[]> => {
+    return GET<IDepartment[]>(`${REST_URL_BASE}/departments`).then(
         response => {
-            console.log(response.data);
-            return response.data as IDepartment[];
+            return response.data;
         }
     )
-}
+};
 
 export const createDepartment = (data: IDepartment): Promise<IDepartment> => (
-    POST(`${REST_URL_BASE}/departments`, data).then(
+    POST<IDepartment>(`${REST_URL_BASE}/departments`, data).then(
         response => {
-            return response.data as IDepartment;
+            return response.data;
         }
     )
 );
 
 export const getSpecializations = (): Promise<string[]> => (
-    GET(`${REST_URL_BASE}/departments/specializations`).then(
+    GET<string[]>(`${REST_URL_BASE}/departments/specializations`).then(
         response => {
-            return response.data as string[];
+            return response.data;
         }
     )
 );
 
 export const editDepartment = (data: IDepartment): Promise<IDepartment> => (
-    PUT(`${REST_URL_BASE}/departments/${data.id}`, data).then(
+    PUT<IDepartment>(`${REST_URL_BASE}/departments/${data.id}`, data).then(
         response => {
-            return response.data as IDepartment;
+            return response.data;
         }
     )
 );
