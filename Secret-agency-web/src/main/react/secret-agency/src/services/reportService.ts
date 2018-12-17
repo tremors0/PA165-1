@@ -15,8 +15,8 @@ export function getAllReports(): Promise<IReport[]> {
 export function createNewReport(newReport: IReportCreate): Promise<IReport | string> {
     return POST<IReport>(`${REST_URL_BASE}/reports`, newReport).then((response => {
         return response.data;
-    })).catch((response) => {
-        return response.response.data;
+    })).catch((error) => {
+        return error.message || error.response.data as string;
     });
 }
 
@@ -40,7 +40,7 @@ export function getReportById(reportId: number): Promise<IReport | string> {
     return GET<IReport>(`${REST_URL_BASE}/reports/report/${reportId}`).then((report) => {
         return report.data;
     }).catch((error) => {
-        return error.response.data as string;
+        return error.message || error.response.data as string;
     });
 }
 
@@ -53,6 +53,30 @@ export async function updateReport(reportUpdate: IReportUpdate): Promise<IReport
         .then(response => {
             return response.data
         }).catch(error => {
-            return error.response.data as string;
+            return error.message || error.response.data as string;
         });
+}
+
+/**
+ * Approve report with given id. Returns message error or nothing if report was approved.
+ * @param reportId id of the report
+ */
+export function approveReport(reportId: number): Promise<void | string> {
+    return PUT<void>(`${REST_URL_BASE}/reports/report/${reportId}/approve`).then(() => {
+        return;
+    }).catch((error: any) => {
+        return error.message || error.response.data as string;
+    });
+}
+
+/**
+ * Deny report with given id. Returns message error or nothing if report was denied.
+ * @param reportId id of the report
+ */
+export function denyReport(reportId: number): Promise<void | string> {
+    return PUT<void>(`${REST_URL_BASE}/reports/report/${reportId}/deny`).then(() => {
+        return;
+    }).catch((error: any) => {
+        return error.message || error.response.data as string;
+    });
 }

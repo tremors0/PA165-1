@@ -1,3 +1,6 @@
+.ReportsPage .table-wrapper {
+    width: 1000px;
+}
 .ReportsPage__createNewReport {
     margin-top: 10px;
 }
@@ -7,6 +10,12 @@
 }
 
 .ReportsPage__actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+}
+
+.ReportsPage__approveDeny {
     display: flex;
     justify-content: space-between;
 }
