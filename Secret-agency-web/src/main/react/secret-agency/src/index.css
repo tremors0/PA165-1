@@ -1,10 +1,21 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    height: 100vh;
 }
 
 #root {
-  height: 100vh;
+    height: 100vh;
+}
+.btn a {
+    padding: 10px 0;
+}
+
+.btn-primary a, .btn-secondary a {
+    color: white;
+}
+
+.btn-primary a:hover, .btn-secondary a:hover {
+    text-decoration: none;
 }

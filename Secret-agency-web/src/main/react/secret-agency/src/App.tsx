@@ -12,6 +12,7 @@ import {DepartmentsPage} from "./components/departments-page/DepartmentsPage";
 import {ROUTING_URL_BASE} from "./utils/requestUtils";
 import {ReportsPage} from "./components/reports-page/ReportsPage";
 import {ReportNewForm} from "./components/reports-page/ReportNewForm";
+import {ReportDetail} from "./components/reports-page/ReportDetail";
 
 export interface ITab {
     title: string,
@@ -115,16 +116,17 @@ class App extends React.Component<{}, IState> {
                         <button className="logout-button btn btn-danger" type={'button'} onClick={this.onLogout}>Log out</button>
                     </div>
                     <div className={"content"}>
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
+                        <Route exact path={`${ROUTING_URL_BASE}/agents`} component={AgentsPage} />
+                        <Route exact path={`${ROUTING_URL_BASE}/departments`} component={DepartmentsPage}/>
+                        <Route exact path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
                             <ReportsPage {...props}
                                          authenticatedUserId={authenticatedAgentId}
                                          isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}/>
                         )}/>
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/reports/new`} render={(props) => (
+                        <Route exact path={`${ROUTING_URL_BASE}/reports/new`} render={(props) => (
                             <ReportNewForm {...props} authenticatedAgentId={authenticatedAgentId}/>
                         )} />
+                        <Route path={`${ROUTING_URL_BASE}/reports/report/:reportId`} component={ReportDetail}/>
                     </div>
                 </div>
             </BrowserRouter>
