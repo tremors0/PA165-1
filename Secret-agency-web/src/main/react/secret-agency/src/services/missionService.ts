@@ -1,4 +1,4 @@
-import {GET, POST, REST_URL_BASE} from "../utils/requestUtils";
+import {GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
 import {IMission} from "../types/Mission";
 
 export function getAllMissions(): Promise<IMission[]> {
@@ -20,7 +20,15 @@ export const getMission = (missionId: number): Promise<IMission> => {
 };
 
 export const createMission = (data: IMission): Promise<IMission> => (
-    POST(`${REST_URL_BASE}/missions`, data).then(
+    POST<IMission>(`${REST_URL_BASE}/missions`, data).then(
+        response => {
+            return response.data as IMission;
+        }
+    )
+);
+
+export const updateMission = (data: IMission): Promise<IMission> => (
+    PUT<IMission>(`${REST_URL_BASE}/missions/${data.id}`, data).then(
         response => {
             return response.data as IMission;
         }

@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 
 import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionUpdateDTO;
 import cz.fi.muni.pa165.secretagency.entity.Mission;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.facade.MissionFacade;
@@ -47,6 +48,13 @@ public class MissionFacadeImpl implements MissionFacade {
     @Override
     public void deleteMission(Long missionId) {
         missionService.deleteEntityById(missionId);
+    }
+
+    @Override
+    public MissionDTO updateMission(MissionUpdateDTO missionUpdateDTO) {
+        Mission mappedMission = beanMappingService.mapTo(missionUpdateDTO, Mission.class);
+        Mission updatedMission = missionService.updateMission(mappedMission);
+        return beanMappingService.mapTo(updatedMission, MissionDTO.class);
     }
 
     @Override

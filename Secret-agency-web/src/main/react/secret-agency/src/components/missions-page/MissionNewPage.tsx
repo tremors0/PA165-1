@@ -161,8 +161,8 @@ export class MissionNewPage extends React.Component<IProps, IState> {
     }
 
     public render() {
-        // submit is completed - redirect to reports
-        if (this.state.redirectToMissionsPage) {
+        // submit is completed or non-admin tries to access this page - redirect to missions
+        if (!this.props.isAuthenticatedUserAdmin || this.state.redirectToMissionsPage) {
             return <Redirect to={`${ROUTING_URL_BASE}/missions`} />;
         }
 

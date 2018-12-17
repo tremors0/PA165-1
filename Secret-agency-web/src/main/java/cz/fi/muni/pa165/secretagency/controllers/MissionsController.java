@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.secretagency.controllers;
 import cz.fi.muni.pa165.secretagency.ApiUris;
 import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.exceptions.InvalidDeleteRequestException;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
@@ -155,6 +156,30 @@ public class MissionsController {
 
         Long missionId = missionFacade.createMission(missionCreateDTO);
         return missionFacade.getMissionById(missionId);
+    }
+
+    /**
+     * Updates mission
+     * curl --cookie "{COOKIE_VALUE}" -X PUT -i -H "Content-Type: application/json" --data
+     * '{ "latitude": "23.52", "longitude": "15.22", "missionType": "SABOTAGE", "started":"2013-02-11", "ended":"2014-10-12"}'
+     * http://localhost:8080/pa165/rest/missions/2
+     *
+     * @param id Identifier for mission
+     * @param missionUpdateDTO MissionUpdateDTO with required fields for creation
+     * @return The created mission MissionDTO
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public final MissionDTO updateMission(@PathVariable("id") Long id, @Valid @RequestBody MissionUpdateDTO missionUpdateDTO) {
+        logger.debug("rest update mission with id: {}", id);
+
+        try {
+            missionUpdateDTO.setId(id);
+            missionFacade.updateMission(missionUpdateDTO);
+            return missionFacade.getMissionById(id);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException();
+        }
     }
 
     /**

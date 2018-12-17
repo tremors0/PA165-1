@@ -39,9 +39,8 @@ export class MissionDetailPage extends React.Component<IProps, IState> {
         missionService.getMission(this.props.missionId).then(m => {
             this.setState(prevState => ({...prevState, isLoaded: true, mission: m}));
             agentService.getAllAgents().then(agents => {
-                const agentsArray = agents.data as IAgent[];
                 const assignedAgents = [] as IAgent[];
-                agentsArray.forEach(agent => {
+                agents.forEach(agent => {
                     if (m.agentIds.indexOf(agent.id) !== -1) {
                         assignedAgents.push(agent);
                     }

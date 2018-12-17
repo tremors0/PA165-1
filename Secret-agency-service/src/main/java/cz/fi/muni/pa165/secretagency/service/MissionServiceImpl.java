@@ -18,6 +18,14 @@ import java.util.List;
 public class MissionServiceImpl extends GenericServiceImpl<Mission, MissionDao> implements MissionService {
 
     @Override
+    public Mission updateMission(Mission mission) {
+        if (mission == null) {
+            throw new NullPointerException("Mission is null");
+        }
+        return getDao().merge(mission);
+    }
+
+    @Override
     public List<Mission> getMissionsWithType(MissionTypeEnum type) {
         if (type == null) {
             throw new NullPointerException("Mission type is null");
