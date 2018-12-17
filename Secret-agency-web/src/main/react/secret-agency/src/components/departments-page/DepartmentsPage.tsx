@@ -2,6 +2,8 @@ import * as React from "react";
 import "../SharedStyles.css";
 import {ChangeEvent, MouseEvent} from 'react';
 import {IDepartment} from "../../types/Department";
+import "../SharedStyles.css";
+
 import {
     createDepartment,
     editDepartment,
@@ -12,6 +14,7 @@ import {DepartmentShowRow} from "./DepartmentShowRow";
 import {DepartmentEditRow} from "./DepartmentEditRow";
 import * as Immutable from 'immutable';
 import {defineAbility} from "../../config/ability";
+import {SearchDepartmentsForm} from "./SearchDepartmentsForm";
 
 interface IDepartmentsState {
     readonly departments: Immutable.Map<number, IDepartment>;
@@ -150,6 +153,12 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
         }
     };
 
+    private onSearchChange = (departments: Immutable.Map<number, IDepartment>) => {
+        this.setState(_ => ({
+            departments,
+        }));
+    };
+
     public render() {
         if (this.state) {
             const { departments } = this.state;
@@ -170,72 +179,75 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
             );
             const {city, country,latitude, longitude, specialization} = this.state.newDepartment;
             return (
-                <div className="table-wrapper">
-                    {this.state.formErrors.length > 0 && <div className={'alert alert-danger'}>
-                        {this.state.formErrors.map((error: string, index) =>
-                            <p key={index}>{error}</p>
-                        )}
-                    </div>}
-                    <table className="data-table">
-                        <thead>
-                        <tr>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Specialization</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tableRows}
-                        {defineAbility().can('create', 'Department') &&
-                        <tr>
-                            <td>
-                                <input type={'text'} value={city}
-                                       onChange={this.onCityChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={country}
-                                       onChange={this.onCountryChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={latitude}
-                                       onChange={this.onLatitudeChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={longitude}
-                                       onChange={this.onLongitudeChange}
-                                />
-                            </td>
-                            <td>
-                                <select value={specialization}
-                                        onChange={this.onSpecializationChange}
-                                >
-                                    <option value={""}/>
-                                    {this.state.specializations.map((specializationOption: string) =>
-                                        <option key={specializationOption}
-                                                value={specializationOption}>{specializationOption}</option>
-                                    )}
-                                </select>
-                            </td>
-                            <td>
-                                <button
-                                    className={"btn btn-primary"}
-                                    type={'submit'}
-                                    value={'create'}
-                                    onClick={this.addDepartment}
-                                >
-                                    Create
-                                </button>
-                            </td>
-                        </tr>
-                        }
-                        </tbody>
-                    </table>
+                <div>
+                    <div className="table-wrapper">
+                        {this.state.formErrors.length > 0 && <div className={'alert alert-danger'}>
+                            {this.state.formErrors.map((error: string, index) =>
+                                <p key={index}>{error}</p>
+                            )}
+                        </div>}
+                        <table className="data-table">
+                            <thead>
+                            <tr>
+                                <th>City</th>
+                                <th>Country</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Specialization</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tableRows}
+                            {defineAbility().can('create', 'Department') &&
+                            <tr>
+                                <td>
+                                    <input type={'text'} value={city}
+                                           onChange={this.onCityChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={country}
+                                           onChange={this.onCountryChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={latitude}
+                                           onChange={this.onLatitudeChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={longitude}
+                                           onChange={this.onLongitudeChange}
+                                    />
+                                </td>
+                                <td>
+                                    <select value={specialization}
+                                            onChange={this.onSpecializationChange}
+                                    >
+                                        <option value={""}/>
+                                        {this.state.specializations.map((specializationOption: string) =>
+                                            <option key={specializationOption}
+                                                    value={specializationOption}>{specializationOption}</option>
+                                        )}
+                                    </select>
+                                </td>
+                                <td>
+                                    <button
+                                        className={"btn btn-primary"}
+                                        type={'submit'}
+                                        value={'create'}
+                                        onClick={this.addDepartment}
+                                    >
+                                        Create
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <SearchDepartmentsForm onSearch={this.onSearchChange}/>
                 </div>
             )
         } else {

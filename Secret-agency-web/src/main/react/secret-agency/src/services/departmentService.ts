@@ -32,3 +32,27 @@ export const editDepartment = (data: IDepartment): Promise<IDepartment> => (
         }
     )
 );
+
+export const getDepartmentsByCity = (city: string): Promise<IDepartment[]> => {
+    return GET<IDepartment[]>(`${REST_URL_BASE}/departments/city/${city}`).then(
+        response => {
+            return response.data;
+        }
+    )
+};
+
+export const getDepartmentsByCountry = (country: string): Promise<IDepartment[]> => {
+    return GET<IDepartment[]>(`${REST_URL_BASE}/departments/country/${country}`).then(
+        response => {
+            return response.data;
+        }
+    )
+};
+
+export const getDepartmentsBySpecialization = (specialization: string): Promise<IDepartment[]> => {
+    return GET<IDepartment[]>(`${REST_URL_BASE}/departments/specialization/${specialization}`).then(
+        response => {
+            return response.data;
+        }
+    )
+};
