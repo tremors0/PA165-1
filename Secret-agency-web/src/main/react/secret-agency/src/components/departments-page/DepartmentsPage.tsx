@@ -5,7 +5,7 @@ import {IDepartment} from "../../types/Department";
 import "../SharedStyles.css";
 
 import {
-    createDepartment,
+    createDepartment, deleteDepartment,
     editDepartment,
     getAllDepartments,
     getSpecializations
@@ -22,6 +22,7 @@ interface IDepartmentsState {
     readonly specializations: string[];
     readonly editedDepartmentId: number | null;
     readonly formErrors: string[];
+    readonly initServerError: string;
 }
 
 interface INewDepartment {
@@ -34,48 +35,62 @@ interface INewDepartment {
 
 export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
     public async componentDidMount() {
-        const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
-            (department: IDepartment) => [
-                department.id, department
-            ]
-        ));
-        const specializations = await getSpecializations();
-        const newDepartment = {
-            city: '',
-            country: '',
-            latitude: '',
-            longitude: '',
-            specialization: '',
-        };
-        this.setState({
-            departments,
-            newDepartment,
-            specializations,
-            editedDepartmentId: null,
-            formErrors: [],
-        });
+
+        try {
+            const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
+                (department: IDepartment) => [
+                    department.id, department
+                ]
+            ));
+            const specializations = await getSpecializations();
+            const newDepartment = {
+                city: '',
+                country: '',
+                latitude: '',
+                longitude: '',
+                specialization: '',
+            };
+            this.setState({
+                departments,
+                newDepartment,
+                specializations,
+                editedDepartmentId: null,
+                formErrors: [],
+                initServerError: "",
+            });
+        } catch (e) {
+            this.setState(_ => ({
+                initServerError: e.message,
+            }));
+        }
     };
+
 
     private addDepartment = async (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const {city, country, latitude, longitude, specialization} = this.state.newDepartment;
-        const department: IDepartment = {
-            id: 1, // temporary id, will be given from API
-            city,
-            country,
-            latitude: parseFloat(latitude),
-            longitude: parseFloat(longitude),
-            specialization
-        };
-        const errors = this.validate(department);
-        if (errors.length === 0) {
-            const createdDepartment = await createDepartment(department);
-            this.setState((prevState) => ({
-                departments: prevState.departments.set(createdDepartment.id, createdDepartment)
-            }));
-            this.setState(_ => ({editedDepartmentId: null}));
-        } else {
-            this.setState( _ => ({formErrors: errors}));
+        try {
+            const department: IDepartment = {
+                id: 1, // temporary id, will be given from API
+                city,
+                country,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                specialization,
+                agentIds: [],
+            };
+            const errors = this.validate(department);
+            if (errors.length === 0) {
+                const createdDepartment = await createDepartment(department);
+                this.setState((prevState) => ({
+                    departments: prevState.departments.set(createdDepartment.id, createdDepartment)
+                }));
+                this.setState(_ => ({editedDepartmentId: null, formErrors: []}));
+            } else {
+                this.setState(_ => ({formErrors: errors}));
+            }
+        } catch (e) {
+            this.setState(_ => ({formErrors: [e.message]}));
         }
 
     };
@@ -142,14 +157,18 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
 
     private onEdit = async (department: IDepartment) => {
         const errors = this.validate(department);
-        if (errors.length === 0) {
-            const editedDepartment = await editDepartment(department);
-            this.setState((prevState) => ({
-                departments: prevState.departments.set(editedDepartment.id, editedDepartment)
-            }));
-            this.setState(_ => ({editedDepartmentId: null}));
-        } else {
-            this.setState( _ => ({formErrors: errors}));
+        try {
+            if (errors.length === 0) {
+                const editedDepartment = await editDepartment(department);
+                this.setState((prevState) => ({
+                    departments: prevState.departments.set(editedDepartment.id, editedDepartment)
+                }));
+                this.setState(_ => ({editedDepartmentId: null, formErrors: []}));
+            } else {
+                this.setState( _ => ({formErrors: errors}));
+            }
+        } catch (e) {
+            this.setState(_ => ({formErrors: [e.message]}));
         }
     };
 
@@ -159,8 +178,43 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
         }));
     };
 
+    private onDelete = async (departmentId: number) => {
+        const department = this.state.departments.get(departmentId);
+        if (department.agentIds.length > 0) {
+            this.setState(_ => ({
+                formErrors: ["There are still some agents in this department, fire them before you tear down the building"]
+            }))
+        } else {
+            try {
+                await deleteDepartment(department.id);
+                const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
+                    (dep: IDepartment) => [
+                        dep.id, dep
+                    ]
+                ));
+
+                this.setState(_ => ({
+                    departments,
+                    formErrors: [],
+                }));
+
+            } catch (e) {
+                this.setState( _ => ({
+                    formErrors: [e.message],
+                }));
+            }
+        }
+    };
+
     public render() {
         if (this.state) {
+            if (this.state.initServerError) {
+                return (
+                    <div className={'alert alert-danger col-sm12'}>
+                        {this.state.initServerError}
+                    </div>
+                );
+            }
             const { departments } = this.state;
             const tableRows = departments.keySeq().map((key: number) =>
                 this.state.editedDepartmentId === key ?
@@ -174,7 +228,8 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
                 <DepartmentShowRow
                     key={key}
                     department={departments.get(key)}
-                    onStartEdit={this.startEditDepartment.bind(this, key)}
+                    onStartEdit={() => this.startEditDepartment(key)}
+                    onDelete={() => this.onDelete(key)}
                 />
             );
             const {city, country,latitude, longitude, specialization} = this.state.newDepartment;
