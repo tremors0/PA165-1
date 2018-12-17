@@ -3,6 +3,7 @@ export interface IMission {
     readonly name: string;
     // TODO finish after RestController is ready
     readonly agentIds: number[];
+    readonly reportIds: number[];
 }
 
 export interface IMissionSelectOption {

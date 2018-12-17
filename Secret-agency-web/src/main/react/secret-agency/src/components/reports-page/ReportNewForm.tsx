@@ -7,7 +7,7 @@ import * as missionService from "../../services/missionService";
 import "./ReportNewForm.css";
 import {Redirect} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
-import {IMissionSelectOption} from "../../types/Mission";
+import {IMission, IMissionSelectOption} from "../../types/Mission";
 import {AlertCloseable} from "../alert-closeable/AlertCloseable";
 
 
@@ -20,8 +20,7 @@ interface IReportNewFormState {
     // form data
     readonly text: string;
     readonly missionResult: MissionResult;
-    readonly agentId: number | null;
-    readonly missionId: number | null;
+    readonly missionId: number;
 
     // mission ids for select
     readonly missionIdsOptions: IMissionSelectOption[];
@@ -31,7 +30,6 @@ interface IReportNewFormState {
     readonly isLoading: boolean;
 
     // errors
-    readonly hasError: boolean;
     readonly loadingError: string;
     readonly submitError: string;
     readonly createError: string;
@@ -51,9 +49,8 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
      * EVENT HANDLERS
      *******************************************************/
     private onReportTextChange = (e: FormEvent<FormControl>): void => {
-        const text = (e.target as HTMLTextAreaElement).value.trim();
-        const isMessageTooShort = text.length < 10;
-        this.setState((prevState) => ({...prevState, text, hasError: isMessageTooShort, submitError: ""}));
+        const text = (e.target as HTMLTextAreaElement).value;
+        this.setState((prevState) => ({...prevState, text, submitError: ""}));
     };
 
     private onReportStatusChange = (e: FormEvent<FormControl>): void => {
@@ -76,11 +73,12 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
         // new request - hide previous error
         this.setState(prevState => ({...prevState, createError: ""}));
 
-        const {missionId, agentId, text, missionResult} = this.state;
+        const {missionId, text, missionResult} = this.state;
+        const agentId = this.props.authenticatedAgentId;
 
         // validate data
-        if (missionId == null || agentId == null || this.state.hasError) {
-            const submitError = "Form is not valid.";
+        if (this.state.text.trim().length < 10) {
+            const submitError = "Report is not long enough";
             this.setState(prevState => ({...prevState, submitError}));
             return;
         }
@@ -107,35 +105,72 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
         this.state = {
             text: "",
             missionResult: "COMPLETED",
-            agentId: null,
-            missionId: null,
+            missionId: -1, // fake id - is changed after componentDidMount method
             redirectToReportsPage: false,
             isLoading: true,
             missionIdsOptions: [],
-            hasError: false,
             loadingError: "",
             submitError: "",
             createError: "",
         }
     }
 
-    public componentDidMount() {
-        missionService.getAllMissions().then((missions) => {
-            const authenticatedAgentId = this.props.authenticatedAgentId;
-            const agentsMissionsOptions = missions.filter(mission => mission.agentIds.indexOf(authenticatedAgentId) !== -1)
-                                                  .map(mission => ({ id: mission.id, name: mission.name }));
-            this.setState(prevState => ({...prevState, missionIdsOptions: agentsMissionsOptions, isLoading: false}));
-        }).catch(() => {
+    /**
+     * Prepare values for mission select when component is mounted.
+     */
+    public async componentDidMount() {
+        let missions: IMission[] = [];
+        try {
+            missions = await missionService.getAllMissions();
+        } catch (e) {
             const requestError = "Cannot load missions for authenticated agent";
             this.setState(prevState => ({...prevState, requestError, isLoading: false}));
-        });
+        }
+
+        const agentsMissionsOptions = await this.getMissionOptionsForSelect(missions);
+        const missionId = agentsMissionsOptions.length === 0 ? -1 : agentsMissionsOptions[0].id;
+        this.setState(prevState => ({...prevState, missionIdsOptions: agentsMissionsOptions,
+            isLoading: false, missionId}));
+
     }
 
-    public componentWillReceiveProps(newProps: IProps) {
-        const agentId = newProps.authenticatedAgentId;
-        if (agentId !== this.state.agentId) {
-            this.setState(prevState => ({...prevState, agentId}));
-        }
+    /**
+     * Return options for mission select. Should return only missions, in which given agent took part
+     *   and for which the agent has not written the review yet.
+     * @param missions all missions
+     */
+    private async getMissionOptionsForSelect(missions: IMission[]): Promise<IMissionSelectOption[]> {
+        const missionsJoinedByAgent = this.getMissionsJoinedByAgent(missions);
+        const missionsJoinedByAgentWithoutReports = await this.filterMissionsAgentAlreadyWroteReview(missionsJoinedByAgent);
+        return missionsJoinedByAgentWithoutReports.map((mission) => ({id: mission.id, name: mission.name}));
+    }
+
+    /**
+     * Return missions in which logged user took part.
+     * @param missions missions in which logged user took part
+     */
+    private getMissionsJoinedByAgent(missions: IMission[]): IMission[] {
+        return missions.filter(mission => mission.agentIds.indexOf(this.props.authenticatedAgentId) !== -1);
+    }
+
+    /**
+     * Returns missions for which user has not written review yet.
+     * @param missionsJoinedByLoggedAgent missions for which user has not written review yet
+     */
+    private async filterMissionsAgentAlreadyWroteReview(missionsJoinedByLoggedAgent: IMission[]): Promise<IMission[]> {
+        const reports = await reportService.getAllReports();
+        const reportsFromLoggedUserIds = reports.filter(report => report.agent.id === this.props.authenticatedAgentId)
+                                                .map(report => report.id);
+        const result: IMission[] = [];
+        missionsJoinedByLoggedAgent.forEach(mission => {
+           for(const reportId of reportsFromLoggedUserIds) {
+               if (mission.reportIds.indexOf(reportId) >= 0) {
+                   return;
+               }
+           }
+           result.push(mission);
+        });
+        return result;
     }
 
     /********************************************************
@@ -154,11 +189,9 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
         ));
     }
 
-    private getTextValidationState(): "success" | "warning" | "error" {
-        if (this.state.text.length < 10) {
-            return "error"
-        }
-        return "success";
+    private getMissionNameForId(id: number):string {
+        return this.state.missionIdsOptions.filter((missionOpt) => missionOpt.id === id)
+                                           .map((mission) => mission.name)[0];
     }
 
 
@@ -177,41 +210,50 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
         if (this.state.loadingError !== "") {
             return <Alert bsStyle={"danger"}>{this.state.loadingError}</Alert>
         }
-
-        const missionResultOptions = this.getMissionResultOptions();
         const missionOptions = this.getMissionOptions();
 
         // form is loaded but agent does not participate on any mission
         if (missionOptions.length === 0) {
-            return (<Alert bsStyle={"info"}>You don't participate on any mission</Alert>);
+            return (
+                <Alert bsStyle={"info"}>
+                    You don't participate on any mission or you've written the review already.
+                </Alert>
+            );
         }
+
+        const selectedMissionId = this.state.missionId;
+        const selectedMissionName = this.getMissionNameForId(selectedMissionId) || "";
+        const missionResultOptions = this.getMissionResultOptions();
 
         return (
             <div className={'ReportNewForm'}>
-                <h2>Create new report {this.state.missionId != null && `for mission ${this.state.missionId}`}</h2>
-
                 <AlertCloseable bsStyle={'danger'}
                                 isVisible={this.state.createError !== ""}
                                 onHide={this.onCloseCreateAlert}>
                     {this.state.createError}
-                </AlertCloseable>);
+                </AlertCloseable>
 
-                <form className={'ReportNewForm__form'}>
+                <h2>Create new report for mission {selectedMissionId !== -1 &&
+                    <span className={'text-primary'}>{selectedMissionName}</span>}
+                </h2>
+
+                <form className={'ReportNewForm__form'} noValidate={true}>
                     <FormGroup controlId={'ReportNewForm__selectMission'}>
                         <ControlLabel>Mission</ControlLabel>
                         <FormControl componentClass={'select'}
-                                     value={this.state.missionId!}
+                                     value={selectedMissionId}
                                      onChange={this.onMissionChange}>
                             {missionOptions}
                         </FormControl>
                     </FormGroup>
-                    <FormGroup controlId={'ReportNewForm__text'} validationState={this.getTextValidationState()}>
+                    <FormGroup controlId={'ReportNewForm__text'}>
                         <ControlLabel>Report</ControlLabel>
                         <FormControl componentClass={'textarea'}
                                      value={this.state.text}
                                      placeholder={'Report must contain at least 10 characters'}
-                                     onChange={this.onReportTextChange}/>
-                        <FormControl.Feedback />
+                                     onChange={this.onReportTextChange}
+                                     className={this.state.submitError && "is-invalid"}/>
+                        {this.state.submitError && <div className={'text-danger small'}>{this.state.submitError}</div>}
                     </FormGroup>
                     <FormGroup controlId={'ReportNewForm__missionResult'}>
                         <ControlLabel>Result of your work</ControlLabel>
@@ -223,7 +265,7 @@ export class ReportNewForm extends React.PureComponent<IProps, IState> {
                     </FormGroup>
                 </form>
 
-                <Button bsStyle={"primary"} type={"submit"} onChange={this.onSubmit}>Submit</Button>
+                <Button bsStyle={"primary"} type={"submit"} onClick={this.onSubmit}>Submit</Button>
             </div>
         )
     }
