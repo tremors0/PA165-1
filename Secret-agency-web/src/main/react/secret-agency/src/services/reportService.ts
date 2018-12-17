@@ -1,5 +1,6 @@
 import {IReport, IReportCreate, IReportUpdate} from "../types/Report";
 import {DELETE, GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
+import {AxiosError} from "axios";
 
 
 export function getAllReports(): Promise<IReport[]> {
@@ -15,8 +16,8 @@ export function getAllReports(): Promise<IReport[]> {
 export function createNewReport(newReport: IReportCreate): Promise<IReport | string> {
     return POST<IReport>(`${REST_URL_BASE}/reports`, newReport).then((response => {
         return response.data;
-    })).catch((error) => {
-        return error.message || error.response.data as string;
+    })).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
     });
 }
 
@@ -39,8 +40,8 @@ export function deleteReport(reportId: number): Promise<boolean> {
 export function getReportById(reportId: number): Promise<IReport | string> {
     return GET<IReport>(`${REST_URL_BASE}/reports/report/${reportId}`).then((report) => {
         return report.data;
-    }).catch((error) => {
-        return error.message || error.response.data as string;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
     });
 }
 
@@ -52,8 +53,8 @@ export async function updateReport(reportUpdate: IReportUpdate): Promise<IReport
     return PUT<IReport>(`${REST_URL_BASE}/reports/report/${reportUpdate.id}`, reportUpdate)
         .then(response => {
             return response.data
-        }).catch(error => {
-            return error.message || error.response.data as string;
+        }).catch((error: AxiosError) => {
+            return error.response ? error.response.data.message : error.message;
         });
 }
 
@@ -64,8 +65,8 @@ export async function updateReport(reportUpdate: IReportUpdate): Promise<IReport
 export function approveReport(reportId: number): Promise<void | string> {
     return PUT<void>(`${REST_URL_BASE}/reports/report/${reportId}/approve`).then(() => {
         return;
-    }).catch((error: any) => {
-        return error.message || error.response.data as string;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
     });
 }
 
@@ -76,7 +77,34 @@ export function approveReport(reportId: number): Promise<void | string> {
 export function denyReport(reportId: number): Promise<void | string> {
     return PUT<void>(`${REST_URL_BASE}/reports/report/${reportId}/deny`).then(() => {
         return;
-    }).catch((error: any) => {
-        return error.message || error.response.data as string;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
+    });
+}
+
+// /interval/{dateFrom}/{dateTo}
+export function getReportsFromInterval(dateFrom: string, dateTo: string): Promise<IReport[] | string> {
+    return GET<IReport[]>(`${REST_URL_BASE}/reports/interval/${dateFrom}/${dateTo}`).then((response) => {
+        return response.data;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
+    });
+}
+
+// /missionResult/{missionResult}
+export function getReportsWithResult(result: string): Promise<IReport[] | string> {
+    return GET<IReport[]>(`${REST_URL_BASE}/reports/missionResult/${result}`).then((response) => {
+        return response.data;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
+    });
+}
+
+// /reportStatus/{reportStatus}
+export function getreportsWithStatus(status: string,): Promise<IReport[] | string> {
+    return GET<IReport[]>(`${REST_URL_BASE}/reports/reportStatus/${status}`).then((response) => {
+        return response.data;
+    }).catch((error: AxiosError) => {
+        return error.response ? error.response.data.message : error.message;
     });
 }
