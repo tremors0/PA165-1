@@ -64,6 +64,10 @@ public class InitDataFacadeImpl implements InitDataFacade {
         Mission getDrunkDuringCeremony = createMission(50.08804, 14.42076, MissionTypeEnum.SABOTAGE,
                 LocalDate.of(2014, 11, 7), LocalDate.of(2014, 11, 7),
                 "getDrunkDuringCeremony");
+        Mission makeKosteleckeUzeninyGreatAgain = createMission(48.08804, 16.2,
+                MissionTypeEnum.SABOTAGE, LocalDate.of(2014, 11, 7),
+                LocalDate.of(2014, 11, 7), "MakeKosteleckeUzeninyGreatAgain");
+
 
         // creating reports
         Report transportBabisJrToKrymReport = createReport("Transport of Babis Jr to Krym was successful.",
@@ -83,12 +87,13 @@ public class InitDataFacadeImpl implements InitDataFacade {
         transportBabisJrToKrym.addReport(transportBabisJrToKrymReport, babis);
         getDrunkDuringCeremony.addAgent(zMan);
         getDrunkDuringCeremony.addReport(getDrunkReport, zMan);
+        makeKosteleckeUzeninyGreatAgain.addAgent(babis);
 
         // save entities
         // order of loading entities into database: Department -> Agent -> Mission -> Report
         saveDepartments(prague, london);
         saveAgents(babis, bond, zMan, orange);
-        saveMissions(transportBabisJrToKrym, getDrunkDuringCeremony);
+        saveMissions(transportBabisJrToKrym, getDrunkDuringCeremony, makeKosteleckeUzeninyGreatAgain);
         saveReports(getDrunkReport, transportBabisJrToKrymReport);
     }
 
