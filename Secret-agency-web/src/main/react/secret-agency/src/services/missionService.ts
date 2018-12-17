@@ -13,6 +13,12 @@ export function getAllTypes(): Promise<string[]> {
     });
 }
 
+export const getMission = (missionId: number): Promise<IMission> => {
+    return GET<IMission>(`${REST_URL_BASE}/missions/${missionId}`).then(response =>{
+       return response.data as IMission;
+    });
+};
+
 export const createMission = (data: IMission): Promise<IMission> => (
     POST(`${REST_URL_BASE}/missions`, data).then(
         response => {

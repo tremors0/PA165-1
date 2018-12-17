@@ -4,6 +4,7 @@ import * as missionService from "../../services/missionService";
 import {IMission} from "../../types/Mission";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Link} from "react-router-dom";
+import {Button} from "react-bootstrap";
 
 interface IMissionsState {
     activeMissions: IMission[];
@@ -93,16 +94,23 @@ function RenderTable(props: ITableProps) {
         return <div className={'alert alert-info'}>{infoString}</div>;
     }
 
+    const handleDelete = (missionId: number) => {
+        alert("Delete mission with id" + missionId);
+    };
+
     const rows = props.missions.map(mission =>
         <tr key={mission.id}>
-            <td>{mission.name}</td>
+            <td><Link to={`${ROUTING_URL_BASE}/missions/detail/${mission.id}`}>{mission.name}</Link></td>
             <td>{mission.latitude}</td>
             <td>{mission.longitude}</td>
             <td>{mission.missionType}</td>
             <td>{mission.started}</td>
             {props.isShowCompleted && <td>{mission.ended}</td>}
             <td>{mission.agentIds.length}</td>
-            {props.isAdmin && <td>EDIT AND DELETE</td>}
+            {props.isAdmin && <td>
+                <Link className={"btn btn-primary ml-1"} to={`${ROUTING_URL_BASE}/missions/edit/${mission.id}`}>Edit</Link>
+                <Button className={"btn btn-danger mt-1 ml-1"} onClick={() => handleDelete(mission.id)}>Delete</Button>
+            </td>}
         </tr>
     );
 

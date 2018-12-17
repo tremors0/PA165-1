@@ -14,6 +14,8 @@ import {ReportsPage} from "./components/reports-page/ReportsPage";
 import {ReportNewForm} from "./components/reports-page/ReportNewForm";
 import {MissionsPage} from "./components/missions-page/MissionsPage";
 import {MissionNewPage} from "./components/missions-page/MissionNewPage";
+import {MissionEditPage} from "./components/missions-page/MissionEditPage";
+import {MissionDetailPage} from "./components/missions-page/MissionDetailPage";
 
 export interface ITab {
     title: string,
@@ -128,6 +130,15 @@ class App extends React.Component<{}, IState> {
                             <MissionNewPage {...props}
                                             isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
                                             authenticatedUserId={authenticatedAgentId}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/edit/:missionId`} render={(props) => (
+                            <MissionEditPage {...props}
+                                             isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
+                                             missionId={props.match.params.missionId}/>
+                        )}/>
+                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/detail/:missionId`} render={(props) => (
+                            <MissionDetailPage {...props}
+                                             missionId={props.match.params.missionId}/>
                         )}/>
                         <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
                             <ReportsPage {...props}
