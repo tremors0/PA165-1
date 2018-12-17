@@ -66,6 +66,66 @@ export class MissionsPage extends React.Component<IProps, IState> {
         return this.filterMissions(missions).filter(mission => mission.ended !== null);
     }
 
+    /**
+     * Function to render table of missions
+     * @param props Missions to render
+     */
+    private renderTable(props: ITableProps) {
+        const showOnlyInfo = props.missions.length === 0;
+        const infoString = props.isShowCompleted ? "There are no completed missions" : "There are no active missions";
+        if (showOnlyInfo) {
+            return <div className={'alert alert-info'}>{infoString}</div>;
+        }
+
+        const handleDelete = (missionId: number) => {
+            const response = confirm("Delete mission? Will also delete all reports.");
+            if (response) {
+                missionService.deleteMission(missionId);
+                const completed = this.state.completedMissions.filter(m => m.id !== missionId);
+                const active = this.state.activeMissions.filter(m => m.id !== missionId);
+                this.setState(prevState => ({...prevState, completedMissions: completed, activeMissions: active}));
+            }
+        };
+
+        const rows = props.missions.map(mission =>
+            <tr key={mission.id}>
+                <td><Link to={`${ROUTING_URL_BASE}/missions/detail/${mission.id}`}>{mission.name}</Link></td>
+                <td>{mission.latitude}</td>
+                <td>{mission.longitude}</td>
+                <td>{mission.missionType}</td>
+                <td>{mission.started}</td>
+                {props.isShowCompleted && <td>{mission.ended}</td>}
+                <td>{mission.agentIds.length}</td>
+                {props.isAdmin && <td>
+                    <Link className={"btn btn-primary mt-1 ml-1"} to={`${ROUTING_URL_BASE}/missions/edit/${mission.id}`}>Edit</Link>
+                    <Button className={"btn btn-danger mt-1 ml-1"} onClick={() => handleDelete(mission.id)}>Delete</Button>
+                </td>}
+            </tr>
+        );
+
+        return (
+            <div>
+                <table className="data-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Type</th>
+                        <th>Started</th>
+                        {props.isShowCompleted && <th>Ended</th>}
+                        <th>Assigned Agents</th>
+                        {props.isAdmin && <th>Actions</th>}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rows}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
     public render() {
         if (!this.state.isLoaded) {
             return <div>Loading table...</div>;
@@ -74,65 +134,11 @@ export class MissionsPage extends React.Component<IProps, IState> {
         return (
             <div className={"MissionsPage mb-5"}>
                 <h4 className={"mt-5"}>Active Missions <span className={"badge badge-success"}>{this.state.activeMissions.length}</span></h4>
-                <RenderTable missions={this.state.activeMissions} isShowCompleted={false} isAdmin={this.props.isAuthenticatedUserAdmin}/>
+                {this.renderTable({missions: this.state.activeMissions, isShowCompleted: false, isAdmin: this.props.isAuthenticatedUserAdmin})}
                 <h4 className={"mt-5"}>Completed Missions <span className={"badge badge-dark"}>{this.state.completedMissions.length}</span></h4>
-                <RenderTable missions={this.state.completedMissions} isShowCompleted={true} isAdmin={this.props.isAuthenticatedUserAdmin}/>
+                {this.renderTable({missions: this.state.completedMissions, isShowCompleted: true, isAdmin: this.props.isAuthenticatedUserAdmin})}
                 {this.props.isAuthenticatedUserAdmin && <Link className={"btn btn-success mt-4"} to={`${ROUTING_URL_BASE}/missions/new`}>Create mission</Link>}
             </div>
         )
     }
-}
-
-/**
- * Function to render table of missions
- * @param props Missions to render
- */
-function RenderTable(props: ITableProps) {
-    const showOnlyInfo = props.missions.length === 0;
-    const infoString = props.isShowCompleted ? "There are no completed missions" : "There are no active missions";
-    if (showOnlyInfo) {
-        return <div className={'alert alert-info'}>{infoString}</div>;
-    }
-
-    const handleDelete = (missionId: number) => {
-        alert("Delete mission with id" + missionId);
-    };
-
-    const rows = props.missions.map(mission =>
-        <tr key={mission.id}>
-            <td><Link to={`${ROUTING_URL_BASE}/missions/detail/${mission.id}`}>{mission.name}</Link></td>
-            <td>{mission.latitude}</td>
-            <td>{mission.longitude}</td>
-            <td>{mission.missionType}</td>
-            <td>{mission.started}</td>
-            {props.isShowCompleted && <td>{mission.ended}</td>}
-            <td>{mission.agentIds.length}</td>
-            {props.isAdmin && <td>
-                <Link className={"btn btn-primary ml-1"} to={`${ROUTING_URL_BASE}/missions/edit/${mission.id}`}>Edit</Link>
-                <Button className={"btn btn-danger mt-1 ml-1"} onClick={() => handleDelete(mission.id)}>Delete</Button>
-            </td>}
-        </tr>
-    );
-
-    return (
-        <div className="table-wrapper">
-            <table className="data-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Type</th>
-                    <th>Started</th>
-                    {props.isShowCompleted && <th>Ended</th>}
-                    <th>Assigned Agents</th>
-                    {props.isAdmin && <th>Actions</th>}
-                </tr>
-                </thead>
-                <tbody>
-                {rows}
-                </tbody>
-            </table>
-        </div>
-    );
 }

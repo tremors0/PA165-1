@@ -6,6 +6,8 @@ import {Redirect} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Link} from "react-router-dom";
 import {IMission} from "../../types/Mission";
+import DatePicker from "react-datepicker";
+import * as moment from "moment";
 
 // INTERFACES FOR COMPONENT
 interface IMissionEditPageProps {
@@ -85,7 +87,7 @@ export class MissionEditPage extends React.Component<IProps, IState> {
                 longitude: mission.longitude,
                 missionType: mission.missionType,
                 started: mission.started.toString(),
-                ended: mission.ended.toString()
+                ended: mission.ended === null ? "" : mission.ended.toString()
             }))
         })
     }
@@ -109,14 +111,16 @@ export class MissionEditPage extends React.Component<IProps, IState> {
 
     };
 
-    private onStartedChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const startedDate = e.currentTarget.value;
-        this.setState(prevState => ({...prevState, started: startedDate}));
+    private onStartedChange = (date: Date | null): void => {
+        if (date !== null) {
+            this.setState(prevState => ({...prevState, started: moment(date).format('YYYY-MM-DD')}));
+        }
     };
 
-    private onEndedChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const endedDate = e.currentTarget.value;
-        this.setState(prevState => ({...prevState, started: endedDate}));
+    private onEndedChange = (date: Date | null): void => {
+        if (date !== null) {
+            this.setState(prevState => ({...prevState, ended: moment(date).format('YYYY-MM-DD')}));
+        }
     };
 
     private onMissionTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
@@ -158,8 +162,14 @@ export class MissionEditPage extends React.Component<IProps, IState> {
             this.setState(prevState => ({...prevState, startedError: true}));
             isFormValid=false;
         }
-        if (!this.isDate(this.state.ended)) {
+        if (this.state.ended !== "" && !this.isDate(this.state.ended)) {
             this.setState(prevState => ({...prevState, endedError: true}));
+            isFormValid=false;
+        }
+        const startedDate = new Date(Date.parse(this.state.started));
+        const endedDate = (this.state.ended !== "") ? new Date(Date.parse(this.state.ended)) : null;
+        if (endedDate !== null && startedDate > endedDate) {
+            this.setState(prevState => ({...prevState, startedError: true, endedError: true}));
             isFormValid=false;
         }
         if (!isFormValid) {return;}
@@ -171,8 +181,8 @@ export class MissionEditPage extends React.Component<IProps, IState> {
             latitude: this.state.latitude,
             longitude: this.state.longitude,
             missionType: this.state.missionType,
-            started: new Date(Date.parse(this.state.started)),
-            ended: new Date(Date.parse(this.state.ended))
+            started: startedDate,
+            ended: endedDate
         } as IMission;
 
         // save new mission and handle response
@@ -204,6 +214,19 @@ export class MissionEditPage extends React.Component<IProps, IState> {
         // server responded with error - form cannot be loaded
         if (this.state.errorMsg !== "") {
             return <Alert bsStyle={"danger"}>{this.state.errorMsg}</Alert>
+        }
+
+        let endedMsg = "OK";
+        let startedMsg = "OK";
+        if (this.state.startedError) {
+            startedMsg = "Required Date (required format: yyyy-MM-dd)";
+        }
+        if (this.state.endedError) {
+            endedMsg = "Invalid format (required format: yyyy-MM-dd)";
+        }
+        if (this.state.startedError && this.state.endedError) {
+            endedMsg = "Started date have to be at the same day or before ended date!";
+            startedMsg = "Started date have to be at the same day or before ended date!";
         }
 
         return (
@@ -253,21 +276,21 @@ export class MissionEditPage extends React.Component<IProps, IState> {
                     </div>
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
-                            <label htmlFor={"startedInput"}>Start date</label>
-                            <input type={"text"}  className={this.state.startedError ? "form-control is-invalid" : "form-control is-valid"}
-                                   id={"startedInput"} placeholder={"Start date"} value={this.state.started} onChange={this.onStartedChange}/>
-                            <div className={this.state.startedError ? "invalid-feedback" : "valid-feedback"}>
-                                {this.state.startedError ? "Invalid Date (required format: yyyy-MM-dd)" : "OK"}
+                            <label className={"mr-2"} htmlFor={"startedInput"}>Start date</label>
+                            <DatePicker id={"startedInput"} className={this.state.startedError ? "form-control is-invalid" : "form-control is-valid"}
+                                        value={this.state.started} placeholderText={"Pick start date"} onChange={this.onStartedChange}/>
+                            <div className={this.state.startedError ? "d-block invalid-feedback" : "d-block valid-feedback"}>
+                                {startedMsg}
                             </div>
                         </div>
                     </div>
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
-                            <label htmlFor={"endedInput"}>End date</label>
-                            <input type={"text"}  className={this.state.endedError ? "form-control is-invalid" : "form-control is-valid"}
-                                   id={"endedInput"} placeholder={"End date"} value={this.state.ended} onChange={this.onEndedChange}/>
-                            <div className={this.state.endedError ? "invalid-feedback" : "valid-feedback"}>
-                                {this.state.endedError ? "Invalid Date (required format: yyyy-MM-dd)" : "OK"}
+                            <label className={"mr-2"} htmlFor={"endedInput"}>End date</label>
+                            <DatePicker id={"endedInput"} className={this.state.endedError ? "form-control is-invalid" : "form-control is-valid"}
+                                        value={this.state.ended} placeholderText={"Pick end date"} onChange={this.onEndedChange}/>
+                            <div className={this.state.endedError ? "d-block invalid-feedback" : "d-block valid-feedback"}>
+                                {endedMsg}
                             </div>
                         </div>
                     </div>

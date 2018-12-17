@@ -6,6 +6,9 @@ import {Redirect} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Link} from "react-router-dom";
 import {IMission} from "../../types/Mission";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import * as moment from "moment";
 
 
 // INTERFACES FOR COMPONENT
@@ -96,9 +99,10 @@ export class MissionNewPage extends React.Component<IProps, IState> {
 
     };
 
-    private onStartedChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const startedDate = e.currentTarget.value;
-        this.setState(prevState => ({...prevState, started: startedDate}));
+    private onStartedChange = (date: Date | null): void => {
+        if (date !== null) {
+            this.setState(prevState => ({...prevState, started: moment(date).format('YYYY-MM-DD')}));
+        }
     };
 
     private onMissionTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
@@ -223,11 +227,11 @@ export class MissionNewPage extends React.Component<IProps, IState> {
                     </div>
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>
-                            <label htmlFor={"startedInput"}>Start date</label>
-                            <input type={"text"}  className={this.state.startedError ? "form-control is-invalid" : "form-control is-valid"}
-                                   id={"startedInput"} placeholder={"Start date"} value={this.state.started} onChange={this.onStartedChange}/>
-                            <div className={this.state.startedError ? "invalid-feedback" : "valid-feedback"}>
-                                {this.state.startedError ? "Invalid Date (required format: yyyy-MM-dd)" : "OK"}
+                            <label className={"mr-2"} htmlFor={"startedInput"}>Start date</label>
+                            <DatePicker id={"startedInput"} className={this.state.startedError ? "form-control is-invalid" : "form-control is-valid"}
+                                        value={this.state.started} placeholderText={"Pick start date"} onChange={this.onStartedChange}/>
+                            <div className={this.state.startedError ? "d-block invalid-feedback" : "d-block valid-feedback"}>
+                                {this.state.startedError ? "Required Date (format: yyyy-MM-dd)" : "OK"}
                             </div>
                         </div>
                     </div>

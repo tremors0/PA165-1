@@ -7,7 +7,9 @@ import cz.fi.muni.pa165.secretagency.dto.MissionUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.exceptions.InvalidDeleteRequestException;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.secretagency.facade.AgentFacade;
 import cz.fi.muni.pa165.secretagency.facade.MissionFacade;
+import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,10 @@ public class MissionsController {
 
     @Autowired
     private MissionFacade missionFacade;
+    @Autowired
+    private ReportFacade reportFacade;
+    @Autowired
+    private AgentFacade agentFacade;
 
     /**
      * Get list of all missions
@@ -194,12 +200,10 @@ public class MissionsController {
 
         try {
             MissionDTO missionDTO = missionFacade.getMissionById(id);
-            if (!missionDTO.getReportIds().isEmpty()) {
-                throw new InvalidDeleteRequestException();
-            }
-            if (!missionDTO.getAgentIds().isEmpty()) {
-                throw new InvalidDeleteRequestException();
-            }
+            missionDTO.getAgentIds().stream().forEach((agentId) ->
+                    agentFacade.removeAgentFromMission(agentId, missionDTO.getId()));
+            missionDTO.getReportIds().stream().forEach((reportId) ->
+                    reportFacade.deleteReport(reportId));
             missionFacade.deleteMission(id);
         }
         catch (IllegalArgumentException ex) {

@@ -1,4 +1,4 @@
-import {GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
+import {DELETE, GET, POST, PUT, REST_URL_BASE} from "../utils/requestUtils";
 import {IMission} from "../types/Mission";
 
 export function getAllMissions(): Promise<IMission[]> {
@@ -17,6 +17,10 @@ export const getMission = (missionId: number): Promise<IMission> => {
     return GET<IMission>(`${REST_URL_BASE}/missions/${missionId}`).then(response =>{
        return response.data as IMission;
     });
+};
+
+export const deleteMission = (missionId: number): void => {
+    DELETE<IMission>(`${REST_URL_BASE}/missions/${missionId}`);
 };
 
 export const createMission = (data: IMission): Promise<IMission> => (
