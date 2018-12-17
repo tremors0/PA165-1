@@ -131,15 +131,6 @@ class App extends React.Component<{}, IState> {
                                             isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
                                             authenticatedUserId={authenticatedAgentId}/>
                         )}/>
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/edit/:missionId`} render={(props) => (
-                            <MissionEditPage {...props}
-                                             isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
-                                             missionId={props.match.params.missionId}/>
-                        )}/>
-                        <Route exact={true} path={`${ROUTING_URL_BASE}/missions/detail/:missionId`} render={(props) => (
-                            <MissionDetailPage {...props}
-                                             missionId={props.match.params.missionId}/>
-                        )}/>
                         <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
                             <ReportsPage {...props}
                                          authenticatedUserId={authenticatedAgentId}
