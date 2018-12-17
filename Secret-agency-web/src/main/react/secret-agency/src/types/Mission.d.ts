@@ -7,6 +7,7 @@ export interface IMission {
     readonly ended: Date;
     readonly missionType: MissionType;
     readonly agentIds: number[];
+    readonly reportIds: number[];
 }
 
 export type MissionType = "SABOTAGE" | "ASSASSINATION" | "ESPIONAGE";
