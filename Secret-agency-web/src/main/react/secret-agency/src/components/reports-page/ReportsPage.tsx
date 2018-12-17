@@ -1,11 +1,15 @@
 import * as React from "react";
-import {IReport} from "../../types/Report";
+import {IReport, ReportStatus} from "../../types/Report";
 import * as reportService from "../../services/reportService";
 import {Link, Redirect} from "react-router-dom";
 import {RouteComponentProps} from "react-router";
 import {ROUTING_URL_BASE} from "../../utils/requestUtils";
 import {Button} from "react-bootstrap";
 import "./ReportsPage.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPencilAlt, faSearch, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {AlertCloseable} from "../alert-closeable/AlertCloseable";
+import {ReportFilter} from "./ReportFilter";
 
 type NavigateToDetailMode = "EDIT" | "READ-ONLY";
 
@@ -19,6 +23,7 @@ interface IReportPageState {
     isLoaded: boolean,
     navigateToDetailId: number,
     navigateToDetailMode: NavigateToDetailMode;
+    serverError: string,
 }
 
 type IState = IReportPageState;
@@ -51,6 +56,54 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         this.setState(prevState => ({...prevState, navigateToDetailId: reportId, navigateToDetailMode:"EDIT"}))
     };
 
+    private onApproveReport = async (reportId: number): Promise<void> => {
+        const result = await reportService.approveReport(reportId);
+        // error
+        if (typeof result === "string") {
+            this.setState(prevState => ({...prevState, serverError: result}));
+            return;
+        }
+
+        // success
+        this.updateReportStatus(reportId, "APPROVED");
+    };
+
+    private onDenyReport = async (reportId: number): Promise<void> => {
+        const result = await reportService.denyReport(reportId);
+        // error
+        if (typeof result === "string") {
+            this.setState(prevState => ({...prevState, serverError: result}));
+            return;
+        }
+
+        // success
+        this.updateReportStatus(reportId, "DENIED");
+    };
+
+    private updateReportStatus(reportId: number, reportStatus: ReportStatus) {
+        const updatedReports = this.state.reports.map((report) => {
+            if (report.id === reportId) {
+                return {...report, reportStatus};
+            }
+            return report;
+        });
+
+        this.setState(prevState => ({...prevState, reports: updatedReports}));
+    }
+
+    private onHideServerError = (): void => {
+        this.setState(prevState => ({...prevState, serverError: ""}));
+    };
+
+    private onFilterResult = (result: IReport[] | string) => {
+        if (typeof result === "string") {
+            this.setState(prevState => ({...prevState, serverError: result}));
+            return;
+        }
+
+        this.setState(prevState => ({...prevState, reports: result}));
+    };
+
     /********************************************************
      * LIFE-CYCLE METHODS
      *******************************************************/
@@ -62,6 +115,7 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
             isLoaded: false,
             navigateToDetailId: -1, // -1 means don't navigate
             navigateToDetailMode: "READ-ONLY",
+            serverError: "",
         }
     }
 
@@ -91,9 +145,15 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
         if (canUserEdit || this.props.isAuthenticatedUserAdmin) {
             return (
                 <div className={'ReportsPage__actions'}>
-                    <Button bsStyle={'info'} onClick={() => this.onShowDetail(report.id)}>View</Button>
-                    <Button bsStyle={'success'} onClick={() => this.onEditReport(report.id)}>Edit</Button>
-                    <Button bsStyle={'danger'} onClick={() => this.onRemoveReport(report.id)}>Delete</Button>
+                    <span className={"icon-operation"} onClick={() => this.onShowDetail(report.id)}>
+                        <FontAwesomeIcon icon={faSearch} size={"2x"} />
+                    </span>
+                    <span className={"icon-operation"} onClick={() => this.onEditReport(report.id)}>
+                        <FontAwesomeIcon icon={faPencilAlt} size={"2x"} />
+                    </span>
+                    <span className={"icon-operation"} onClick={() => this.onRemoveReport(report.id)}>
+                        <FontAwesomeIcon icon={faTrash} size={"2x"} />
+                    </span>
                 </div>
             );
         }
@@ -104,6 +164,23 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
                 <Button bsStyle={'info'}>View</Button>
             </div>
         );
+    }
+
+    private getApproveDenyActionsForReport(report: IReport): JSX.Element | null {
+        if (!this.props.isAuthenticatedUserAdmin) {
+            return null;
+        }
+
+        if (report.reportStatus === "APPROVED" || report.reportStatus === "DENIED") {
+            return <small>Already done</small>;
+        }
+
+        return (
+            <div className={"ReportsPage__approveDeny"}>
+                <Button bsStyle={"success"} onClick={() => this.onApproveReport(report.id)}>Approve</Button>
+                <Button bsStyle={"danger"} onClick={() => this.onDenyReport(report.id)}>Deny</Button>
+            </div>
+        )
     }
 
     private getRedirectUrl(): string {
@@ -129,44 +206,58 @@ export class ReportsPage extends React.PureComponent<IProps, IState> {
 
         const isAnyRowVisible = this.state.reports.length !== 0;
 
-        if (!isAnyRowVisible) {
-            return <div className={'alert alert-info'}>There are no reports from current user</div>;
-        }
-
         const tableRows = this.state.reports.map((report) => (
             <tr key={report.id}>
-                <td>{report.mission && report.mission.id}</td>
+                <td>{this.getActionsForReport(report)}</td>
+                <td>{report.mission && report.mission.name}</td>
                 {this.props.isAuthenticatedUserAdmin && <td>{report.agent.codeName}</td>}
                 <td>{report.date}</td>
                 <td>{report.missionResult}</td>
                 <td>{report.reportStatus}</td>
-                <td>{this.getActionsForReport(report)}</td>
+                {this.getApproveDenyActionsForReport(report) != null &&
+                    <td>{this.getApproveDenyActionsForReport(report)}</td>}
             </tr>
            )
         );
 
         return (
             <div className={'ReportsPage'}>
-                <div className={"table-wrapper"}>
-                    <table className={"data-table"}>
-                        <thead>
-                        <tr>
-                            <th>Mission</th>
-                            {this.props.isAuthenticatedUserAdmin && <th>Agent</th>}
-                            <th>Date</th>
-                            <th>Mission result</th>
-                            <th>Report status</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tableRows}
-                        </tbody>
-                    </table>
-                </div>
+                {!isAnyRowVisible ? (
+                    <div className={'alert alert-info'}>
+                        There are no reports to display...
+                    </div>)
+                    : (
+                    <div className={"table-wrapper"}>
+                        <table className={"data-table"}>
+                            <thead>
+                            <tr>
+                                <th>Actions</th>
+                                <th>Mission</th>
+                                {this.props.isAuthenticatedUserAdmin && <th>Agent</th>}
+                                <th>Date</th>
+                                <th>Mission result</th>
+                                <th>Report status</th>
+                                {this.props.isAuthenticatedUserAdmin &&<th>Approve/deny</th>}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+                <AlertCloseable isVisible={this.state.serverError !== ""}
+                                bsStyle={"danger"}
+                                onHide={this.onHideServerError}>
+                    {this.state.serverError}
+                </AlertCloseable>
+
                 <Button bsStyle="primary" className={'ReportsPage__createNewReport'}>
                     <Link to={`${ROUTING_URL_BASE}/reports/new`}>Create report</Link>
                 </Button>
+
+
+                <ReportFilter onSearch={this.onFilterResult}/>
             </div>
         );
     }

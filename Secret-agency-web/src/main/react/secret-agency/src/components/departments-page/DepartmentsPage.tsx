@@ -2,8 +2,10 @@ import * as React from "react";
 import "../SharedStyles.css";
 import {ChangeEvent, MouseEvent} from 'react';
 import {IDepartment} from "../../types/Department";
+import "../SharedStyles.css";
+
 import {
-    createDepartment,
+    createDepartment, deleteDepartment,
     editDepartment,
     getAllDepartments,
     getSpecializations
@@ -12,6 +14,7 @@ import {DepartmentShowRow} from "./DepartmentShowRow";
 import {DepartmentEditRow} from "./DepartmentEditRow";
 import * as Immutable from 'immutable';
 import {defineAbility} from "../../config/ability";
+import {SearchDepartmentsForm} from "./SearchDepartmentsForm";
 
 interface IDepartmentsState {
     readonly departments: Immutable.Map<number, IDepartment>;
@@ -19,6 +22,7 @@ interface IDepartmentsState {
     readonly specializations: string[];
     readonly editedDepartmentId: number | null;
     readonly formErrors: string[];
+    readonly initServerError: string;
 }
 
 interface INewDepartment {
@@ -31,48 +35,62 @@ interface INewDepartment {
 
 export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
     public async componentDidMount() {
-        const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
-            (department: IDepartment) => [
-                department.id, department
-            ]
-        ));
-        const specializations = await getSpecializations();
-        const newDepartment = {
-            city: '',
-            country: '',
-            latitude: '',
-            longitude: '',
-            specialization: '',
-        };
-        this.setState({
-            departments,
-            newDepartment,
-            specializations,
-            editedDepartmentId: null,
-            formErrors: [],
-        });
+
+        try {
+            const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
+                (department: IDepartment) => [
+                    department.id, department
+                ]
+            ));
+            const specializations = await getSpecializations();
+            const newDepartment = {
+                city: '',
+                country: '',
+                latitude: '',
+                longitude: '',
+                specialization: '',
+            };
+            this.setState({
+                departments,
+                newDepartment,
+                specializations,
+                editedDepartmentId: null,
+                formErrors: [],
+                initServerError: "",
+            });
+        } catch (e) {
+            this.setState(_ => ({
+                initServerError: e.message,
+            }));
+        }
     };
+
 
     private addDepartment = async (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const {city, country, latitude, longitude, specialization} = this.state.newDepartment;
-        const department: IDepartment = {
-            id: 1, // temporary id, will be given from API
-            city,
-            country,
-            latitude: parseFloat(latitude),
-            longitude: parseFloat(longitude),
-            specialization
-        };
-        const errors = this.validate(department);
-        if (errors.length === 0) {
-            const createdDepartment = await createDepartment(department);
-            this.setState((prevState) => ({
-                departments: prevState.departments.set(createdDepartment.id, createdDepartment)
-            }));
-            this.setState(_ => ({editedDepartmentId: null}));
-        } else {
-            this.setState( _ => ({formErrors: errors}));
+        try {
+            const department: IDepartment = {
+                id: 1, // temporary id, will be given from API
+                city,
+                country,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                specialization,
+                agentIds: [],
+            };
+            const errors = this.validate(department);
+            if (errors.length === 0) {
+                const createdDepartment = await createDepartment(department);
+                this.setState((prevState) => ({
+                    departments: prevState.departments.set(createdDepartment.id, createdDepartment)
+                }));
+                this.setState(_ => ({editedDepartmentId: null, formErrors: []}));
+            } else {
+                this.setState(_ => ({formErrors: errors}));
+            }
+        } catch (e) {
+            this.setState(_ => ({formErrors: [e.message]}));
         }
 
     };
@@ -139,19 +157,64 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
 
     private onEdit = async (department: IDepartment) => {
         const errors = this.validate(department);
-        if (errors.length === 0) {
-            const editedDepartment = await editDepartment(department);
-            this.setState((prevState) => ({
-                departments: prevState.departments.set(editedDepartment.id, editedDepartment)
-            }));
-            this.setState(_ => ({editedDepartmentId: null}));
+        try {
+            if (errors.length === 0) {
+                const editedDepartment = await editDepartment(department);
+                this.setState((prevState) => ({
+                    departments: prevState.departments.set(editedDepartment.id, editedDepartment)
+                }));
+                this.setState(_ => ({editedDepartmentId: null, formErrors: []}));
+            } else {
+                this.setState( _ => ({formErrors: errors}));
+            }
+        } catch (e) {
+            this.setState(_ => ({formErrors: [e.message]}));
+        }
+    };
+
+    private onSearchChange = (departments: Immutable.Map<number, IDepartment>) => {
+        this.setState(_ => ({
+            departments,
+        }));
+    };
+
+    private onDelete = async (departmentId: number) => {
+        const department = this.state.departments.get(departmentId);
+        if (department.agentIds.length > 0) {
+            this.setState(_ => ({
+                formErrors: ["There are still some agents in this department, fire them before you tear down the building"]
+            }))
         } else {
-            this.setState( _ => ({formErrors: errors}));
+            try {
+                await deleteDepartment(department.id);
+                const departments = Immutable.Map<number, IDepartment>((await getAllDepartments()).map(
+                    (dep: IDepartment) => [
+                        dep.id, dep
+                    ]
+                ));
+
+                this.setState(_ => ({
+                    departments,
+                    formErrors: [],
+                }));
+
+            } catch (e) {
+                this.setState( _ => ({
+                    formErrors: [e.message],
+                }));
+            }
         }
     };
 
     public render() {
         if (this.state) {
+            if (this.state.initServerError) {
+                return (
+                    <div className={'alert alert-danger col-sm12'}>
+                        {this.state.initServerError}
+                    </div>
+                );
+            }
             const { departments } = this.state;
             const tableRows = departments.keySeq().map((key: number) =>
                 this.state.editedDepartmentId === key ?
@@ -165,77 +228,81 @@ export class DepartmentsPage extends React.Component<{}, IDepartmentsState> {
                 <DepartmentShowRow
                     key={key}
                     department={departments.get(key)}
-                    onStartEdit={this.startEditDepartment.bind(this, key)}
+                    onStartEdit={() => this.startEditDepartment(key)}
+                    onDelete={() => this.onDelete(key)}
                 />
             );
             const {city, country,latitude, longitude, specialization} = this.state.newDepartment;
             return (
-                <div className="table-wrapper">
-                    {this.state.formErrors.length > 0 && <div className={'alert alert-danger'}>
-                        {this.state.formErrors.map((error: string, index) =>
-                            <p key={index}>{error}</p>
-                        )}
-                    </div>}
-                    <table className="data-table">
-                        <thead>
-                        <tr>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Specialization</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tableRows}
-                        {defineAbility().can('create', 'Department') &&
-                        <tr>
-                            <td>
-                                <input type={'text'} value={city}
-                                       onChange={this.onCityChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={country}
-                                       onChange={this.onCountryChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={latitude}
-                                       onChange={this.onLatitudeChange}
-                                />
-                            </td>
-                            <td>
-                                <input type={'text'} value={longitude}
-                                       onChange={this.onLongitudeChange}
-                                />
-                            </td>
-                            <td>
-                                <select value={specialization}
-                                        onChange={this.onSpecializationChange}
-                                >
-                                    <option value={""}/>
-                                    {this.state.specializations.map((specializationOption: string) =>
-                                        <option key={specializationOption}
-                                                value={specializationOption}>{specializationOption}</option>
-                                    )}
-                                </select>
-                            </td>
-                            <td>
-                                <button
-                                    className={"btn btn-primary"}
-                                    type={'submit'}
-                                    value={'create'}
-                                    onClick={this.addDepartment}
-                                >
-                                    Create
-                                </button>
-                            </td>
-                        </tr>
-                        }
-                        </tbody>
-                    </table>
+                <div>
+                    <div className="table-wrapper">
+                        {this.state.formErrors.length > 0 && <div className={'alert alert-danger'}>
+                            {this.state.formErrors.map((error: string, index) =>
+                                <p key={index}>{error}</p>
+                            )}
+                        </div>}
+                        <table className="data-table">
+                            <thead>
+                            <tr>
+                                <th>City</th>
+                                <th>Country</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Specialization</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tableRows}
+                            {defineAbility().can('create', 'Department') &&
+                            <tr>
+                                <td>
+                                    <input type={'text'} value={city}
+                                           onChange={this.onCityChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={country}
+                                           onChange={this.onCountryChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={latitude}
+                                           onChange={this.onLatitudeChange}
+                                    />
+                                </td>
+                                <td>
+                                    <input type={'text'} value={longitude}
+                                           onChange={this.onLongitudeChange}
+                                    />
+                                </td>
+                                <td>
+                                    <select value={specialization}
+                                            onChange={this.onSpecializationChange}
+                                    >
+                                        <option value={""}/>
+                                        {this.state.specializations.map((specializationOption: string) =>
+                                            <option key={specializationOption}
+                                                    value={specializationOption}>{specializationOption}</option>
+                                        )}
+                                    </select>
+                                </td>
+                                <td>
+                                    <button
+                                        className={"btn btn-primary"}
+                                        type={'submit'}
+                                        value={'create'}
+                                        onClick={this.addDepartment}
+                                    >
+                                        Create
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <SearchDepartmentsForm onSearch={this.onSearchChange}/>
                 </div>
             )
         } else {

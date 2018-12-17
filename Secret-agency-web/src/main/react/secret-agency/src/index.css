@@ -19,3 +19,19 @@ body {
 .btn-primary a:hover, .btn-secondary a:hover {
     text-decoration: none;
 }
+
+.icon-operation:hover {
+    cursor: pointer;
+}
+
+.icon-operation .fa-trash:hover {
+    color: #dc3545; /*bootstrap - danger*/
+}
+
+.icon-operation .fa-search:hover {
+    color: #17a2b8; /*bootstrap - info*/
+}
+
+.icon-operation .fa-pencil-alt:hover {
+    color: #28a745; /* bootstrap - success*/
+}
