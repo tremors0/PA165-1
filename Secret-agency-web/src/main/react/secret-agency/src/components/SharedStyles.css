@@ -24,3 +24,12 @@
 .table-wrapper {
     width: 700px;
 }
+
+.search-by-form {
+    padding: 30px;
+}
+
+.search-by-form-input {
+    width: 50%;
+    padding: 0 10px;
+}

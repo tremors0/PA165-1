@@ -78,7 +78,6 @@ export class AgentsPage extends React.Component<any, IAgentsState> {
                     departmentId: agent.department.id,
                     codeName: agent.codeName,
                 };
-                console.log(newAgent);
                 this.setState({
                     newAgent,
                     edit: true
