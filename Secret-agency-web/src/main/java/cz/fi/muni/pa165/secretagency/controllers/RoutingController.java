@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Controller which supports React routing. To make React routing work when front-end is deployed to the same server
- *   as back-end, it's necessary to provide endpoints which always return index.html.<br>
- * For this app, every endpoint which path is starting with <b></>pa165/secretAgency/</b> returns index.html.
+ *   as back-end, it's necessary to provide endpoints which always forwards to homepage<br>
+ * For this app, every endpoint which path is starting with <b></>pa165/secretAgency/</b> returns homepage..
  *
  * @author Jan Pavlu
  */
@@ -16,6 +16,6 @@ public class RoutingController {
 
     @RequestMapping(ApiUris.ROUTING_URL_BASE + "/**")
     public String index() {
-        return "redirect:/";
+        return "forward:/";
     }
 }
