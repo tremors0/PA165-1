@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.secretagency.facade;
 import cz.fi.muni.pa165.secretagency.dto.AgentAuthenticateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
+import cz.fi.muni.pa165.secretagency.dto.AgentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
 
@@ -35,6 +36,13 @@ public interface AgentFacade {
     Long createAgent(AgentCreateDTO agentCreateDTO);
 
     /**
+     * edit existing agent
+     * @param agentUpdateDTO agent with updated properties
+     * @return updated agent
+     */
+    AgentDTO editAgent(AgentUpdateDTO agentUpdateDTO);
+
+    /**
      * Delete agent by given id
      * @param id if agent to be deleted
      */
@@ -45,6 +53,12 @@ public interface AgentFacade {
      * @return all ranks
      */
     AgentRankEnum[] getAgentRanks();
+
+    /**
+     * Get all possible languages
+     * @return all languages
+     */
+    LanguageEnum[] getAllLanguages();
 
     /**
      * Get all agents by a given rank
