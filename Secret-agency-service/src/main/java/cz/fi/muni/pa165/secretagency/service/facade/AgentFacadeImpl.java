@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.secretagency.service.facade;
 import cz.fi.muni.pa165.secretagency.dto.AgentAuthenticateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.AgentDTO;
+import cz.fi.muni.pa165.secretagency.dto.AgentUpdateDTO;
 import cz.fi.muni.pa165.secretagency.entity.Agent;
 import cz.fi.muni.pa165.secretagency.enums.AgentRankEnum;
 import cz.fi.muni.pa165.secretagency.enums.LanguageEnum;
@@ -59,6 +60,21 @@ public class AgentFacadeImpl implements AgentFacade {
     }
 
     @Override
+    public AgentDTO editAgent(AgentUpdateDTO agentUpdateDTO) {
+        Agent agentToBeUpdated = agentService.getEntityById(agentUpdateDTO.getId());
+
+        agentToBeUpdated.setDepartment(departmentService.getEntityById(agentUpdateDTO.getDepartmentId()));
+        agentToBeUpdated.setRank(agentUpdateDTO.getRank());
+        agentToBeUpdated.setName(agentUpdateDTO.getName());
+        agentToBeUpdated.setBirthDate(agentUpdateDTO.getBirthDate());
+        agentToBeUpdated.setLanguages(agentUpdateDTO.getLanguages());
+        agentToBeUpdated.setCodeName(agentUpdateDTO.getCodeName());
+
+        agentService.updateAgent(agentToBeUpdated);
+        return beanMappingService.mapTo(agentService.getEntityById(agentUpdateDTO.getId()), AgentDTO.class);
+    }
+
+    @Override
     public void deleteAgent(Long id) {
         agentService.deleteEntityById(id);
     }
@@ -66,6 +82,11 @@ public class AgentFacadeImpl implements AgentFacade {
     @Override
     public AgentRankEnum[] getAgentRanks() {
         return AgentRankEnum.values();
+    }
+
+    @Override
+    public LanguageEnum[] getAllLanguages() {
+        return LanguageEnum.values();
     }
 
     @Override
