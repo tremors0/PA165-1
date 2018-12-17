@@ -3,10 +3,13 @@ package cz.fi.muni.pa165.secretagency.controllers;
 import cz.fi.muni.pa165.secretagency.ApiUris;
 import cz.fi.muni.pa165.secretagency.dto.MissionCreateDTO;
 import cz.fi.muni.pa165.secretagency.dto.MissionDTO;
+import cz.fi.muni.pa165.secretagency.dto.MissionUpdateDTO;
 import cz.fi.muni.pa165.secretagency.enums.MissionTypeEnum;
 import cz.fi.muni.pa165.secretagency.exceptions.InvalidDeleteRequestException;
 import cz.fi.muni.pa165.secretagency.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.secretagency.facade.AgentFacade;
 import cz.fi.muni.pa165.secretagency.facade.MissionFacade;
+import cz.fi.muni.pa165.secretagency.facade.ReportFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,10 @@ public class MissionsController {
 
     @Autowired
     private MissionFacade missionFacade;
+    @Autowired
+    private ReportFacade reportFacade;
+    @Autowired
+    private AgentFacade agentFacade;
 
     /**
      * Get list of all missions
@@ -158,6 +165,49 @@ public class MissionsController {
     }
 
     /**
+     * Updates mission
+     * curl --cookie "{COOKIE_VALUE}" -X PUT -i -H "Content-Type: application/json" --data
+     * '{ "latitude": "23.52", "longitude": "15.22", "missionType": "SABOTAGE", "started":"2013-02-11", "ended":"2014-10-12"}'
+     * http://localhost:8080/pa165/rest/missions/2
+     *
+     * @param id Identifier for mission
+     * @param missionUpdateDTO MissionUpdateDTO with required fields for creation
+     * @return The created mission MissionDTO
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public final MissionDTO updateMission(@PathVariable("id") Long id, @Valid @RequestBody MissionUpdateDTO missionUpdateDTO) {
+        logger.debug("rest update mission with id: {}", id);
+
+        try {
+            missionUpdateDTO.setId(id);
+            missionFacade.updateMission(missionUpdateDTO);
+            return missionFacade.getMissionById(id);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
+     * Assigns agent to mission
+     * curl --cookie {COOKIE_VALUE} -i -X PUT http://localhost:8080/pa165/rest/missions/{agentId}/{missionId}
+     *
+     * @param agentId Identifier for agent
+     * @param missionId Identifier for mission
+     */
+    @RequestMapping(value = "/{agentId}/{missionId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final void assignAgentToMission(@PathVariable("agentId") Long agentId, @PathVariable("missionId") Long missionId) {
+        logger.debug("rest assign agent id: {} to mission id: {}", agentId, missionId);
+
+        try {
+            agentFacade.assignAgentToMission(agentId, missionId);
+        }
+        catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
      * Delete one mission
      * curl --cookie {COOKIE_VALUE} -i -X DELETE http://localhost:8080/pa165/rest/missions/{id}
      *
@@ -169,13 +219,30 @@ public class MissionsController {
 
         try {
             MissionDTO missionDTO = missionFacade.getMissionById(id);
-            if (!missionDTO.getReportIds().isEmpty()) {
-                throw new InvalidDeleteRequestException();
-            }
-            if (!missionDTO.getAgentIds().isEmpty()) {
-                throw new InvalidDeleteRequestException();
-            }
+            missionDTO.getAgentIds().stream().forEach((agentId) ->
+                    agentFacade.removeAgentFromMission(agentId, missionDTO.getId()));
+            missionDTO.getReportIds().stream().forEach((reportId) ->
+                    reportFacade.deleteReport(reportId));
             missionFacade.deleteMission(id);
+        }
+        catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
+     * Remove agent from mission
+     * curl --cookie {COOKIE_VALUE} -i -X DELETE http://localhost:8080/pa165/rest/missions/{agentId}/{missionId}
+     *
+     * @param agentId Identifier for agent
+     * @param missionId Identifier for mission
+     */
+    @RequestMapping(value = "/{agentId}/{missionId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final void removeAgentFromMission(@PathVariable("agentId") Long agentId, @PathVariable("missionId") Long missionId) {
+        logger.debug("rest remove agent id: {} from mission id: {}", agentId, missionId);
+
+        try {
+            agentFacade.removeAgentFromMission(agentId, missionId);
         }
         catch (IllegalArgumentException ex) {
             throw new ResourceNotFoundException();
