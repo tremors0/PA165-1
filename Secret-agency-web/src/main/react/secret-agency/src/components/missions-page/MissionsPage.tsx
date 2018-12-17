@@ -133,9 +133,9 @@ export class MissionsPage extends React.Component<IProps, IState> {
 
         return (
             <div className={"MissionsPage mb-5"}>
-                <h4 className={"mt-5"}>Active Missions <span className={"badge badge-success"}>{this.state.activeMissions.length}</span></h4>
+                <h4 className={"mt-2"}>Active Missions <span className={"badge badge-success"}>{this.state.activeMissions.length}</span></h4>
                 {this.renderTable({missions: this.state.activeMissions, isShowCompleted: false, isAdmin: this.props.isAuthenticatedUserAdmin})}
-                <h4 className={"mt-5"}>Completed Missions <span className={"badge badge-dark"}>{this.state.completedMissions.length}</span></h4>
+                <h4 className={"mt-4"}>Completed Missions <span className={"badge badge-dark"}>{this.state.completedMissions.length}</span></h4>
                 {this.renderTable({missions: this.state.completedMissions, isShowCompleted: true, isAdmin: this.props.isAuthenticatedUserAdmin})}
                 {this.props.isAuthenticatedUserAdmin && <Link className={"btn btn-success mt-4"} to={`${ROUTING_URL_BASE}/missions/new`}>Create mission</Link>}
             </div>

@@ -182,7 +182,7 @@ export class MissionNewPage extends React.Component<IProps, IState> {
 
         return (
             <div className={'MissionNewForm'}>
-                <h2>Create new mission</h2>
+                <h2 className={"mt-2"}>Create new mission</h2>
                 <form className={'MissionNewForm__form'}>
                     <div className={"form-row"}>
                         <div className={"col-md-6 mb-3"}>

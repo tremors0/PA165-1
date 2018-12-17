@@ -189,6 +189,25 @@ public class MissionsController {
     }
 
     /**
+     * Assigns agent to mission
+     * curl --cookie {COOKIE_VALUE} -i -X PUT http://localhost:8080/pa165/rest/missions/{agentId}/{missionId}
+     *
+     * @param agentId Identifier for agent
+     * @param missionId Identifier for mission
+     */
+    @RequestMapping(value = "/{agentId}/{missionId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final void assignAgentToMission(@PathVariable("agentId") Long agentId, @PathVariable("missionId") Long missionId) {
+        logger.debug("rest assign agent id: {} to mission id: {}", agentId, missionId);
+
+        try {
+            agentFacade.assignAgentToMission(agentId, missionId);
+        }
+        catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
      * Delete one mission
      * curl --cookie {COOKIE_VALUE} -i -X DELETE http://localhost:8080/pa165/rest/missions/{id}
      *
@@ -205,6 +224,25 @@ public class MissionsController {
             missionDTO.getReportIds().stream().forEach((reportId) ->
                     reportFacade.deleteReport(reportId));
             missionFacade.deleteMission(id);
+        }
+        catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    /**
+     * Remove agent from mission
+     * curl --cookie {COOKIE_VALUE} -i -X DELETE http://localhost:8080/pa165/rest/missions/{agentId}/{missionId}
+     *
+     * @param agentId Identifier for agent
+     * @param missionId Identifier for mission
+     */
+    @RequestMapping(value = "/{agentId}/{missionId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public final void removeAgentFromMission(@PathVariable("agentId") Long agentId, @PathVariable("missionId") Long missionId) {
+        logger.debug("rest remove agent id: {} from mission id: {}", agentId, missionId);
+
+        try {
+            agentFacade.removeAgentFromMission(agentId, missionId);
         }
         catch (IllegalArgumentException ex) {
             throw new ResourceNotFoundException();

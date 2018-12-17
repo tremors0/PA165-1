@@ -38,3 +38,11 @@ export const updateMission = (data: IMission): Promise<IMission> => (
         }
     )
 );
+
+export const removeAgentFromMission = (agentId: number, missionId: number): void => {
+    DELETE(`${REST_URL_BASE}/missions/${agentId}/${missionId}`);
+};
+
+export const assignAgentToMission = (agentId: number, missionId: number): void => {
+    PUT(`${REST_URL_BASE}/missions/${agentId}/${missionId}`, "");
+};

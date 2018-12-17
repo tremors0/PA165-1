@@ -139,6 +139,7 @@ class App extends React.Component<{}, IState> {
                         )}/>
                         <Route exact={true} path={`${ROUTING_URL_BASE}/missions/detail/:missionId`} render={(props) => (
                             <MissionDetailPage {...props}
+                                               isAuthenticatedUserAdmin={isAuthenticatedAgentAdmin}
                                                missionId={props.match.params.missionId}/>
                         )}/>
                         <Route exact={true} path={`${ROUTING_URL_BASE}/reports`} render={(props) => (
