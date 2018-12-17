@@ -59,8 +59,6 @@ export class SearchDepartmentsForm extends React.Component<ISearchDepartmentsFor
 
     private onSearch = async (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        console.log(this.state.searchType);
-        console.log(this.state.searchValue);
         let departments = [];
         switch (this.state.searchType) {
             case SEARCH_BY_VALUE_CITY:
