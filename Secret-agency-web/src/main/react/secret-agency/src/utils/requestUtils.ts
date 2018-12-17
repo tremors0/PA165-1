@@ -21,7 +21,7 @@ export function POST<T>(url: string, data?: any): AxiosPromise<T> {
     });
 }
 
-export function PUT<T>(url: string, data: any): AxiosPromise<T> {
+export function PUT<T>(url: string, data?: any): AxiosPromise<T> {
     return axios.put<T>(url, data, {withCredentials: true}).then((response) => {
         validateResponse(response);
         return response;
